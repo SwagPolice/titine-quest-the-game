@@ -1,7 +1,7 @@
 # titine-quest-the-game
 A script which simulates a custom drinking board game I created with a friend.
 The goal of the script is to balance the game, by determining what changes have to be made to classes and avoid drinking too much.
-The current version does not simulate all the classes, but allow to simulates multiple games to get an average number of turns and t-shots.
+The current version does not simulate all the classes, but allow to simulate multiple games to get an average number of turns and t-shots.
 Why t-shots? Because Titine the Bird decides which shot you will get!
 
 ## What is needed to play
