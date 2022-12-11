@@ -7,13 +7,13 @@ Why t-shots? Because Titine the Bird decides which shot you will get!
 ## What is needed to play
 - Titine's Quest board
 - a regular card game
-- some dice
-- a piece/token for each player
-- a piece representing Titine
+- some regular dice
+- a pawn for each player
+- a pawn representing Titine
 - 4 ladders
 - drinks
 - 4 bottles of shot drinks
-- some other tools for the different classes in the game (to be determined)
+- a virtual d78 die for everything related to bard
 
 ## Rules of the game
 Titine's Quest is a drinking board game with RPG elements, whose board mechanics are inspired by Goose Game.
