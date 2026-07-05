@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KALBLAST Card Generator</title>
+  <style>
+    body {
+      background: #121214;
+      margin: 0;
+      padding: 40px;
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    /* Tarot Card Dimensions & Vibe */
+    .card {
+      width: 350px;
+      height: 600px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Glowing visual background trick - dynamically tinted via JS */
+    .art-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 60%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.25;
+    }
+
+    /* Frosted Glass Panels */
+    .character-name-zone, .textbox {
+      background: rgba(20, 16, 28, 0.50);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      z-index: 2;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .character-name-zone {
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    .class-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .class-subtitle {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin: 4px 0 0 0;
+      font-weight: 700;
+      color: var(--theme-color); /* Driven by JS execution */
+    }
+
+    .textbox {
+      padding: 16px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      color: var(--theme-color); /* Driven by JS execution */
+    }
+
+    .cost-badge {
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: auto;
+      letter-spacing: 0;
+    }
+
+    .rules-text {
+      font-size: 12px;
+      color: #e2e8f0;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+    }
+
+    .rules-text:last-of-type {
+      margin-bottom: 0;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 12px 0;
+    }
+
+    .flavor-text {
+      font-style: italic;
+      font-size: 10px;
+      color: #64748b;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Print optimization: lets you print the page to PDF cleanly */
+    @media print {
+      body { background: white; padding: 0; }
+      .card { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The JavaScript will inject all generated cards right here -->
+
+  <script>
+    // 🗂️ THE CHARACTER DATABASE
+    // Add, remove, or modify your character data here!
+    const characters = [
+      {
+        name: "FireFoxxx",
+        title: "CEO of CAGEC",
+        image: "firefoxxx.jpg",
+        color: "#ef4444", // Red
+        traitName: "Shall I repeat myself?",
+        traitDesc: "You may reroll your movement die. To do so, you must drink a number of sips equal to twice the tens digit of your current space.",
+        abilityName: "Firework-aholic",
+        abilityCost: "🥃 1Š",
+        abilityDesc: "Cast a fireball from your space that can travel a distance of 2d6 spaces, go through walls and change direction freely. Any player hit drinks 1Š. If ALL other players are hit by it, they each drink 1Š extra.",
+        flavor: '"At CAGEC, we cherish our consum... our customers!"'
+      },
+      {
+        name: "Glamidir Vospo",
+        title: "Master of Disguise",
+        image: "spy.jpg",
+        color: "#10b981", // Green
+        traitName: "In their shoes",
+        traitDesc: "Copy the movement mechanic of the player closest ahead on the board. If you are currently in first place, roll 1d6 instead.",
+        abilityName: "In their head",
+        abilityCost: "🥃 1Š",
+        abilityDesc: "Whenever you pass through or land on a space occupied by another player, you may pay the cost. Copy their Class Ability as a temporary extra ability you can trigger once for free on this turn.",
+        flavor: '"I am Glamidir... VOSPODINOV!"'
+      },
+      {
+        name: "Hans Pinner",
+        title: "The Advisor",
+        image: "advisor.jpg",
+        color: "#eab308", // Gold
+        traitName: "Dark Maneuvers",
+        traitDesc: "Roll 1d6 for your movement. Then, roll a second 1d6: choose an opponent to either move forward/backward by that many spaces, and make them either drink/distribute that many sips.",
+        abilityName: "The Grand Scheme",
+        abilityCost: "🥃 1Š",
+        abilityDesc: "Swap your board piece and Class Card with any player who has not played as the Advisor yet and take an Advisor token. If no valid players remain, the game instantly ends. <b>Nobody wins</b>.",
+        flavor: '"There is no plan. I am the plan."'
+      }
+    ];
+
+    // 🏗️ CARD GENERATOR ENGINE
+    // This loop dynamically builds the HTML layout for each item in the database
+    const body = document.body;
+
+    characters.forEach(char => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      // Inject character specific style rules inline
+      card.style.backgroundImage = `url('${char.image}')`;
+      card.style.setProperty('--theme-color', char.color);
+
+      card.innerHTML = `
+        <div class="art-bg" style="background: radial-gradient(circle at center, ${char.color} 0%, rgba(0,0,0,0) 70%);"></div>
+
+        <div class="character-name-zone">
+          <h1 class="class-title">${char.name}</h1>
+          <p class="class-subtitle">${char.title}</p>
+        </div>
+
+        <div class="textbox">
+          <div class="section-title">⚙️ ${char.traitName}</div>
+          <p class="rules-text">${char.traitDesc}</p>
+
+          <hr>
+
+          <div class="section-title">
+            ⚡ ${char.abilityName}
+            <span class="cost-badge">${char.abilityCost}</span>
+          </div>
+          <p class="rules-text">${char.abilityDesc}</p>
+
+          <div class="flavor-text">${char.flavor}</div>
+        </div>
+      `;
+
+      body.appendChild(card);
+    });
+  </script>
+</body>
+</html>
