@@ -240,7 +240,7 @@
         name: "Hans Pinner",
         title: "The Advisor",
         image: "advisor.jpg",
-        color: "#8c08ea", // Purple
+        color: "#35389e", // Purple
         difficulty: 3,
         traitName: "Dark Maneuvers",
         traitDesc: "Roll 1d6 for your movement. Then, roll a second 1d6: choose an opponent to either move forward/backward by that many spaces, and make them either drink/distribute that many sips.",
@@ -287,6 +287,65 @@
         abilityCost: "KŠ",
         abilityDesc: "Play RPS with every opponent. Everytime you win, move +K spaces and the other player drinks KŠ. If you lose, they move +K spaces. If you win against everyone, opponents drink another KŠ and you move an extra +K spaces for each opponent.",
         flavor: '"What does not kill you makes you faster!"'
+      },
+      {
+        name: "Robiocoop",
+        title: "Fallen board member",
+        image: "warrior.jpg",
+        color: "#27c16f",
+        difficulty: 2,
+        traitName: "Relentless Destroyer",
+        traitDesc: "You can climb up ladders even when passing by them.",
+        abilityName: "Pursuit of Vengeance",
+        abilityCost: "1Š",
+        abilityDesc: "Challenge the player closest ahead on the board to RPS (best of 3).\n" +
+                "<br>- If you lose, the other player drinks 1Š.\n" +
+                "<br>- If you win, the other player drinks 2Š and you go to their space.",
+        flavor: '"I will turn this whole board into cardboard."'
+      },
+      {
+        name: "\"Grandma\" Luke",
+        title: "Diversity Hire",
+        image: "priest.jpg",
+        color: "#afa8a8",
+        difficulty: 2,
+        traitName: "Pride Parade",
+        traitDesc: "Roll 1d6 for movement. When the player closest ahead on the board drinks, you may go straight to their space and drink double the amount for them. Usable only once a round.",
+        abilityName: "I Prefer Tea",
+        abilityCost: "1Š",
+        abilityDesc: "Obtain 1d3 tokens. You can never have more than 3 at the same time. Every time you have to drink 1Š or more, you may discard a token. You may then decide to either drink a number of sips equal to the number of Š multiplied by 1d6 or drink the Š. You cannot cancel Š you have to drink to activate this ability.",
+        flavor: '"Sometimes I wonder what I am doing here..."'
+      },
+      {
+        name: "Paul Guaca",
+        title: "Master Brewer",
+        image: "vanilla.jpg",
+        color: "#6bae22",
+        difficulty: 1,
+        traitName: "Barathon",
+        traitDesc: "Roll 2d6 for movement. You drink a number of sips equal to the lower die.",
+        abilityName: "Sambuquiño?",
+        abilityCost: "1Š",
+        abilityDesc: "Give out 1Š, add 1 to your Š-counter." +
+                "When the counter reaches 6, you can give out 6Š, divided amongst how many players you want. Reset the counter.",
+        flavor: '"Great spirits drink alike."'
+      },
+      {
+        name: "Brenchilli",
+        title: "Fashion Designer",
+        image: "carpenter.jpg",
+        color: "#b08ff6",
+        difficulty: 2,
+        traitName: "I saw it first",
+        traitDesc: "You can move one ladder whenever you roll an even number.\n" +
+                "You can interrupt a ladder event you are not involved in if the ladder is in indicated range by drinking the current bid + 1Š.",
+        abilityName: "Trend Setter",
+        abilityCost: "1Š",
+        abilityDesc: "Choose one: " +
+                "<br>- Move a ladder from within your indicated range into your inventory. " +
+                "<br>- Place a ladder from your inventory onto any space within your indicated range." +
+                "<br>When a ladder is placed or moved this way, all players standing within the indicated range layout centered on the upper end of the ladder must drink Š according to the grid.",
+        flavor: '"Out of my catwalk, filthy dogs!"'
       }
     ];// 🏗️ CARD GENERATOR ENGINE
     const body = document.body;
