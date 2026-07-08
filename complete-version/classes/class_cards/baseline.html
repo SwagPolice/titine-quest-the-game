@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>KALBLAST Card Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
   <style>
     body {
       background: #121214;
@@ -11,8 +13,16 @@
       font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
       display: flex;
       flex-wrap: wrap;
-      gap: 30px;
+      gap: 40px;
       justify-content: center;
+    }
+
+    /* Card Wrapper Container for Card + Download Button */
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
     }
 
     /* Tarot Card Dimensions & Vibe */
@@ -41,22 +51,21 @@
       opacity: 0.25;
     }
 
-    /* Frosted Glass Panels */
+    /* 🛠️ FIXED FOR DOWNLOADS: Frosted Matte Glass Panels without backdrop-filter blur */
     .character-name-zone, .textbox {
-      background: rgba(20, 16, 28, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      /* Made background slightly darker & richer to emulate the opacity/matte filter natively */
+      background: linear-gradient(135deg, rgba(24, 20, 34, 0.82) 0%, rgba(18, 14, 26, 0.88) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       z-index: 2;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     }
 
-    /* 🔒 FIXED: Strictly Block layout, anchored completely to the Left */
+    /* Strictly Block layout, anchored completely to the Left */
     .character-name-zone {
       padding: 12px 16px;
       text-align: left;
-      display: block; /* Guarantees items stack vertically, not horizontally */
+      display: block;
       position: relative;
     }
 
@@ -67,7 +76,7 @@
       margin: 0;
       text-transform: uppercase;
       letter-spacing: 1px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
       text-align: left;
     }
 
@@ -79,6 +88,7 @@
       font-weight: 700;
       color: var(--theme-color);
       text-align: left;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
 
     /* Floating Difficulty Badge Style */
@@ -124,6 +134,7 @@
       margin-bottom: 6px;
       color: var(--theme-color);
       text-align: left;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
 
     /* Active Ability Flex Container */
@@ -143,9 +154,10 @@
       color: var(--theme-color);
       text-align: left;
       margin: 0;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
 
-    /* 🎨 Splash Circle Badge */
+    /* Splash Circle Badge */
     .cost-badge {
       background: var(--theme-color);
       color: #ffffff;
@@ -198,9 +210,29 @@
       margin-top: 10px;
     }
 
+    /* Download Button Style */
+    .download-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a19da8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .download-btn:hover {
+      background: var(--theme-color);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
     @media print {
       body { background: white; padding: 0; }
       .card { page-break-inside: avoid; }
+      .download-btn { display: none; }
     }
   </style>
 </head>
@@ -208,13 +240,12 @@
 
   <script>
     // 🗂️ THE CHARACTER DATABASE
-    // Add, remove, or modify your character data here!
     const characters = [
       {
         name: "FireFoxxx",
         title: "CEO of CAGEC",
         image: "firefoxxx.jpg",
-        color: "#ef4444", // Red
+        color: "#ef4444",
         difficulty: 3,
         traitName: "Shall I repeat myself?",
         traitDesc: "You may reroll your movement die. To do so, you must drink a number of sips equal to twice the tens digit of your current space.",
@@ -227,7 +258,7 @@
         name: "Glamidir Vospo",
         title: "Master of Disguise",
         image: "spy.jpg",
-        color: "#10b981", // Green
+        color: "#10b981",
         difficulty: 2,
         traitName: "In their shoes",
         traitDesc: "Copy the movement mechanic of the player closest ahead on the board. If you are currently in first place, roll 1d6 instead.",
@@ -240,7 +271,7 @@
         name: "Hans Pinner",
         title: "The Advisor",
         image: "advisor.jpg",
-        color: "#35389e", // Purple
+        color: "#35389e",
         difficulty: 3,
         traitName: "Dark Maneuvers",
         traitDesc: "Roll 1d6 for your movement. Then, roll a second 1d6: choose an opponent to either move forward/backward by that many spaces, and make them either drink/distribute that many sips.",
@@ -347,49 +378,73 @@
                 "<br>When a ladder is placed or moved this way, all players standing within the indicated range layout centered on the upper end of the ladder must drink Š according to the grid.",
         flavor: '"Out of my catwalk, filthy dogs!"'
       }
-    ];// 🏗️ CARD GENERATOR ENGINE
+    ];
+
+    // 🏗️ CARD GENERATOR ENGINE
     const body = document.body;
 
-    characters.forEach(char => {
+    characters.forEach((char, index) => {
       const starIcons = "★".repeat(char.difficulty);
 
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.backgroundImage = `url('${char.image}')`;
-      card.style.setProperty('--theme-color', char.color);
+      const container = document.createElement('div');
+      container.className = 'card-container';
+      container.style.setProperty('--theme-color', char.color);
 
-      card.innerHTML = `
-        <div class="art-bg" style="background: radial-gradient(circle at center, ${char.color} 0%, rgba(0,0,0,0) 70%);"></div>
+      const cardId = `card-${index}`;
 
-        <div class="character-name-zone">
-          <h1 class="class-title">${char.name}</h1>
-          <p class="class-subtitle">${char.title}</p>
+      container.innerHTML = `
+        <div class="card" id="${cardId}" style="background-image: url('${char.image}');">
+          <div class="art-bg" style="background: radial-gradient(circle at center, ${char.color} 0%, rgba(0,0,0,0) 70%);"></div>
 
-          <div class="difficulty-box">
-            <div class="difficulty-label">Difficulty</div>
-            <div class="stars">${starIcons}</div>
+          <div class="character-name-zone">
+            <h1 class="class-title">${char.name}</h1>
+            <p class="class-subtitle">${char.title}</p>
+
+            <div class="difficulty-box">
+              <div class="difficulty-label">Difficulty</div>
+              <div class="stars">${starIcons}</div>
+            </div>
+          </div>
+
+          <div class="textbox">
+            <div class="section-title">⚙️ ${char.traitName}</div>
+            <p class="rules-text">${char.traitDesc}</p>
+
+            <hr>
+
+            <div class="active-ability-row">
+              <h2 class="active-title-text">⚡ ${char.abilityName}</h2>
+              <span class="cost-badge">${char.abilityCost}</span>
+            </div>
+
+            <p class="rules-text">${char.abilityDesc}</p>
+
+            <div class="flavor-text">${char.flavor}</div>
           </div>
         </div>
 
-        <div class="textbox">
-          <div class="section-title">⚙️ ${char.traitName}</div>
-          <p class="rules-text">${char.traitDesc}</p>
-
-          <hr>
-
-          <div class="active-ability-row">
-            <h2 class="active-title-text">⚡ ${char.abilityName}</h2>
-            <span class="cost-badge">${char.abilityCost}</span>
-          </div>
-
-          <p class="rules-text">${char.abilityDesc}</p>
-
-          <div class="flavor-text">${char.flavor}</div>
-        </div>
+        <button class="download-btn" onclick="downloadCard('${cardId}', '${char.name}')">Download PNG</button>
       `;
 
-      body.appendChild(card);
+      body.appendChild(container);
     });
+
+    // 💾 Extraction Engine
+    function downloadCard(id, name) {
+      const node = document.getElementById(id);
+
+      // We can safely scale back up to high-definition (pixelRatio: 2) now because the broken blur properties are gone!
+      htmlToImage.toPng(node, { quality: 1.0, pixelRatio: 2 })
+        .then(function (dataUrl) {
+          const link = document.createElement('a');
+          link.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_card.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch(function (error) {
+          console.error('Image capture failed:', error);
+        });
+    }
   </script>
 </body>
 </html>
