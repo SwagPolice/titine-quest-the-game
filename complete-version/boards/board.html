@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KALBLAST Neon Spiral Board</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+  <style>
+    body {
+      background: #121214;
+      margin: 0;
+      padding: 40px;
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .download-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a19da8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 24px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .download-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* 🧱 THE BOARD CANVAS WRAPPER */
+    .board-container {
+      position: relative;
+      width: 960px;
+      height: 960px;
+      background: #090610;
+      border: 4px solid #1c172e;
+      border-radius: 16px;
+      padding: 10px;
+      box-sizing: border-box;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    }
+
+    #game-board {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 6px;
+      position: relative;
+      /* Higher z-index to sit perfectly over the glowing neon pipeline */
+      z-index: 2;
+    }
+
+    /* 📐 FROSTED SQUARES: Semi-transparent to let the neon glow show through beautifully */
+    .space {
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      padding: 10px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      /* Subtle dark inner shadow to preserve text contrast over the track */
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.75);
+      overflow: hidden;
+    }
+
+    /* Transparent backings so the underlying light flows through */
+    .space.blue-space {
+      background: linear-gradient(135deg, rgba(20, 28, 45, 0.82) 0%, rgba(10, 15, 28, 0.88) 100%);
+    }
+
+    .space.purple-space {
+      background: linear-gradient(135deg, rgba(34, 12, 45, 0.82) 0%, rgba(16, 5, 24, 0.88) 100%);
+    }
+
+    .space.start-space {
+      background: linear-gradient(135deg, rgba(39, 193, 111, 0.2) 0%, rgba(10, 15, 28, 0.9) 100%);
+      border: 2px solid #27c16f;
+    }
+
+    /* 👑 CENTRAL COMBINED SPACE 60 */
+    .space.center-victory {
+      grid-column: 4 / span 2;
+      grid-row: 4 / span 2;
+      aspect-ratio: auto;
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.9) 0%, rgba(69, 26, 3, 0.95) 100%);
+      border: 3px solid #fbbf24;
+      box-shadow: 0 0 40px rgba(251, 191, 36, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .space-num {
+      font-size: 14px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .center-victory .space-num {
+      color: #fbbf24;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .space-text {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #f1f5f9;
+      font-weight: 500;
+      text-align: left;
+      /* Drops shadowed dark text halo underneath text layers to completely guarantee 100% legibility */
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+    }
+
+    .center-victory .space-text {
+      font-size: 13px;
+      color: #fef3c7;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* 🗺️ THE CORE NEON ENERGY PATHWAY OVERLAY */
+    .path-svg-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      pointer-events: none;
+      z-index: 1; /* Sits underneath the boxes but above the background core map backing */
+    }
+
+    /* Thick base path handling the neon track core */
+    .path-line-glow {
+      fill: none;
+      stroke: url(#neon-gradient);
+      stroke-width: 28px; /* High width neon piping system */
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.4; /* Soft backing blend */
+    }
+
+    /* Intensely focused bright inner core lines */
+    .path-line-core {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 4px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button class="download-btn" onclick="downloadBoard()">Download Glowing Board</button>
+  </div>
+
+  <div class="board-container" id="board-capture-wrapper">
+    <svg class="path-svg-overlay" id="path-svg" viewBox="0 0 940 940">
+      <defs>
+        <linearGradient id="neon-gradient" x1="0%" y1="100%" x2="50%" y2="50%">
+          <stop offset="0%" stop-color="#27c16f" />  <stop offset="40%" stop-color="#38bdf8" /> <stop offset="75%" stop-color="#a855f7" /> <stop offset="100%" stop-color="#fbbf24" /></linearGradient>
+      </defs>
+      <path class="path-line-glow" id="svg-track-glow" d="" />
+      <path class="path-line-core" id="svg-track-core" d="" />
+    </svg>
+
+    <div id="game-board"></div>
+  </div>
+
+  <script>
+    const spiralCoords = [
+      [7,0], [7,1], [7,2], [7,3], [7,4], [7,5], [7,6], [7,7],
+      [6,7], [5,7], [4,7], [3,7], [2,7], [1,7], [0,7],
+      [0,6], [0,5], [0,4], [0,3], [0,2], [0,1], [0,0],
+      [1,0], [2,0], [3,0], [4,0], [5,0], [6,0],
+      [6,1], [6,2], [6,3], [6,4], [6,5], [6,6],
+      [5,6], [4,6], [3,6], [2,6], [1,6],
+      [1,5], [1,4], [1,3], [1,2], [1,1],
+      [2,1], [3,1], [4,1], [5,1],
+      [5,2], [5,3], [5,4], [5,5],
+      [4,5], [3,5], [2,5],
+      [2,4], [2,3], [2,2],
+      [3,2], [4,2],
+      [3,3]
+    ];
+
+    const spaceTexts = {
+      0: "Start", 1: "Everybody drinks", 2: "Player to your left drinks", 3: "Player in front of you drinks", 4: "Go to box 28", 5: "You drink (bitch)", 6: "RPS versus another player, loser drinks one", 7: "Drink and move a ladder", 8: "Give out one sip to another player", 9: "Whisper until your next turn, drink when you fail", 10: "Guys drink, if no guy, everybody drinks", 11: "Five squats or five push-ups or two Š", 12: "Drink one quarter of your glass", 13: "Player to your right drinks", 14: "Collective RPS", 15: "Play suitcase", 16: "Drink as many sips as the dice just did", 17: "Fill up your glass, drink as much as another player has to drink as much", 18: "Roll a dice, even you give X, odd you drink X", 19: "Drink and take an extra turn", 20: "Girls drink. If no girls, everybody drinks", 21: "Drink a Š 🤍", 22: "You can't speak until your next turn. Drink when you do", 23: "Play X or Y", 24: "Until someone else becomes it, you are the queen of questions", 25: "Drink water", 26: "Until your next turn, finish your sentences by 'Yeah' drink when you forget", 27: "People with more than half full glasses drink", 28: "People with odd ages drink", 29: "Drink and make up a permanent rule", 30: "Pick a mate, whenever one drinks, so does the other except for shots", 31: "Give two sips to two people", 32: "Drink and go to the box pointed by the arrow. Trigger the box effect", 33: "Take a shot of hard liquor", 34: "Take a priest token for free", 35: "Player with the fullest drink drinks two sips", 36: "Rotate classes clockwise. People who complain drink", 37: "Trade glasses with a player, you both drink half of it, then switch back", 38: "Play never have I ever", 39: "Switch positions of 2 bottles as you want, then drink a Š from any bottle", 40: "Drink and go to box 61", 41: "Play the pointing game", 42: "Switch positions physically but, nothing else with the player in front of you. You become mates", 43: "Point at someone, say an anecdote that may be true or false, people guess and losers drink", 44: "One shot of hard liquor with someone, or two alone", 45: "Drink water", 46: "Choose: Either drink 7 sips and go forward one box or drink 1 Š and take an extra turn", 47: "Drink water", 48: "Play would you rather, minority drinks", 49: "Drink and activate your ability for free next time", 50: "Trade your class with the player in front of you. Complainers drink.", 51: "Trigger the bard's ability for free, except you can get hit as well", 52: "Move 3 boxes ahead and drink", 53: "Put a landmine on that box. Next player who lands on it removes the landmine, stops their turn and takes a Š", 54: "Roll two dice for X, go forward X, drink X sips", 55: "Royal RPS. Losers drink. If everyone thing, give one Š", 56: "Player with the emptiest glass empties it", 57: "Drop a rule made on box 32. Their creator drinks if there is no rule, you drink", 58: "Drink water", 59: "Drink water", 60: "King, you dropped this. 👑 You win, all players except you chug their glasses, you can give yours to target player. Fragile: only one ladder on it."
+    };
+
+    const board = document.getElementById("game-board");
+    let svgPathD = "";
+
+    // 🏗️ SYSTEM ASSEMBLY MATRIX
+    for (let i = 0; i <= 60; i++) {
+      const coords = spiralCoords[i];
+      const element = document.createElement("div");
+
+      element.style.gridRowStart = coords[0] + 1;
+      element.style.gridColumnStart = coords[1] + 1;
+
+      const ruleText = spaceTexts[i] || "";
+
+      const colWidth = 940 / 8;
+      const rowHeight = 940 / 8;
+      let centerX = (coords[1] * colWidth) + (colWidth / 2);
+      let centerY = (coords[0] * rowHeight) + (rowHeight / 2);
+
+      if (i === 60) {
+        centerX = (4 * colWidth);
+        centerY = (4 * rowHeight);
+        svgPathD += ` L ${centerX} ${centerY}`;
+      } else {
+        if (i === 0) svgPathD += `M ${centerX} ${centerY}`;
+        else svgPathD += ` L ${centerX} ${centerY}`;
+      }
+
+      if (i === 60) {
+        element.className = "space center-victory";
+        element.innerHTML = `
+          <div class="space-num">👑 SPACE 60</div>
+          <div class="space-text">${ruleText}</div>
+        `;
+      } else {
+        const colorationClass = (i === 0) ? "start-space" : (i % 2 === 0 ? "blue-space" : "purple-space");
+        element.className = `space ${colorationClass}`;
+
+        element.innerHTML = `
+          <div class="space-num">${i === 0 ? "START" : i}</div>
+          <div class="space-text">${ruleText}</div>
+        `;
+      }
+      board.appendChild(element);
+    }
+
+    // Set paths on both vectors (glowing piping backdrop + solid white inner line tracking)
+    document.getElementById("svg-track-glow").setAttribute("d", svgPathD);
+    document.getElementById("svg-track-core").setAttribute("d", svgPathD);
+
+    // 💾 Extraction Engine Capture Target Pipeline
+    function downloadBoard() {
+      const targetNode = document.getElementById("board-capture-wrapper");
+
+      htmlToImage.toPng(targetNode, { quality: 1.0, pixelRatio: 2 })
+        .then(function (dataUrl) {
+          const link = document.createElement('a');
+          link.download = `kalblast_neon_spiral_board.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch(function (error) {
+          console.error('Board download failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>
