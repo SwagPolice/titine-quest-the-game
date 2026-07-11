@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KALBLAST Perfected Golden Spiral Board</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #121214;
+      margin: 0;
+      padding: 40px;
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .download-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a19da8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 24px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .download-btn:hover {
+      background: #fbbf24;
+      color: #000000;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+    }
+
+    /* 🧱 THE BOARD CANVAS WRAPPER */
+    .board-container {
+      position: relative;
+      width: 960px;
+      height: 960px;
+      background: #090610;
+      border: 4px solid #1c172e;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    }
+
+    #game-board {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 📐 CARD roomS */
+    .room {
+      aspect-ratio: 1 / 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      border: 3px solid #090610;
+      overflow: hidden;
+    }
+
+    .room.blue-room {
+      background: linear-gradient(135deg, rgb(7 24 60 / 0.85) 0%, rgba(10, 15, 28, 0.9) 100%);
+    }
+
+    .room.purple-room {
+      background: linear-gradient(135deg, rgb(50 17 67 / 0.85) 0%, rgba(16, 5, 24, 0.9) 100%);
+    }
+
+    .room.start-room {
+      background: linear-gradient(135deg, rgb(46 237 136 / 0.2) 0%, rgb(4 46 15 / 0.79) 100%);
+    }
+
+    /* 👑 CENTRAL COMBINED room 60 */
+    .room.center-victory {
+      grid-column: 4 / span 2;
+      grid-row: 4 / span 2;
+      aspect-ratio: auto;
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.9) 0%, rgba(69, 26, 3, 0.95) 100%);
+      border: 3px solid #fbbf24 !important;
+      box-shadow: 0 0 40px rgba(251, 191, 36, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .room-num {
+      font-size: 14px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .center-victory .room-num {
+      color: #fbbf24;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .room-text {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #f1f5f9;
+      font-weight: 500;
+      text-align: left;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+    }
+
+    .center-victory .room-text {
+      font-size: 13px;
+      color: #fef3c7;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* 🛠️ WALL ELIMINATORS */
+    .open-right   { border-right: none !important; }
+    .open-left    { border-left: none !important; }
+    .open-up      { border-top: none !important; }
+    .open-down    { border-bottom: none !important; }
+
+    .receive-right { border-left: none !important; }
+    .receive-left  { border-right: none !important; }
+    .receive-up    { border-bottom: none !important; }
+    .receive-down  { border-top: none !important; }
+
+    /* 🗺️ THE CORE NEON ENERGY PATHWAY OVERLAY */
+    .path-svg-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .path-line-glow {
+      fill: none;
+      stroke: #fbbf24;
+      stroke-width: 26px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.45;
+    }
+
+    .path-line-core {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 4px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button class="download-btn" onclick="downloadBoard()">Download Perfected Golden Board</button>
+  </div>
+
+  <div class="board-container" id="board-capture-wrapper">
+    <svg class="path-svg-overlay" id="path-svg" viewBox="0 0 936 936">
+      <path class="path-line-glow" id="svg-track-glow" d="" />
+      <path class="path-line-core" id="svg-track-core" d="" />
+    </svg>
+
+    <div id="game-board"></div>
+  </div>
+
+  <!-- 📥 SEPARATE TEXT RULES FILE IMPORT -->
+  <script src="board-rules.js"></script>
+
+  <script>
+    const spiralCoords = [
+      [7,0], [7,1], [7,2], [7,3], [7,4], [7,5], [7,6], [7,7],
+      [6,7], [5,7], [4,7], [3,7], [2,7], [1,7], [0,7],
+      [0,6], [0,5], [0,4], [0,3], [0,2], [0,1], [0,0],
+      [1,0], [2,0], [3,0], [4,0], [5,0], [6,0],
+      [6,1], [6,2], [6,3], [6,4], [6,5], [6,6],
+      [5,6], [4,6], [3,6], [2,6], [1,6],
+      [1,5], [1,4], [1,3], [1,2], [1,1],
+      [2,1], [3,1], [4,1], [5,1],
+      [5,2], [5,3], [5,4], [5,5],
+      [4,5], [3,5], [2,5],
+      [2,4], [2,3], [2,2],
+      [3,2], [4,2],
+      [3,3]
+    ];
+
+    const board = document.getElementById("game-board");
+    let svgPathD = "";
+
+    for (let i = 0; i <= 60; i++) {
+      const coords = spiralCoords[i];
+      const element = document.createElement("div");
+
+      element.style.gridRowStart = coords[0] + 1;
+      element.style.gridColumnStart = coords[1] + 1;
+
+      // Pull from imported global array array directly by index
+      const ruleText = roomTexts[i] || "";
+
+      const colWidth = 936 / 8;
+      const rowHeight = 936 / 8;
+
+      let centerX, centerY;
+
+      if (i < 60) {
+        centerX = (coords[1] * colWidth) + (colWidth / 2);
+        centerY = (coords[0] * rowHeight) + (rowHeight / 2);
+
+        if (i === 0) {
+          svgPathD += `M ${centerX} ${centerY}`;
+        } else {
+          svgPathD += ` L ${centerX} ${centerY}`;
+        }
+
+        if (i === 59) {
+          const borderEdgeX = centerX + (colWidth / 2);
+          svgPathD += ` L ${borderEdgeX} ${centerY}`;
+        }
+      }
+
+      let borderClasses = [];
+      let isOpened = { right: false, left: false, up: false, down: false };
+
+      // Calculate forward paths
+      if (i < 60) {
+        const next = spiralCoords[i + 1];
+        if (next[1] > coords[1]) { borderClasses.push("open-right"); isOpened.right = true; }
+        else if (next[1] < coords[1]) { borderClasses.push("open-left"); isOpened.left = true; }
+        else if (next[0] < coords[0]) { borderClasses.push("open-up"); isOpened.up = true; }
+        else if (next[0] > coords[0]) { borderClasses.push("open-down"); isOpened.down = true; }
+      }
+
+      // Calculate entrance paths
+      if (i > 0) {
+        const prev = spiralCoords[i - 1];
+        if (coords[1] > prev[1]) { borderClasses.push("receive-right"); isOpened.left = true; }
+        else if (coords[1] < prev[1]) { borderClasses.push("receive-left"); isOpened.right = true; }
+        else if (coords[0] < prev[0]) { borderClasses.push("receive-up"); isOpened.down = true; }
+        else if (coords[0] > prev[0]) { borderClasses.push("receive-down"); isOpened.up = true; }
+      }
+
+      let shadowArray = [];
+
+      if (i !== 60) {
+        if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
+
+        if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)");
+      }
+
+      if (shadowArray.length > 0) {
+        element.style.boxShadow = shadowArray.join(", ");
+      }
+
+      if (i === 60) {
+        element.className = "room center-victory";
+        element.innerHTML = `
+          <div class="room-num">👑 ROOM 60 👑</div>
+          <div class="room-text">${ruleText}</div>
+        `;
+      } else {
+        const colorationClass = (i === 0) ? "start-room" : (i % 2 === 0 ? "blue-room" : "purple-room");
+        element.className = `room ${colorationClass} ${borderClasses.join(" ")}`;
+
+        element.innerHTML = `
+          <div class="room-num">${i === 0 ? "START" : i}</div>
+          <div class="room-text">${ruleText}</div>
+        `;
+      }
+      board.appendChild(element);
+    }
+
+    document.getElementById("svg-track-glow").setAttribute("d", svgPathD);
+    document.getElementById("svg-track-core").setAttribute("d", svgPathD);
+
+    function downloadBoard() {
+      const targetNode = document.getElementById("board-capture-wrapper");
+
+      htmlToImage.toPng(targetNode, { quality: 1.0, pixelRatio: 2 })
+        .then(function (dataUrl) {
+          const link = document.createElement('a');
+          link.download = `kalblast_perfected_board.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch(function (error) {
+          console.error('Board download failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>

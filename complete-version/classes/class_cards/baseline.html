@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KALBLAST Card Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+  <style>
+    body {
+      background: #121214;
+      margin: 0;
+      padding: 40px;
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    /* Card Wrapper Container for Card + Download Button */
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Tarot Card Dimensions & Vibe */
+    .card {
+      width: 350px;
+      height: 600px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Glowing visual background trick */
+    .art-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 60%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.25;
+    }
+
+    /* 🛠️ FIXED FOR DOWNLOADS: Frosted Matte Glass Panels without backdrop-filter blur */
+    .character-name-zone, .textbox {
+      /* Made background slightly darker & richer to emulate the opacity/matte filter natively */
+      background: linear-gradient(135deg, rgba(24, 20, 34, 0.82) 0%, rgba(18, 14, 26, 0.88) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      z-index: 2;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    /* Strictly Block layout, anchored completely to the Left */
+    .character-name-zone {
+      padding: 12px 16px;
+      text-align: left;
+      display: block;
+      position: relative;
+    }
+
+    .class-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      text-align: left;
+    }
+
+    .class-subtitle {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin: 4px 0 0 0;
+      font-weight: 700;
+      color: var(--theme-color);
+      text-align: left;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Floating Difficulty Badge Style */
+    .difficulty-box {
+      position: absolute;
+      bottom: -14px;
+      right: 14px;
+      text-align: center;
+      background: #14101c;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      z-index: 3;
+    }
+
+    .difficulty-label {
+      font-size: 8px;
+      font-weight: 800;
+      color: #a19da8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1px;
+    }
+
+    .stars {
+      color: #fbbf24;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .textbox {
+      padding: 16px;
+    }
+
+    /* Passive Trait Title */
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      color: var(--theme-color);
+      text-align: left;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Active Ability Flex Container */
+    .active-ability-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+
+    .active-title-text {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--theme-color);
+      text-align: left;
+      margin: 0;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Splash Circle Badge */
+    .cost-badge {
+      background: var(--theme-color);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      line-height: 1.1;
+
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.2);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+
+    .rules-text {
+      font-size: 12px;
+      color: #e2e8f0;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      text-align: left;
+    }
+
+    .rules-text:last-of-type {
+      margin-bottom: 0;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 12px 0;
+    }
+
+    .flavor-text {
+      font-style: italic;
+      font-size: 10px;
+      color: #64748b;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Download Button Style */
+    .download-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a19da8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .download-btn:hover {
+      background: var(--theme-color);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .card { page-break-inside: avoid; }
+      .download-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    // 🗂️ THE CHARACTER DATABASE
+    const characters = [
+      {
+        name: "FireFoxxx",
+        title: "CEO of CAGEC",
+        image: "firefoxxx.jpg",
+        color: "#ef4444",
+        difficulty: 3,
+        traitName: "Shall I repeat myself?",
+        traitDesc: "You may reroll your movement die. To do so, you must drink a number of sips equal to twice the tens digit of your current room.",
+        abilityName: "Firework-aholic",
+        abilityCost: "1Š",
+        abilityDesc: "Cast a fireball from your room that can travel a distance of 2d6 rooms, go through walls and change direction freely. Any player hit drinks 1Š. If ALL other players are hit by it, they each drink 1Š extra.",
+        flavor: '"At CAGEC, we cherish our consum... our customers!"'
+      },
+      {
+        name: "Glamidir Vospo",
+        title: "Master of Disguise",
+        image: "spy.jpg",
+        color: "#10b981",
+        difficulty: 2,
+        traitName: "In their shoes",
+        traitDesc: "Copy the movement mechanic of the player closest ahead on the board. If you are currently in first place, roll 1d6 instead.",
+        abilityName: "In their head",
+        abilityCost: "1Š",
+        abilityDesc: "Whenever you pass through or land in a room occupied by another player, you may pay the cost. Copy their Class Ability as a temporary extra ability you can trigger once for free on this turn.",
+        flavor: '"I am Glamidir... VOSPODINOV!"'
+      },
+      {
+        name: "Hans Pinner",
+        title: "The Advisor",
+        image: "advisor.jpg",
+        color: "#35389e",
+        difficulty: 3,
+        traitName: "Dark Maneuvers",
+        traitDesc: "Roll 1d6 for your movement. Then, roll a second 1d6: choose an opponent to either move forward/backward by that many rooms, and make them either drink/distribute that many sips.",
+        abilityName: "The Grand Scheme",
+        abilityCost: "1Š",
+        abilityDesc: "Swap your board piece and Class Card with any player who has not played as the Advisor yet and take an Advisor token. If no valid players remain, the game instantly ends. <b>Nobody wins</b>.",
+        flavor: '"There is no plan. I am the plan."'
+      },
+      {
+        name: "Clazgreb",
+        title: "Faceless Investor",
+        image: "bard.jpg",
+        color: "#eab308",
+        difficulty: 1,
+        traitName: "Around The World",
+        traitDesc: "Roll 1d60 for movement. The result is the number of the room you land on.",
+        abilityName: "Emergency Group Call",
+        abilityCost: "1Š",
+        abilityDesc: "Create a shockwave centered on room 1d60. Opponents drink Š according to your class layout.",
+        flavor: '"Market trends indicate that I should short your life. *CLICK*"'
+      },
+      {
+        name: "Carnila",
+        title: "Glam Metal Idol",
+        image: "vampire.jpg",
+        color: "#981241",
+        difficulty: 2,
+        traitName: "Bite Your Teeth",
+        traitDesc: "Roll 2d6 and use the highest result for movement.",
+        abilityName: "BLOODMONEY",
+        abilityCost: "1Š",
+        abilityDesc: "Cancel the effect of the room you landed in, then put a landmine on it. Next time another player passes in the room, they remove the landmine, stop their turn in the room, drink 1Š, and you are <b>bound</b>.",
+        flavor: '"Give me your energy, give me your BLOOD!"'
+      },
+      {
+        name: "Turbo Killer",
+        title: "EXEC at Imago Pharma",
+        image: "berserker.jpg",
+        color: "#8327c1",
+        difficulty: 2,
+        traitName: "A question of dosing",
+        traitDesc: "Whenever you land in a blue room, give 2 sips. Whenever you land in a purple room, drink 1 sip.",
+        abilityName: "Round of test injections",
+        abilityCost: "KŠ",
+        abilityDesc: "Play RPS with every opponent. Everytime you win, move +K rooms and the other player drinks KŠ. If you lose, they move +K rooms. If you win against everyone, opponents drink another KŠ and you move an extra +K rooms for each opponent.",
+        flavor: '"What does not kill you makes you faster!"'
+      },
+      {
+        name: "Robiocoop",
+        title: "Fallen board member",
+        image: "warrior.jpg",
+        color: "#27c16f",
+        difficulty: 2,
+        traitName: "Relentless Destroyer",
+        traitDesc: "You can climb up ladders even when passing by them.",
+        abilityName: "Pursuit of Vengeance",
+        abilityCost: "1Š",
+        abilityDesc: "Challenge the player closest ahead on the board to RPS (best of 3).\n" +
+                "<br>- If you lose, the other player drinks 1Š.\n" +
+                "<br>- If you win, the other player drinks 2Š and you go to their room.",
+        flavor: '"I will turn this whole board into cardboard."'
+      },
+      {
+        name: "“Grandma” Luke",
+        title: "Diversity Hire",
+        image: "priest.jpg",
+        color: "#afa8a8",
+        difficulty: 2,
+        traitName: "Pride Parade",
+        traitDesc: "Roll 1d6 for movement. Once a round, when the player closest ahead on the board drinks, you may go straight to their room and drink double the amount for them.",
+        abilityName: "I Prefer Tea",
+        abilityCost: "1Š",
+        abilityDesc: "Obtain 1d3 tokens. You can never have more than 3 at the same time. When you have to drink 1Š or more, you may discard a token. You may then decide to either drink a number of sips equal to the number of Š multiplied by 1d6 or drink the Š. <br><i>You cannot cancel Š you have to drink to activate this ability.</i>",
+        flavor: '"Sometimes I wonder what I am doing here..."'
+      },
+      {
+        name: "Paul Guaca",
+        title: "Master Brewer",
+        image: "vanilla.jpg",
+        color: "#6bae22",
+        difficulty: 1,
+        traitName: "Barathon",
+        traitDesc: "Roll 2d6 for movement. You drink a number of sips equal to the lower die.",
+        abilityName: "Sambuquiño?",
+        abilityCost: "1Š",
+        abilityDesc: "Give out 1Š, add 1 to your Š-counter." +
+                "When the counter reaches 6, you can give out 6Š, divided amongst how many players you want. Reset the counter.",
+        flavor: '"Great spirits drink alike."'
+      },
+      {
+        name: "Brenchilli",
+        title: "Fashion Designer",
+        image: "carpenter.jpg",
+        color: "#b08ff6",
+        difficulty: 2,
+        traitName: "I saw it first",
+        traitDesc: "You can move one ladder whenever you roll an even number.\n" +
+                "You can interrupt a ladder event you are not involved in if the ladder is in indicated range by drinking the current bid + 1Š.",
+        abilityName: "Trend Setter",
+        abilityCost: "1Š",
+        abilityDesc: "Choose one: " +
+                "<br>- Move a ladder from within your indicated range into your inventory. " +
+                "<br>- Place a ladder from your inventory into any room within your indicated range." +
+                "<br>When a ladder is placed or moved this way, all players standing within the indicated range layout centered on the upper end of the ladder must drink Š according to the grid.",
+        flavor: '"Out of my catwalk, filthy dogs!"'
+      }
+    ];
+
+    // 🏗️ CARD GENERATOR ENGINE
+    const body = document.body;
+
+    characters.forEach((char, index) => {
+      const starIcons = "★".repeat(char.difficulty);
+
+      const container = document.createElement('div');
+      container.className = 'card-container';
+      container.style.setProperty('--theme-color', char.color);
+
+      const cardId = `card-${index}`;
+
+      container.innerHTML = `
+        <div class="card" id="${cardId}" style="background-image: url('${char.image}');">
+          <div class="art-bg" style="background: radial-gradient(circle at center, ${char.color} 0%, rgba(0,0,0,0) 70%);"></div>
+
+          <div class="character-name-zone">
+            <h1 class="class-title">${char.name}</h1>
+            <p class="class-subtitle">${char.title}</p>
+
+            <div class="difficulty-box">
+              <div class="difficulty-label">Difficulty</div>
+              <div class="stars">${starIcons}</div>
+            </div>
+          </div>
+
+          <div class="textbox">
+            <div class="section-title">⚙️ ${char.traitName}</div>
+            <p class="rules-text">${char.traitDesc}</p>
+
+            <hr>
+
+            <div class="active-ability-row">
+              <h2 class="active-title-text">⚡ ${char.abilityName}</h2>
+              <span class="cost-badge">${char.abilityCost}</span>
+            </div>
+
+            <p class="rules-text">${char.abilityDesc}</p>
+
+            <div class="flavor-text">${char.flavor}</div>
+          </div>
+        </div>
+
+        <button class="download-btn" onclick="downloadCard('${cardId}', '${char.name}')">Download PNG</button>
+      `;
+
+      body.appendChild(container);
+    });
+
+    // 💾 Extraction Engine
+    function downloadCard(id, name) {
+      const node = document.getElementById(id);
+
+      // We can safely scale back up to high-definition (pixelRatio: 2) now because the broken blur properties are gone!
+      htmlToImage.toPng(node, { quality: 1.0, pixelRatio: 2 })
+        .then(function (dataUrl) {
+          const link = document.createElement('a');
+          link.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_card.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch(function (error) {
+          console.error('Image capture failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>
