@@ -220,15 +220,23 @@
 
       let centerX, centerY;
 
-      if (i === 60) {
-        centerX = (3 * colWidth) + (colWidth / 2);
-        centerY = (4 * rowHeight) + (rowHeight / 2);
-        svgPathD += ` L ${centerX} ${centerY}`;
-      } else {
+      // 🎯 BORDER RUNNER STITCH FIX:
+      // We calculate Space 59's center point, then extend the vector line right to its column border line.
+      if (i < 60) {
         centerX = (coords[1] * colWidth) + (colWidth / 2);
         centerY = (coords[0] * rowHeight) + (rowHeight / 2);
-        if (i === 0) svgPathD += `M ${centerX} ${centerY}`;
-        else svgPathD += ` L ${centerX} ${centerY}`;
+
+        if (i === 0) {
+          svgPathD += `M ${centerX} ${centerY}`;
+        } else {
+          svgPathD += ` L ${centerX} ${centerY}`;
+        }
+
+        // If we are evaluating space 59, append one last straight vector segment right up to the border threshold.
+        if (i === 59) {
+          const borderEdgeX = centerX + (colWidth / 2);
+          svgPathD += ` L ${borderEdgeX} ${centerY}`;
+        }
       }
 
       let borderClasses = [];
@@ -252,21 +260,19 @@
         else if (coords[0] > prev[0]) { borderClasses.push("receive-down"); isOpened.up = true; }
       }
 
-      // 🛡️ ACCURATE WALL SHADOW LAYER
-      // We only apply edge shadows strictly if a solid grid wall exists.
-      // If a wall is open, shadow = 0. Zero bleeding anywhere.
       let shadowArray = [];
-      if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
-      if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
-      if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
-      if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
 
-      // 💎 COMPACT CORNER SHADOW INJECTION
-      // Checks for physical, intersecting solid walls to spawn an elegant, localized corner shadow.
-      if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)"); // Top-Right Corner
-      if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)"); // Bottom-Right Corner
-      if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)"); // Top-Left Corner
-      if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)"); // Bottom-Left Corner
+      if (i !== 60) {
+        if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
+        if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
+
+        if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)");
+        if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)");
+      }
 
       if (shadowArray.length > 0) {
         element.style.boxShadow = shadowArray.join(", ");
