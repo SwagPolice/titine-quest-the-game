@@ -61,8 +61,8 @@
       z-index: 2;
     }
 
-    /* 📐 CARD SPACES */
-    .space {
+    /* 📐 CARD roomS */
+    .room {
       aspect-ratio: 1 / 1;
       padding: 10px;
       display: flex;
@@ -73,20 +73,20 @@
       overflow: hidden;
     }
 
-    .space.blue-space {
-      background: linear-gradient(135deg, rgba(20, 28, 45, 0.85) 0%, rgba(10, 15, 28, 0.9) 100%);
+    .room.blue-room {
+      background: linear-gradient(135deg, rgb(7 24 60 / 0.85) 0%, rgba(10, 15, 28, 0.9) 100%);
     }
 
-    .space.purple-space {
-      background: linear-gradient(135deg, rgba(34, 12, 45, 0.85) 0%, rgba(16, 5, 24, 0.9) 100%);
+    .room.purple-room {
+      background: linear-gradient(135deg, rgb(50 17 67 / 0.85) 0%, rgba(16, 5, 24, 0.9) 100%);
     }
 
-    .space.start-space {
-      background: linear-gradient(135deg, rgba(39, 193, 111, 0.2) 0%, rgba(10, 15, 28, 0.95) 100%);
+    .room.start-room {
+      background: linear-gradient(135deg, rgb(46 237 136 / 0.2) 0%, rgb(4 46 15 / 0.79) 100%);
     }
 
-    /* 👑 CENTRAL COMBINED SPACE 60 */
-    .space.center-victory {
+    /* 👑 CENTRAL COMBINED room 60 */
+    .room.center-victory {
       grid-column: 4 / span 2;
       grid-row: 4 / span 2;
       aspect-ratio: auto;
@@ -98,19 +98,19 @@
       text-align: center;
     }
 
-    .space-num {
+    .room-num {
       font-size: 14px;
       font-weight: 900;
       color: rgba(255, 255, 255, 0.6);
     }
 
-    .center-victory .space-num {
+    .center-victory .room-num {
       color: #fbbf24;
       font-size: 22px;
       margin-bottom: 8px;
     }
 
-    .space-text {
+    .room-text {
       font-size: 11px;
       line-height: 1.4;
       color: #f1f5f9;
@@ -119,7 +119,7 @@
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
     }
 
-    .center-victory .space-text {
+    .center-victory .room-text {
       font-size: 13px;
       color: #fef3c7;
       font-weight: 700;
@@ -182,6 +182,9 @@
     <div id="game-board"></div>
   </div>
 
+  <!-- 📥 SEPARATE TEXT RULES FILE IMPORT -->
+  <script src="board-rules.js"></script>
+
   <script>
     const spiralCoords = [
       [7,0], [7,1], [7,2], [7,3], [7,4], [7,5], [7,6], [7,7],
@@ -199,10 +202,6 @@
       [3,3]
     ];
 
-    const spaceTexts = {
-      0: "Start", 1: "Everybody drinks", 2: "Player to your left drinks", 3: "Player in front of you drinks", 4: "Go to box 28", 5: "You drink (bitch)", 6: "RPS versus another player, loser drinks one", 7: "Drink and move a ladder", 8: "Give out one sip to another player", 9: "Whisper until your next turn, drink when you fail", 10: "Guys drink, if no guy, everybody drinks", 11: "Five squats or five push-ups or two Š", 12: "Drink one quarter of your glass", 13: "Player to your right drinks", 14: "Collective RPS", 15: "Play suitcase", 16: "Drink as many sips as the dice just did", 17: "Fill up your glass, drink as much as another player has to drink as much", 18: "Roll a dice, even you give X, odd you drink X", 19: "Drink and take an extra turn", 20: "Girls drink. If no girls, everybody drinks", 21: "Drink a Š 🤍", 22: "You can't speak until your next turn. Drink when you do", 23: "Play X or Y", 24: "Until someone else becomes it, you are the queen of questions", 25: "Drink water", 26: "Until your next turn, finish your sentences by 'Yeah' drink when you forget", 27: "People with more than half full glasses drink", 28: "People with odd ages drink", 29: "Drink and make up a permanent rule", 30: "Pick a mate, whenever one drinks, so does the other except for shots", 31: "Give two sips to two people", 32: "Drink and go to the box pointed by the arrow. Trigger the box effect", 33: "Take a shot of hard liquor", 34: "Take a priest token for free", 35: "Player with the fullest drink drinks two sips", 36: "Rotate classes clockwise. People who complain drink", 37: "Trade glasses with a player, you both drink half of it, then switch back", 38: "Play never have I ever", 39: "Switch positions of 2 bottles as you want, then drink a Š from any bottle", 40: "Drink and go to box 61", 41: "Play the pointing game", 42: "Switch positions physically but, nothing else with the player in front of you. You become mates", 43: "Point at someone, say an anecdote that may be true or false, people guess and losers drink", 44: "One shot of hard liquor with someone, or two alone", 45: "Drink water", 46: "Choose: Either drink 7 sips and go forward one box or drink 1 Š and take an extra turn", 47: "Drink water", 48: "Play would you rather, minority drinks", 49: "Drink and activate your ability for free next time", 50: "Trade your class with the player in front of you. Complainers drink.", 51: "Trigger the bard's ability for free, except you can get hit as well", 52: "Move 3 boxes ahead and drink", 53: "Put a landmine on that box. Next player who lands on it removes the landmine, stops their turn and takes a Š", 54: "Roll two dice for X, go forward X, drink X sips", 55: "Royal RPS. Losers drink. If everyone thing, give one Š", 56: "Player with the emptiest glass empties it", 57: "Drop a rule made on box 32. Their creator drinks if there is no rule, you drink", 58: "Drink water", 59: "Drink water", 60: "King, you dropped this. 👑 You win, all players except you chug their glasses, you can give yours to target player. Fragile: only one ladder on it."
-    };
-
     const board = document.getElementById("game-board");
     let svgPathD = "";
 
@@ -213,15 +212,14 @@
       element.style.gridRowStart = coords[0] + 1;
       element.style.gridColumnStart = coords[1] + 1;
 
-      const ruleText = spaceTexts[i] || "";
+      // Pull from imported global array array directly by index
+      const ruleText = roomTexts[i] || "";
 
       const colWidth = 936 / 8;
       const rowHeight = 936 / 8;
 
       let centerX, centerY;
 
-      // 🎯 BORDER RUNNER STITCH FIX:
-      // We calculate Space 59's center point, then extend the vector line right to its column border line.
       if (i < 60) {
         centerX = (coords[1] * colWidth) + (colWidth / 2);
         centerY = (coords[0] * rowHeight) + (rowHeight / 2);
@@ -232,7 +230,6 @@
           svgPathD += ` L ${centerX} ${centerY}`;
         }
 
-        // If we are evaluating space 59, append one last straight vector segment right up to the border threshold.
         if (i === 59) {
           const borderEdgeX = centerX + (colWidth / 2);
           svgPathD += ` L ${borderEdgeX} ${centerY}`;
@@ -279,18 +276,18 @@
       }
 
       if (i === 60) {
-        element.className = "space center-victory";
+        element.className = "room center-victory";
         element.innerHTML = `
-          <div class="space-num">👑 SPACE 60</div>
-          <div class="space-text">${ruleText}</div>
+          <div class="room-num">👑 ROOM 60 👑</div>
+          <div class="room-text">${ruleText}</div>
         `;
       } else {
-        const colorationClass = (i === 0) ? "start-space" : (i % 2 === 0 ? "blue-space" : "purple-space");
-        element.className = `space ${colorationClass} ${borderClasses.join(" ")}`;
+        const colorationClass = (i === 0) ? "start-room" : (i % 2 === 0 ? "blue-room" : "purple-room");
+        element.className = `room ${colorationClass} ${borderClasses.join(" ")}`;
 
         element.innerHTML = `
-          <div class="space-num">${i === 0 ? "START" : i}</div>
-          <div class="space-text">${ruleText}</div>
+          <div class="room-num">${i === 0 ? "START" : i}</div>
+          <div class="room-text">${ruleText}</div>
         `;
       }
       board.appendChild(element);
