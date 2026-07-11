@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KALBLAST Neon Spiral Board</title>
+  <title>KALBLAST Perfected Golden Spiral Board</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background: #121214;
       margin: 0;
@@ -29,10 +33,10 @@
       transition: all 0.2s ease;
     }
     .download-btn:hover {
-      background: #ef4444;
-      color: #ffffff;
+      background: #fbbf24;
+      color: #000000;
       border-color: transparent;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
     }
 
     /* 🧱 THE BOARD CANVAS WRAPPER */
@@ -43,8 +47,7 @@
       background: #090610;
       border: 4px solid #1c172e;
       border-radius: 16px;
-      padding: 10px;
-      box-sizing: border-box;
+      padding: 12px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.8);
     }
 
@@ -54,40 +57,32 @@
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
-      gap: 6px;
       position: relative;
-      /* Higher z-index to sit perfectly over the glowing neon pipeline */
       z-index: 2;
     }
 
-    /* 📐 FROSTED SQUARES: Semi-transparent to let the neon glow show through beautifully */
+    /* 📐 CARD SPACES */
     .space {
       aspect-ratio: 1 / 1;
-      border-radius: 8px;
       padding: 10px;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      /* Subtle dark inner shadow to preserve text contrast over the track */
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.75);
+      border: 3px solid #090610;
       overflow: hidden;
     }
 
-    /* Transparent backings so the underlying light flows through */
     .space.blue-space {
-      background: linear-gradient(135deg, rgba(20, 28, 45, 0.82) 0%, rgba(10, 15, 28, 0.88) 100%);
+      background: linear-gradient(135deg, rgba(20, 28, 45, 0.85) 0%, rgba(10, 15, 28, 0.9) 100%);
     }
 
     .space.purple-space {
-      background: linear-gradient(135deg, rgba(34, 12, 45, 0.82) 0%, rgba(16, 5, 24, 0.88) 100%);
+      background: linear-gradient(135deg, rgba(34, 12, 45, 0.85) 0%, rgba(16, 5, 24, 0.9) 100%);
     }
 
     .space.start-space {
-      background: linear-gradient(135deg, rgba(39, 193, 111, 0.2) 0%, rgba(10, 15, 28, 0.9) 100%);
-      border: 2px solid #27c16f;
+      background: linear-gradient(135deg, rgba(39, 193, 111, 0.2) 0%, rgba(10, 15, 28, 0.95) 100%);
     }
 
     /* 👑 CENTRAL COMBINED SPACE 60 */
@@ -96,7 +91,7 @@
       grid-row: 4 / span 2;
       aspect-ratio: auto;
       background: linear-gradient(135deg, rgba(120, 53, 15, 0.9) 0%, rgba(69, 26, 3, 0.95) 100%);
-      border: 3px solid #fbbf24;
+      border: 3px solid #fbbf24 !important;
       box-shadow: 0 0 40px rgba(251, 191, 36, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
@@ -121,7 +116,6 @@
       color: #f1f5f9;
       font-weight: 500;
       text-align: left;
-      /* Drops shadowed dark text halo underneath text layers to completely guarantee 100% legibility */
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
     }
 
@@ -132,50 +126,55 @@
       text-align: center;
     }
 
+    /* 🛠️ WALL ELIMINATORS */
+    .open-right   { border-right: none !important; }
+    .open-left    { border-left: none !important; }
+    .open-up      { border-top: none !important; }
+    .open-down    { border-bottom: none !important; }
+
+    .receive-right { border-left: none !important; }
+    .receive-left  { border-right: none !important; }
+    .receive-up    { border-bottom: none !important; }
+    .receive-down  { border-top: none !important; }
+
     /* 🗺️ THE CORE NEON ENERGY PATHWAY OVERLAY */
     .path-svg-overlay {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
+      top: 12px;
+      left: 12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
       pointer-events: none;
-      z-index: 1; /* Sits underneath the boxes but above the background core map backing */
+      z-index: 1;
     }
 
-    /* Thick base path handling the neon track core */
     .path-line-glow {
       fill: none;
-      stroke: url(#neon-gradient);
-      stroke-width: 28px; /* High width neon piping system */
+      stroke: #fbbf24;
+      stroke-width: 26px;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: 0.4; /* Soft backing blend */
+      opacity: 0.45;
     }
 
-    /* Intensely focused bright inner core lines */
     .path-line-core {
       fill: none;
       stroke: #ffffff;
       stroke-width: 4px;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: 0.75;
+      opacity: 0.85;
     }
   </style>
 </head>
 <body>
 
   <div class="controls">
-    <button class="download-btn" onclick="downloadBoard()">Download Glowing Board</button>
+    <button class="download-btn" onclick="downloadBoard()">Download Perfected Golden Board</button>
   </div>
 
   <div class="board-container" id="board-capture-wrapper">
-    <svg class="path-svg-overlay" id="path-svg" viewBox="0 0 940 940">
-      <defs>
-        <linearGradient id="neon-gradient" x1="0%" y1="100%" x2="50%" y2="50%">
-          <stop offset="0%" stop-color="#27c16f" />  <stop offset="40%" stop-color="#38bdf8" /> <stop offset="75%" stop-color="#a855f7" /> <stop offset="100%" stop-color="#fbbf24" /></linearGradient>
-      </defs>
+    <svg class="path-svg-overlay" id="path-svg" viewBox="0 0 936 936">
       <path class="path-line-glow" id="svg-track-glow" d="" />
       <path class="path-line-core" id="svg-track-core" d="" />
     </svg>
@@ -207,7 +206,6 @@
     const board = document.getElementById("game-board");
     let svgPathD = "";
 
-    // 🏗️ SYSTEM ASSEMBLY MATRIX
     for (let i = 0; i <= 60; i++) {
       const coords = spiralCoords[i];
       const element = document.createElement("div");
@@ -217,18 +215,61 @@
 
       const ruleText = spaceTexts[i] || "";
 
-      const colWidth = 940 / 8;
-      const rowHeight = 940 / 8;
-      let centerX = (coords[1] * colWidth) + (colWidth / 2);
-      let centerY = (coords[0] * rowHeight) + (rowHeight / 2);
+      const colWidth = 936 / 8;
+      const rowHeight = 936 / 8;
+
+      let centerX, centerY;
 
       if (i === 60) {
-        centerX = (4 * colWidth);
-        centerY = (4 * rowHeight);
+        centerX = (3 * colWidth) + (colWidth / 2);
+        centerY = (4 * rowHeight) + (rowHeight / 2);
         svgPathD += ` L ${centerX} ${centerY}`;
       } else {
+        centerX = (coords[1] * colWidth) + (colWidth / 2);
+        centerY = (coords[0] * rowHeight) + (rowHeight / 2);
         if (i === 0) svgPathD += `M ${centerX} ${centerY}`;
         else svgPathD += ` L ${centerX} ${centerY}`;
+      }
+
+      let borderClasses = [];
+      let isOpened = { right: false, left: false, up: false, down: false };
+
+      // Calculate forward paths
+      if (i < 60) {
+        const next = spiralCoords[i + 1];
+        if (next[1] > coords[1]) { borderClasses.push("open-right"); isOpened.right = true; }
+        else if (next[1] < coords[1]) { borderClasses.push("open-left"); isOpened.left = true; }
+        else if (next[0] < coords[0]) { borderClasses.push("open-up"); isOpened.up = true; }
+        else if (next[0] > coords[0]) { borderClasses.push("open-down"); isOpened.down = true; }
+      }
+
+      // Calculate entrance paths
+      if (i > 0) {
+        const prev = spiralCoords[i - 1];
+        if (coords[1] > prev[1]) { borderClasses.push("receive-right"); isOpened.left = true; }
+        else if (coords[1] < prev[1]) { borderClasses.push("receive-left"); isOpened.right = true; }
+        else if (coords[0] < prev[0]) { borderClasses.push("receive-up"); isOpened.down = true; }
+        else if (coords[0] > prev[0]) { borderClasses.push("receive-down"); isOpened.up = true; }
+      }
+
+      // 🛡️ ACCURATE WALL SHADOW LAYER
+      // We only apply edge shadows strictly if a solid grid wall exists.
+      // If a wall is open, shadow = 0. Zero bleeding anywhere.
+      let shadowArray = [];
+      if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
+      if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
+      if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
+      if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
+
+      // 💎 COMPACT CORNER SHADOW INJECTION
+      // Checks for physical, intersecting solid walls to spawn an elegant, localized corner shadow.
+      if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)"); // Top-Right Corner
+      if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)"); // Bottom-Right Corner
+      if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)"); // Top-Left Corner
+      if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)"); // Bottom-Left Corner
+
+      if (shadowArray.length > 0) {
+        element.style.boxShadow = shadowArray.join(", ");
       }
 
       if (i === 60) {
@@ -239,7 +280,7 @@
         `;
       } else {
         const colorationClass = (i === 0) ? "start-space" : (i % 2 === 0 ? "blue-space" : "purple-space");
-        element.className = `space ${colorationClass}`;
+        element.className = `space ${colorationClass} ${borderClasses.join(" ")}`;
 
         element.innerHTML = `
           <div class="space-num">${i === 0 ? "START" : i}</div>
@@ -249,18 +290,16 @@
       board.appendChild(element);
     }
 
-    // Set paths on both vectors (glowing piping backdrop + solid white inner line tracking)
     document.getElementById("svg-track-glow").setAttribute("d", svgPathD);
     document.getElementById("svg-track-core").setAttribute("d", svgPathD);
 
-    // 💾 Extraction Engine Capture Target Pipeline
     function downloadBoard() {
       const targetNode = document.getElementById("board-capture-wrapper");
 
       htmlToImage.toPng(targetNode, { quality: 1.0, pixelRatio: 2 })
         .then(function (dataUrl) {
           const link = document.createElement('a');
-          link.download = `kalblast_neon_spiral_board.png`;
+          link.download = `kalblast_perfected_board.png`;
           link.href = dataUrl;
           link.click();
         })
