@@ -710,7 +710,7 @@ def room_is_purple(room):
 
 # ---- Monte Carlo runner ------------------------------------------------
 
-def run_simulations(num_games=2000, min_players=2, max_players=6, seed=0):
+def run_simulations(num_games=2000, min_players=2, max_players=6, seed=None):
     rng = random.Random(seed)
     class_wins = {c: 0 for c in CLASSES}
     class_games = {c: 0 for c in CLASSES}
