@@ -139,10 +139,22 @@ to the next bottle in the line sequence.</li>
 <hr />
 <h2 id="detailed-rules-key-concepts">🪜 Detailed Rules &amp; Key
 Concepts</h2>
+<h3 id="resolving-room-effects">Resolving Room Effects</h3>
+<p>When your movement lands you in a room, resolve that room’s printed
+effect (drinking, mini-game, teleport, etc.) before doing anything else.
+If that effect sends you somewhere else, resolve the new room’s effect
+too, and so on, until you land somewhere with no further
+displacement.</p>
+<p>The one exception is a ladder: if the room you land in contains a
+ladder, you do not resolve its printed text directly. Instead, resolve
+the Ladder Event first — then resolve the effect of whichever room you
+end up in once the ladder event is settled.</p>
 <h3 id="moving-ladders">Moving Ladders</h3>
 <p>Whenever your movement die shows a <strong>6</strong>, you may move
 one of the four ladders at the end of your turn, reconnecting it between
-any two rooms you choose (Room 60 excepted — see FAQ).</p>
+any two rooms you choose (Room 60 excepted — see FAQ). Classes that roll
+multiple dice for movement can show multiple 6s in the same turn, and
+may move one ladder per 6 shown.</p>
 <h3 id="ladder-events">Ladder Events</h3>
 <p>When a movement route intersects with a ladder:</p>
 <ol type="1">
@@ -155,6 +167,14 @@ with each counter-challenge requiring <strong>+1 Š higher</strong> than
 the last bid, until all opponents yield or the active player gives
 up.</li>
 </ol>
+<p>Only the active player can ever trigger a Ladder Event, no matter
+what caused them to enter the room — but it always requires movement to
+have happened first that turn; a player simply sitting in a laddered
+room does not re-trigger it at the start of their next turn.</p>
+<p>If resolving a Ladder Event lands you in a room where a different
+ladder also has an end, you immediately resolve a new Ladder Event for
+it — ladders can chain this way. The same ladder, however, cannot be
+used twice in the same turn.</p>
 <h3 id="bound">Bound</h3>
 <p>Some cards and rooms make two players <strong>bound</strong> to each
 other. Whenever a bound player has to drink for any reason other than a
@@ -163,6 +183,7 @@ same amount. A player can only be bound to one other player at a time —
 entering a new bond immediately breaks their previous one.</p>
 <h3 id="mini-games-keywords">Mini-Games &amp; Keywords</h3>
 <ul>
+<li><strong>RPS:</strong> A classic Rock-Paper-Scissors game.</li>
 <li><strong>Collective RPS:</strong> All players throw
 Rock-Paper-Scissors at once. Each player drinks one sip for every
 opponent whose sign beats theirs.</li>
@@ -214,11 +235,21 @@ time you drink.</li>
 <strong>Impenetrable</strong>; no ladder can be anchored to it or bypass
 its borders.</li>
 </ul></li>
-<li><strong>Q: Do I match a shot if my Mate takes one?</strong>
+<li><strong>Q: Do I match a shot if the player I’m Bound to takes
+one?</strong>
 <ul>
-<li><em>A:</em> No. The Mate/Bond dynamic applies strictly to standard
-sips. <code>Š</code> actions are individual unless explicitly stated
+<li><em>A:</em> No. The Bound dynamic applies strictly to standard sips.
+<code>Š</code> actions are individual unless explicitly stated
 otherwise.</li>
+</ul></li>
+<li><strong>Q: What if I get moved onto Room 60 by another player’s
+ability, but it’s not my turn?</strong>
+<ul>
+<li><em>A:</em> You do not win — only the active player triggers room
+effects (see the State Change Interaction rule), and the win condition
+is Room 60’s effect. You simply remain there. On your next turn, roll
+normally: since you’re already on Room 60, any roll overshoots by its
+full value, and you bounce straight back that many rooms.</li>
 </ul></li>
 </ul>
   </div>

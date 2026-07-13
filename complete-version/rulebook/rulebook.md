@@ -131,6 +131,7 @@ Some cards and rooms make two players **bound** to each other. Whenever a bound 
 
 ### Mini-Games & Keywords
 
+*   **RPS:** A classic Rock-Paper-Scissors game.
 *   **Collective RPS:** All players throw Rock-Paper-Scissors at once. Each player drinks one sip for every opponent whose sign beats theirs.
 *   **Royal RPS:** The active player plays a separate round of RPS against each other player in turn, one at a time.
 *   **Suitcase:** The first player starts with "In my suitcase, I have..." followed by an item or expression. Each following player repeats the entire list in order, then adds one new item. Whoever fails to repeat the full sequence correctly drinks one sip. *(Optional harder variant: they drink a number of sips equal to the length of the sequence instead.)*
