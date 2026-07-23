@@ -1,6 +1,6 @@
-// 📝 KALBLAST room EFFECTS CONFIGURATION
+// 📝 KALBLAST room EFFECTS CONFIGURATION (English)
 // Line index matches the room Number directly (Index 0 = Start, Index 60 = Victory)
-const roomTexts = [
+const roomTexts_en = [
   "", // room 0
   "Everybody drinks", // room 1
   "Player to your left drinks", // room 2
