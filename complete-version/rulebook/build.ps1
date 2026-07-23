@@ -1,3 +1,5 @@
 Set-Location $PSScriptRoot
 pandoc rulebook.md -o rulebook.html --template rulebook-template.html -s
 Write-Host "rulebook.html regenerated from rulebook.md"
+pandoc rulebook.fr.md -o rulebook.fr.html --template rulebook-template.html -s
+Write-Host "rulebook.fr.html regenerated from rulebook.fr.md"

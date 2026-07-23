@@ -3,7 +3,15 @@
 
 A drinking board game with RPG elements, whose board mechanics are inspired by Goose Game. The goal is to be the first player to land exactly on **Room 60**, the last room of the board.
 
-For full setup steps, the turn structure, ladder/shot rules, and FAQ, see the [rulebook](rulebook/rulebook.md).
+For full setup steps, the turn structure, ladder/shot rules, and FAQ, see the rulebook: [English](rulebook/rulebook.md) / [Français](rulebook/rulebook.fr.md).
+
+## Languages
+The game currently supports **English** and **French**:
+- **Rulebook:** `rulebook/rulebook.md` (EN) and `rulebook/rulebook.fr.md` (FR) build to `rulebook.html` / `rulebook.fr.html` via `rulebook/build.sh` (or `build.ps1`).
+- **Class cards:** open `classes/class_cards/baseline.html` in a browser and use the language toggle at the top before downloading PNGs.
+- **Board:** open `boards/board.html` in a browser and use the language toggle before downloading the board PNG.
+
+To add another language, add a sibling data file (`rulebook.<lang>.md`, `characters.<lang>.js`, `board-rules.<lang>.js`) with the same structure and wire it into the relevant build script / language toggle.
 
 ## What is needed to play
 - The KALBLAST board (The Golden Spiral)

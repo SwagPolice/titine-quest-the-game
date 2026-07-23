@@ -39,6 +39,12 @@
       box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
     }
 
+    .lang-btn.active {
+      background: #fbbf24;
+      color: #000000;
+      border-color: transparent;
+    }
+
     /* 🧱 THE BOARD CANVAS WRAPPER */
     .board-container {
       position: relative;
@@ -170,6 +176,8 @@
 <body>
 
   <div class="controls">
+    <button class="download-btn lang-btn active" id="lang-en" onclick="setLanguage('en')">English</button>
+    <button class="download-btn lang-btn" id="lang-fr" onclick="setLanguage('fr')">Français</button>
     <button class="download-btn" onclick="downloadBoard()">Download Perfected Golden Board</button>
   </div>
 
@@ -182,10 +190,18 @@
     <div id="game-board"></div>
   </div>
 
-  <!-- 📥 SEPARATE TEXT RULES FILE IMPORT -->
-  <script src="board-rules.js"></script>
+  <!-- 📥 SEPARATE TEXT RULES FILE IMPORTS (one per language) -->
+  <script src="board-rules.en.js"></script>
+  <script src="board-rules.fr.js"></script>
 
   <script>
+    const roomTextsByLang = { en: roomTexts_en, fr: roomTexts_fr };
+    const roomLabels = {
+      en: { start: "START", victory: "👑 ROOM 60 👑" },
+      fr: { start: "DÉPART", victory: "👑 CASE 60 👑" }
+    };
+    let currentLang = 'en';
+
     const spiralCoords = [
       [7,0], [7,1], [7,2], [7,3], [7,4], [7,5], [7,6], [7,7],
       [6,7], [5,7], [4,7], [3,7], [2,7], [1,7], [0,7],
@@ -203,98 +219,115 @@
     ];
 
     const board = document.getElementById("game-board");
-    let svgPathD = "";
 
-    for (let i = 0; i <= 60; i++) {
-      const coords = spiralCoords[i];
-      const element = document.createElement("div");
+    function renderBoard() {
+      const roomTexts = roomTextsByLang[currentLang];
+      board.innerHTML = "";
+      let svgPathD = "";
 
-      element.style.gridRowStart = coords[0] + 1;
-      element.style.gridColumnStart = coords[1] + 1;
+      for (let i = 0; i <= 60; i++) {
+        const coords = spiralCoords[i];
+        const element = document.createElement("div");
 
-      // Pull from imported global array array directly by index
-      const ruleText = roomTexts[i] || "";
+        element.style.gridRowStart = coords[0] + 1;
+        element.style.gridColumnStart = coords[1] + 1;
 
-      const colWidth = 936 / 8;
-      const rowHeight = 936 / 8;
+        // Pull from the active language's array directly by index
+        const ruleText = roomTexts[i] || "";
 
-      let centerX, centerY;
+        const colWidth = 936 / 8;
+        const rowHeight = 936 / 8;
 
-      if (i < 60) {
-        centerX = (coords[1] * colWidth) + (colWidth / 2);
-        centerY = (coords[0] * rowHeight) + (rowHeight / 2);
+        let centerX, centerY;
 
-        if (i === 0) {
-          svgPathD += `M ${centerX} ${centerY}`;
+        if (i < 60) {
+          centerX = (coords[1] * colWidth) + (colWidth / 2);
+          centerY = (coords[0] * rowHeight) + (rowHeight / 2);
+
+          if (i === 0) {
+            svgPathD += `M ${centerX} ${centerY}`;
+          } else {
+            svgPathD += ` L ${centerX} ${centerY}`;
+          }
+
+          if (i === 59) {
+            const borderEdgeX = centerX + (colWidth / 2);
+            svgPathD += ` L ${borderEdgeX} ${centerY}`;
+          }
+        }
+
+        let borderClasses = [];
+        let isOpened = { right: false, left: false, up: false, down: false };
+
+        // Calculate forward paths
+        if (i < 60) {
+          const next = spiralCoords[i + 1];
+          if (next[1] > coords[1]) { borderClasses.push("open-right"); isOpened.right = true; }
+          else if (next[1] < coords[1]) { borderClasses.push("open-left"); isOpened.left = true; }
+          else if (next[0] < coords[0]) { borderClasses.push("open-up"); isOpened.up = true; }
+          else if (next[0] > coords[0]) { borderClasses.push("open-down"); isOpened.down = true; }
+        }
+
+        // Calculate entrance paths
+        if (i > 0) {
+          const prev = spiralCoords[i - 1];
+          if (coords[1] > prev[1]) { borderClasses.push("receive-right"); isOpened.left = true; }
+          else if (coords[1] < prev[1]) { borderClasses.push("receive-left"); isOpened.right = true; }
+          else if (coords[0] < prev[0]) { borderClasses.push("receive-up"); isOpened.down = true; }
+          else if (coords[0] > prev[0]) { borderClasses.push("receive-down"); isOpened.up = true; }
+        }
+
+        let shadowArray = [];
+
+        if (i !== 60) {
+          if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
+          if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
+          if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
+          if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
+
+          if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)");
+          if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)");
+          if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)");
+          if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)");
+        }
+
+        if (shadowArray.length > 0) {
+          element.style.boxShadow = shadowArray.join(", ");
+        }
+
+        const labels = roomLabels[currentLang];
+
+        if (i === 60) {
+          element.className = "room center-victory";
+          element.innerHTML = `
+            <div class="room-num">${labels.victory}</div>
+            <div class="room-text">${ruleText}</div>
+          `;
         } else {
-          svgPathD += ` L ${centerX} ${centerY}`;
+          const colorationClass = (i === 0) ? "start-room" : (i % 2 === 0 ? "blue-room" : "purple-room");
+          element.className = `room ${colorationClass} ${borderClasses.join(" ")}`;
+
+          element.innerHTML = `
+            <div class="room-num">${i === 0 ? labels.start : i}</div>
+            <div class="room-text">${ruleText}</div>
+          `;
         }
-
-        if (i === 59) {
-          const borderEdgeX = centerX + (colWidth / 2);
-          svgPathD += ` L ${borderEdgeX} ${centerY}`;
-        }
+        board.appendChild(element);
       }
 
-      let borderClasses = [];
-      let isOpened = { right: false, left: false, up: false, down: false };
-
-      // Calculate forward paths
-      if (i < 60) {
-        const next = spiralCoords[i + 1];
-        if (next[1] > coords[1]) { borderClasses.push("open-right"); isOpened.right = true; }
-        else if (next[1] < coords[1]) { borderClasses.push("open-left"); isOpened.left = true; }
-        else if (next[0] < coords[0]) { borderClasses.push("open-up"); isOpened.up = true; }
-        else if (next[0] > coords[0]) { borderClasses.push("open-down"); isOpened.down = true; }
-      }
-
-      // Calculate entrance paths
-      if (i > 0) {
-        const prev = spiralCoords[i - 1];
-        if (coords[1] > prev[1]) { borderClasses.push("receive-right"); isOpened.left = true; }
-        else if (coords[1] < prev[1]) { borderClasses.push("receive-left"); isOpened.right = true; }
-        else if (coords[0] < prev[0]) { borderClasses.push("receive-up"); isOpened.down = true; }
-        else if (coords[0] > prev[0]) { borderClasses.push("receive-down"); isOpened.up = true; }
-      }
-
-      let shadowArray = [];
-
-      if (i !== 60) {
-        if (!isOpened.up) shadowArray.push("inset 0 14px 10px -10px rgba(0,0,0,0.9)");
-        if (!isOpened.down) shadowArray.push("inset 0 -14px 10px -10px rgba(0,0,0,0.9)");
-        if (!isOpened.left) shadowArray.push("inset 14px 0 10px -10px rgba(0,0,0,0.9)");
-        if (!isOpened.right) shadowArray.push("inset -14px 0 10px -10px rgba(0,0,0,0.9)");
-
-        if (!isOpened.up && !isOpened.right) shadowArray.push("inset -24px 24px 20px -20px rgba(0,0,0,0.95)");
-        if (!isOpened.down && !isOpened.right) shadowArray.push("inset -24px -24px 20px -20px rgba(0,0,0,0.95)");
-        if (!isOpened.up && !isOpened.left) shadowArray.push("inset 24px 24px 20px -20px rgba(0,0,0,0.95)");
-        if (!isOpened.down && !isOpened.left) shadowArray.push("inset 24px -24px 20px -20px rgba(0,0,0,0.95)");
-      }
-
-      if (shadowArray.length > 0) {
-        element.style.boxShadow = shadowArray.join(", ");
-      }
-
-      if (i === 60) {
-        element.className = "room center-victory";
-        element.innerHTML = `
-          <div class="room-num">👑 ROOM 60 👑</div>
-          <div class="room-text">${ruleText}</div>
-        `;
-      } else {
-        const colorationClass = (i === 0) ? "start-room" : (i % 2 === 0 ? "blue-room" : "purple-room");
-        element.className = `room ${colorationClass} ${borderClasses.join(" ")}`;
-
-        element.innerHTML = `
-          <div class="room-num">${i === 0 ? "START" : i}</div>
-          <div class="room-text">${ruleText}</div>
-        `;
-      }
-      board.appendChild(element);
+      document.getElementById("svg-track-glow").setAttribute("d", svgPathD);
+      document.getElementById("svg-track-core").setAttribute("d", svgPathD);
     }
 
-    document.getElementById("svg-track-glow").setAttribute("d", svgPathD);
-    document.getElementById("svg-track-core").setAttribute("d", svgPathD);
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
+      renderBoard();
+    }
+
+    renderBoard();
 
     function downloadBoard() {
       const targetNode = document.getElementById("board-capture-wrapper");
@@ -302,7 +335,7 @@
       htmlToImage.toPng(targetNode, { quality: 1.0, pixelRatio: 2 })
         .then(function (dataUrl) {
           const link = document.createElement('a');
-          link.download = `kalblast_perfected_board.png`;
+          link.download = `kalblast_perfected_board_${currentLang}.png`;
           link.href = dataUrl;
           link.click();
         })
