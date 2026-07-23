@@ -128,3 +128,24 @@ li strong {
   font-style: italic;
   color: #e9d5ff;
 }
+
+/* 🛠️ PANDOC BUILD COMPATIBILITY
+   Pandoc wraps fenced-div content in <p>, and renders the .md's "---"
+   separators as <hr>. Neutralize both so generated markup matches the
+   original hand-authored look (spacing already comes from h2 margin-top). */
+.logistics-card p, .warning-box p {
+  margin: 0;
+}
+
+hr {
+  border: none;
+  margin: 0;
+}
+
+/* FAQ-style nested lists (Q bullet containing an A sub-bullet): render the
+   answer flush, without a second bullet marker. */
+li > ul, li > ol {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 4px;
+}
