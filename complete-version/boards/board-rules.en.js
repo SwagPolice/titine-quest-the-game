@@ -63,3 +63,7 @@ const roomTexts_en = [
   "<b>Would you rather</b>", // room 59
   "You win, all players except you chug their glasses, you may give yours to another player. <br><br>UNBREACHABLE: NO ladder on it" // room 60
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { roomTexts_en };
+}

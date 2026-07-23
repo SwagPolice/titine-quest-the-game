@@ -257,13 +257,14 @@
 <body>
 
   <div class="lang-bar">
-    <button class="download-btn lang-btn active" id="lang-en" onclick="setLanguage('en')">English</button>
-    <button class="download-btn lang-btn" id="lang-fr" onclick="setLanguage('fr')">Français</button>
+    <button class="download-btn lang-btn active" data-lang-btn="en">English</button>
+    <button class="download-btn lang-btn" data-lang-btn="fr">Français</button>
   </div>
 
   <!-- 📥 SEPARATE CHARACTER DATA FILE IMPORTS (one per language) -->
   <script src="characters.en.js"></script>
   <script src="characters.fr.js"></script>
+  <script src="../../shared/lang-toggle.js"></script>
 
   <script>
     const charactersByLang = { en: characters_en, fr: characters_fr };
@@ -328,31 +329,16 @@
       });
     }
 
-    function setLanguage(lang) {
+    initLangToggle((lang) => {
       currentLang = lang;
-      document.documentElement.lang = lang;
-      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-      document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
       renderCards();
-    }
+    });
 
     renderCards();
 
     // 💾 Extraction Engine
     function downloadCard(id, name) {
-      const node = document.getElementById(id);
-
-      // We can safely scale back up to high-definition (pixelRatio: 2) now because the broken blur properties are gone!
-      htmlToImage.toPng(node, { quality: 1.0, pixelRatio: 2 })
-        .then(function (dataUrl) {
-          const link = document.createElement('a');
-          link.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${currentLang}_card.png`;
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch(function (error) {
-          console.error('Image capture failed:', error);
-        });
+      downloadPng(id, () => `${name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${currentLang}_card.png`);
     }
   </script>
 </body>

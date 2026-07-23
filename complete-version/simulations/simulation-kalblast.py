@@ -22,8 +22,11 @@
 #   - A ladder Challenge is represented by a single opponent (the most aggressive one),
 #     rather than modeling all opponents independently deciding to challenge.
 
+import json
 import random
+import re
 import statistics
+from pathlib import Path
 
 BOARD_SIZE = 60
 MAX_ROUNDS = 300  # safety timeout (e.g. Advisor "nobody wins" condition)
@@ -31,23 +34,23 @@ MAX_ROUNDS = 300  # safety timeout (e.g. Advisor "nobody wins" condition)
 # Ladders: bottom -> top (as given: 7-33, 27-47, 14-38, 21-43)
 DEFAULT_LADDERS = {7: 33, 27: 47, 14: 38, 21: 43}
 
-# Exact spiral coordinates from complete-version/boards/board-rules.js / board.html,
-# so Manhattan-distance templates (Clazgreb, Brenchilli) match the real board.
-SPIRAL_COORDS = [
-    (7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6), (7, 7),
-    (6, 7), (5, 7), (4, 7), (3, 7), (2, 7), (1, 7), (0, 7),
-    (0, 6), (0, 5), (0, 4), (0, 3), (0, 2), (0, 1), (0, 0),
-    (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0),
-    (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
-    (5, 6), (4, 6), (3, 6), (2, 6), (1, 6),
-    (1, 5), (1, 4), (1, 3), (1, 2), (1, 1),
-    (2, 1), (3, 1), (4, 1), (5, 1),
-    (5, 2), (5, 3), (5, 4), (5, 5),
-    (4, 5), (3, 5), (2, 5),
-    (2, 4), (2, 3), (2, 2),
-    (3, 2), (4, 2),
-    (3, 3),
-]
+
+def _load_spiral_coords():
+    """Parse the SPIRAL_COORDS array out of boards/spiral-coords.js so the
+    simulation's Manhattan-distance templates (Clazgreb, Brenchilli) always
+    match the actual board layout, instead of maintaining a second hand-typed
+    copy of the same 61 coordinates that could silently drift out of sync."""
+    js_path = Path(__file__).resolve().parent.parent / "boards" / "spiral-coords.js"
+    text = js_path.read_text(encoding="utf-8")
+    match = re.search(r"SPIRAL_COORDS\s*=\s*(\[[\s\S]*?\])\s*;", text)
+    if not match:
+        raise RuntimeError(f"Could not find SPIRAL_COORDS array in {js_path}")
+    return [tuple(pair) for pair in json.loads(match.group(1))]
+
+
+# Exact spiral coordinates, shared with complete-version/boards/spiral-coords.js
+# (and, through it, board.html) — see _load_spiral_coords().
+SPIRAL_COORDS = _load_spiral_coords()
 
 CLAZGREB_TEMPLATE = {0: 4, 1: 3, 2: 2}
 BRENCHILLI_TEMPLATE = {0: 3, 1: 2, 2: 1}
@@ -56,6 +59,32 @@ CLASSES = [
     "firefoxxx", "spy", "advisor", "clazgreb", "carnila",
     "turbo_killer", "robiocoop", "priest", "vanilla", "brenchilli",
 ]
+
+# Baseline eagerness to use each class's active ability, independent of the
+# individual player's personal aggressivity (see Player.wants_to_use_ability).
+# Per playtest feedback: engagement is class-dependent, not just player-dependent
+# — e.g. Priest ("Grandma" Luke)'s ability is cheap, frequent, low-risk utility
+# and gets used far more readily than the Advisor's big, disruptive, situational
+# swap. These are initial estimates from card design intuition + that signal;
+# tune further as real playtest data comes in (e.g. after the visual card
+# upgrade, which is expected to raise engagement across the board).
+ABILITY_ENGAGEMENT = {
+    "firefoxxx": 0.55,     # AoE fireball, costly but flashy — moderate use
+    "spy": 0.70,           # only usable when landing on an occupied room, so fairly likely to take it when available
+    "advisor": 0.35,       # big disruptive swap, used sparingly/strategically
+    "clazgreb": 0.60,      # global AoE, costly but high-impact
+    "carnila": 0.50,       # situational area-denial landmine
+    "turbo_killer": 0.45,  # high-variance shot gamble, used cautiously
+    "robiocoop": 0.55,     # aggressive RPS challenge
+    "priest": 0.75,        # cheap, frequent, low-risk resource utility
+    "vanilla": 0.65,       # cheap, repeatable, cumulative payoff
+    "brenchilli": 0.45,    # situational on ladder availability
+}
+# Midpoint of the aggressivity sampling range ([0.2, 0.9] in run_simulations),
+# used to re-center each player's personal aggressivity around 1.0x before
+# scaling the class baseline above, so a raw class dict can be tuned without
+# needing to know the current aggressivity distribution.
+AVG_AGGRESSIVITY = 0.55
 
 
 def manhattan(room_a, room_b):
@@ -100,6 +129,17 @@ class Player:
         """General 'does this player keep escalating / spend resources' check.
         Decays with stakes already committed, mirroring simulationV3.py's will_drink()."""
         prob = max(0.05, self.aggressivity - 0.05 * stakes)
+        return self.rng.random() < prob
+
+    def wants_to_use_ability(self):
+        """Whether this player takes their active ability when they consider it.
+        Unlike wants_to_push(), this scales a per-class baseline (how appealing/
+        low-risk the ability itself is to use — see ABILITY_ENGAGEMENT) by this
+        player's personal aggressivity, so the class design and the individual's
+        personality both matter, independently."""
+        base = ABILITY_ENGAGEMENT.get(self.cls, 0.5)
+        personal_factor = self.aggressivity / AVG_AGGRESSIVITY
+        prob = max(0.0, min(1.0, base * personal_factor))
         return self.rng.random() < prob
 
 
@@ -542,7 +582,7 @@ class Game:
     # ---- active abilities ------------------------------------------------
 
     def maybe_use_active_ability(self, player):
-        if not player.wants_to_push():
+        if not player.wants_to_use_ability():
             return
         others = self.other_players(player)
         r = self.rng
