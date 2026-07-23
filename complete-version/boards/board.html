@@ -176,8 +176,8 @@
 <body>
 
   <div class="controls">
-    <button class="download-btn lang-btn active" id="lang-en" onclick="setLanguage('en')">English</button>
-    <button class="download-btn lang-btn" id="lang-fr" onclick="setLanguage('fr')">Français</button>
+    <button class="download-btn lang-btn active" data-lang-btn="en">English</button>
+    <button class="download-btn lang-btn" data-lang-btn="fr">Français</button>
     <button class="download-btn" onclick="downloadBoard()">Download Perfected Golden Board</button>
   </div>
 
@@ -193,6 +193,8 @@
   <!-- 📥 SEPARATE TEXT RULES FILE IMPORTS (one per language) -->
   <script src="board-rules.en.js"></script>
   <script src="board-rules.fr.js"></script>
+  <script src="spiral-coords.js"></script>
+  <script src="../shared/lang-toggle.js"></script>
 
   <script>
     const roomTextsByLang = { en: roomTexts_en, fr: roomTexts_fr };
@@ -202,21 +204,7 @@
     };
     let currentLang = 'en';
 
-    const spiralCoords = [
-      [7,0], [7,1], [7,2], [7,3], [7,4], [7,5], [7,6], [7,7],
-      [6,7], [5,7], [4,7], [3,7], [2,7], [1,7], [0,7],
-      [0,6], [0,5], [0,4], [0,3], [0,2], [0,1], [0,0],
-      [1,0], [2,0], [3,0], [4,0], [5,0], [6,0],
-      [6,1], [6,2], [6,3], [6,4], [6,5], [6,6],
-      [5,6], [4,6], [3,6], [2,6], [1,6],
-      [1,5], [1,4], [1,3], [1,2], [1,1],
-      [2,1], [3,1], [4,1], [5,1],
-      [5,2], [5,3], [5,4], [5,5],
-      [4,5], [3,5], [2,5],
-      [2,4], [2,3], [2,2],
-      [3,2], [4,2],
-      [3,3]
-    ];
+    const spiralCoords = SPIRAL_COORDS;
 
     const board = document.getElementById("game-board");
 
@@ -319,29 +307,15 @@
       document.getElementById("svg-track-core").setAttribute("d", svgPathD);
     }
 
-    function setLanguage(lang) {
+    initLangToggle((lang) => {
       currentLang = lang;
-      document.documentElement.lang = lang;
-      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-      document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
       renderBoard();
-    }
+    });
 
     renderBoard();
 
     function downloadBoard() {
-      const targetNode = document.getElementById("board-capture-wrapper");
-
-      htmlToImage.toPng(targetNode, { quality: 1.0, pixelRatio: 2 })
-        .then(function (dataUrl) {
-          const link = document.createElement('a');
-          link.download = `kalblast_perfected_board_${currentLang}.png`;
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch(function (error) {
-          console.error('Board download failed:', error);
-        });
+      downloadPng('board-capture-wrapper', () => `kalblast_perfected_board_${currentLang}.png`);
     }
   </script>
 </body>

@@ -58,7 +58,7 @@ const characters_en = [
     title: "Glam Metal Idol",
     image: "vampire.jpg",
     color: "#981241",
-    difficulty: 2,
+    difficulty: 1,
     traitName: "Bite Your Teeth",
     traitDesc: "Roll 2d6 and use the highest result for movement.",
     abilityName: "BLOODMONEY",
@@ -76,7 +76,7 @@ const characters_en = [
     traitDesc: "Roll 1d6 for movement. Whenever you land in a blue room, give 2 sips. Whenever you land in a purple room, drink 1 sip.",
     abilityName: "Round of test injections",
     abilityCost: "KŠ",
-    abilityDesc: "Choose a value for K and pay KŠ to activate, then play RPS against each opponent in turn.\n" +
+    abilityDesc: "Choose a value for K and pay KŠ to activate, then play <b>RPS</b> against each opponent in turn.\n" +
             "<br>- If you win: they drink KŠ and you move +K rooms.\n" +
             "<br>- If you lose: they move +K rooms instead.\n" +
             "<br><br>If you win every match, opponents also drink an extra KŠ each, and you move an extra +K rooms per opponent.",
@@ -92,7 +92,7 @@ const characters_en = [
     traitDesc: "Roll 1d6 for movement. You can climb up ladders even when passing by them.",
     abilityName: "Pursuit of Vengeance",
     abilityCost: "1Š",
-    abilityDesc: "Challenge the player closest ahead on the board to RPS (best of 3).\n" +
+    abilityDesc: "Challenge the player closest ahead on the board to <b>RPS</b> (best of 3).\n" +
             "<br>- If you lose, the other player drinks 1Š.\n" +
             "<br>- If you win, the other player drinks 2Š and you go to their room.",
     flavor: '"I will turn this whole board into cardboard."'
@@ -142,3 +142,7 @@ const characters_en = [
     flavor: '"Out of my catwalk, filthy dogs!"'
   }
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { characters_en };
+}

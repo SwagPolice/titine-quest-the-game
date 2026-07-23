@@ -58,7 +58,7 @@ const characters_fr = [
     title: "Idole du Glam Metal",
     image: "vampire.jpg",
     color: "#981241",
-    difficulty: 2,
+    difficulty: 1,
     traitName: "Une tournée mortelle",
     traitDesc: "Lancez 2d6 et utilisez le résultat le plus élevé pour vous déplacer.",
     abilityName: "LE PRIX DU SANG",
@@ -142,3 +142,7 @@ const characters_fr = [
     flavor: '« Hors de mon podium, les crasseux ! »'
   }
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { characters_fr };
+}

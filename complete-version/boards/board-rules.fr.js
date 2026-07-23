@@ -63,3 +63,7 @@ const roomTexts_fr = [
   "<b>Tu préfères</b>", // case 59
   "Tu gagnes, tous les autres joueurs cul-sec leur verre, tu peux donner le tien à un autre joueur. <br><br>SURPROTÉGÉE : aucune échelle sur cette case" // case 60
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { roomTexts_fr };
+}
