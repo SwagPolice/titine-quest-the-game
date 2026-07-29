@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e
 cd "$(dirname "$0")"
-pandoc rulebook.md -o rulebook.html --template rulebook-template.html -s
-echo "rulebook.html regenerated from rulebook.md"
-pandoc rulebook.fr.md -o rulebook.fr.html --template rulebook-template.html -s
-echo "rulebook.fr.html regenerated from rulebook.fr.md"
+{
+  cat rulebook-head.html
+  pandoc rulebook.md --template rulebook-fragment-template.html -s --metadata lang=en
+  pandoc rulebook.fr.md --template rulebook-fragment-template.html -s --metadata lang=fr --metadata hidden=true
+  cat rulebook-foot.html
+} > rulebook.html
+echo "rulebook.html regenerated (EN + FR) from rulebook.md / rulebook.fr.md"

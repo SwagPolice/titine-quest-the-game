@@ -1,0 +1,10 @@
+
+  <script>
+    initLangToggle(function (lang) {
+      document.querySelectorAll('[data-lang-content]').forEach(function (el) {
+        el.hidden = el.getAttribute('data-lang-content') !== lang;
+      });
+    });
+  </script>
+</body>
+</html>

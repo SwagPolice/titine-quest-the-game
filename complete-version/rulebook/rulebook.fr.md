@@ -1,4 +1,4 @@
-<!-- AUTO-BUILD: après modification de ce fichier, régénérez rulebook.fr.html en exécutant build.sh (ou build.ps1) dans ce dossier. -->
+<!-- AUTO-BUILD: après modification de ce fichier, régénérez rulebook.html en exécutant build.sh (ou build.ps1) dans ce dossier. -->
 
 # KALBLAST
 ### *Buvez jusqu'au sommet*
