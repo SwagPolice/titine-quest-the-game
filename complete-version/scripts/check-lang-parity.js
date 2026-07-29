@@ -10,6 +10,7 @@
 //
 // Run: node complete-version/scripts/check-lang-parity.js
 
+const fs = require('fs');
 const path = require('path');
 
 const { roomTexts_en } = require(path.join(__dirname, '../boards/board-rules.en.js'));
@@ -95,6 +96,37 @@ if (characters_en.length !== characters_fr.length) {
     });
   });
 }
+
+// ---- Rulebook (prose, not a data array — check structure, not content) ----
+
+const rulebookEn = fs.readFileSync(path.join(__dirname, '../rulebook/rulebook.md'), 'utf8');
+const rulebookFr = fs.readFileSync(path.join(__dirname, '../rulebook/rulebook.fr.md'), 'utf8');
+
+function countToken(text, token) {
+  return text.split(token).length - 1;
+}
+
+function countRegex(text, regex) {
+  const matches = text.match(regex);
+  return matches ? matches.length : 0;
+}
+
+const RULEBOOK_CHECKS = [
+  { label: 'H2 sections (##)', regex: /^##\s/gm },
+  { label: 'H3 sections (###)', regex: /^###\s/gm },
+  { label: 'Fenced divs (:::)', token: ':::' },
+  { label: 'Bold markers (**)', token: '**' },
+  { label: 'Inline code (`)', token: '`' },
+  { label: 'Shot symbol (Š)', token: 'Š' },
+];
+
+RULEBOOK_CHECKS.forEach(({ label, token, regex }) => {
+  const enCount = regex ? countRegex(rulebookEn, regex) : countToken(rulebookEn, token);
+  const frCount = regex ? countRegex(rulebookFr, regex) : countToken(rulebookFr, token);
+  if (enCount !== frCount) {
+    errors.push(`Rulebook: "${label}" count differs (EN: ${enCount}, FR: ${frCount})`);
+  }
+});
 
 // ---- Report --------------------------------------------------------------
 
