@@ -80,11 +80,11 @@
     }
 
     .room.blue-room {
-      background: linear-gradient(135deg, rgb(7 24 60 / 0.85) 0%, rgba(10, 15, 28, 0.9) 100%);
+      background: linear-gradient(135deg, rgb(42 84 175 / 0.9) 0%, rgba(22, 40, 92, 0.93) 100%);
     }
 
     .room.purple-room {
-      background: linear-gradient(135deg, rgb(50 17 67 / 0.85) 0%, rgba(16, 5, 24, 0.9) 100%);
+      background: linear-gradient(135deg, rgb(78 30 100 / 0.85) 0%, rgba(34, 11, 46, 0.9) 100%);
     }
 
     .room.start-room {
@@ -97,11 +97,25 @@
       grid-row: 4 / span 2;
       aspect-ratio: auto;
       background: linear-gradient(135deg, rgba(120, 53, 15, 0.9) 0%, rgba(69, 26, 3, 0.95) 100%);
-      border: 3px solid #fbbf24 !important;
+      border-top: 3px solid #fbbf24 !important;
+      border-right: 3px solid #fbbf24 !important;
+      border-bottom: 3px solid #fbbf24 !important;
+      border-left: none !important;
       box-shadow: 0 0 40px rgba(251, 191, 36, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
       text-align: center;
+    }
+
+    /* Room 60's left edge is only walled above where room 59 connects in
+       (the path enters at the bottom-left quadrant) — leave that half open. */
+    .center-victory-border-left-top {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 50%;
+      background: #fbbf24;
     }
 
     .room-num {
@@ -288,6 +302,7 @@
         if (i === 60) {
           element.className = "room center-victory";
           element.innerHTML = `
+            <span class="center-victory-border-left-top"></span>
             <div class="room-num">${labels.victory}</div>
             <div class="room-text">${ruleText}</div>
           `;

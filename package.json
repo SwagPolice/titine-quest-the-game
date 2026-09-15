@@ -1,0 +1,12 @@
+{
+  "name": "titine-quest-the-game",
+  "private": true,
+  "scripts": {
+    "build:rulebook": "node complete-version/rulebook/build.js",
+    "check:lang-parity": "node complete-version/scripts/check-lang-parity.js"
+  },
+  "devDependencies": {
+    "markdown-it": "^14.1.0",
+    "markdown-it-container": "^4.0.0"
+  }
+}

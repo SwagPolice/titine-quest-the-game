@@ -108,7 +108,7 @@ Pendant votre tour, vous **devez** effectuer votre Mouvement Obligatoire et **po
 ## 🪜 Règles Détaillées & Concepts Clés
 
 ### Résoudre les Effets de Case
-Résolvez l'effet de toutes les cases sur lesquelles vous atterrissez pendant votre tour.
+Quand votre mouvement vous fait atterrir sur une case, résolvez l'effet imprimé de cette case (boisson, mini-jeu, téléportation, etc.) avant toute autre chose. Si cet effet vous envoie ailleurs, résolvez aussi l'effet de la nouvelle case, et ainsi de suite, jusqu'à atterrir quelque part sans déplacement supplémentaire.
 
 La seule exception est une échelle : si la case sur laquelle vous atterrissez contient une échelle, vous ne résolvez pas directement son effet. Résolvez d'abord l'Événement d'Échelle — puis résolvez l'effet de la case où vous finissez une fois l'événement réglé.
 
@@ -120,7 +120,7 @@ Quand vous atterrissez sur une case connectée à une échelle :
 
 1. Le joueur actif déclare s'il a l'intention de grimper à l'échelle (s'il monte) ou de l'éviter (s'il descend).
 2. **Le Défi :** N'importe quel adversaire peut instantanément contester le choix du joueur actif en buvant **1 Š**.
-3. **La Guerre des Enchères :** Les joueurs peuvent alterner les enchères, chaque contre-défi devant être **supérieur d'au moins 1 Š** à la dernière enchère, jusqu'à ce que tous les adversaires cèdent ou que le joueur actif abandonne.
+3. **La Guerre des Enchères :** Les joueurs peuvent alterner les enchères, chaque contre-défi devant être **supérieur de 1 Š** à la dernière enchère, jusqu'à ce que tous les adversaires cèdent ou que le joueur actif abandonne.
 
 Seul le joueur actif peut déclencher un Événement d'Échelle, quelle que soit la raison de son entrée dans la case. Le joueur actif ne déclenche pas d'événement pour une échelle connectée à la case sur laquelle il commence son tour.
 
