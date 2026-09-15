@@ -85,7 +85,7 @@ Gameplay proceeds clockwise, player by player.
 ⚠️ **State Change Interaction:** Whenever a player changes rooms *outside* of their own turn (due to displacement effects or abilities), they **do not trigger** the room's text effect.
 :::
 
-*Pay close attention to cooldowns and ability refreshes! Certain actions or passives (such as the Priest's passive) can occur during an opponent's turn, but can only be executed once per round.*
+*Pay close attention to cooldowns and ability refreshes! Certain actions or passives (such as Grandma Luke's passive) can occur during an opponent's turn, but can only be executed once per round.*
 
 ### Anatomy of a Turn
 On your turn, you **must** complete your Mandatory Movement and **may** choose to use your active ability. You possess complete tactical flexibility over your sequence. Choose either **Option A** or **Option B**:
