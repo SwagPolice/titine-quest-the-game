@@ -86,7 +86,7 @@
       letter-spacing: 3px;
       margin: 4px 0 0 0;
       font-weight: 700;
-      color: var(--theme-color);
+      color: var(--theme-color-text);
       text-align: left;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
@@ -132,7 +132,7 @@
       text-transform: uppercase;
       letter-spacing: 1.5px;
       margin-bottom: 6px;
-      color: var(--theme-color);
+      color: var(--theme-color-text);
       text-align: left;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
@@ -151,7 +151,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: var(--theme-color);
+      color: var(--theme-color-text);
       text-align: left;
       margin: 0;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
@@ -160,7 +160,7 @@
     /* Splash Circle Badge */
     .cost-badge {
       background: var(--theme-color);
-      color: #ffffff;
+      color: var(--badge-text-color);
       font-size: 10px;
       font-weight: 900;
       text-transform: uppercase;
@@ -205,7 +205,7 @@
     .flavor-text {
       font-style: italic;
       font-size: 10px;
-      color: #64748b;
+      color: #94a3b8;
       text-align: center;
       margin-top: 10px;
     }
@@ -271,6 +271,83 @@
     const difficultyLabel = { en: "Difficulty", fr: "Difficulté" };
     let currentLang = 'en';
 
+    // 🎨 PRINT-SAFE THEME COLOR DERIVATION
+    // Each class's theme color is also used as text (subtitle/section titles)
+    // and as a badge fill behind white text — two opposite contrast needs a
+    // single hue can't always satisfy. These helpers derive per-character
+    // variants that keep the original color everywhere it already reads fine,
+    // and only nudge it where WCAG contrast (4.5:1) would otherwise fail.
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)];
+    }
+    function rgbToHex([r, g, b]) {
+      return '#' + [r, g, b].map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+    }
+    function rgbToHsl([r, g, b]) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) { h = s = 0; }
+      else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          default: h = (r - g) / d + 4;
+        }
+        h /= 6;
+      }
+      return [h, s, l];
+    }
+    function hslToRgb([h, s, l]) {
+      if (s === 0) return [l * 255, l * 255, l * 255];
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      return [hue2rgb(p, q, h + 1 / 3) * 255, hue2rgb(p, q, h) * 255, hue2rgb(p, q, h - 1 / 3) * 255];
+    }
+    function srgbToLinear(c) {
+      c /= 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+    function relativeLuminance([r, g, b]) {
+      return 0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b);
+    }
+    function contrastRatio(fg, bg) {
+      const l1 = relativeLuminance(fg), l2 = relativeLuminance(bg);
+      const lighter = Math.max(l1, l2), darker = Math.min(l1, l2);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+    // The darkest a name-zone/textbox panel can render (its own paint color,
+    // ignoring the character art showing faintly through) — using this as the
+    // reference guarantees at least 4.5:1 against the real, slightly lighter panel.
+    const PANEL_WORST_CASE_BG = [21, 17, 30];
+    function deriveTextSafeColor(themeHex) {
+      if (contrastRatio(hexToRgb(themeHex), PANEL_WORST_CASE_BG) >= 4.5) return themeHex;
+      const [h, s, l] = rgbToHsl(hexToRgb(themeHex));
+      let lightness = l;
+      for (let step = 0; step < 100; step++) {
+        lightness = Math.min(0.85, lightness + 0.01);
+        const candidate = hslToRgb([h, s, lightness]);
+        if (contrastRatio(candidate, PANEL_WORST_CASE_BG) >= 4.5 || lightness >= 0.85) return rgbToHex(candidate);
+      }
+      return themeHex;
+    }
+    function deriveBadgeTextColor(themeHex) {
+      const theme = hexToRgb(themeHex);
+      const white = [255, 255, 255], black = [20, 16, 26];
+      return contrastRatio(white, theme) >= contrastRatio(black, theme) ? '#ffffff' : '#14101a';
+    }
+
     // 🏗️ CARD GENERATOR ENGINE
     const body = document.body;
     const cardsWrapper = document.createElement('div');
@@ -288,6 +365,8 @@
         const container = document.createElement('div');
         container.className = 'card-container';
         container.style.setProperty('--theme-color', char.color);
+        container.style.setProperty('--theme-color-text', deriveTextSafeColor(char.color));
+        container.style.setProperty('--badge-text-color', deriveBadgeTextColor(char.color));
 
         const cardId = `card-${index}`;
 
