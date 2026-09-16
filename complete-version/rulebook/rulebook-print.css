@@ -1,0 +1,144 @@
+/* Print-only rulebook stylesheet, used exclusively by build-pdf.js.
+   Deliberately NOT a @media print block layered over rulebook-style.css:
+   that stylesheet is tuned for a dark, neon on-screen read, and none of
+   that (glow filters, near-black background, dark card frame) belongs on
+   paper — it would waste ink and print unpredictably depending on the
+   viewer's "print backgrounds" setting. This is a clean, from-scratch,
+   ink-friendly document instead, reusing only the same accent hues,
+   darkened enough to stay readable on white paper. */
+
+:root {
+  --paper: #ffffff;
+  --ink: #1a1720;
+  --ink-muted: #59515f;
+  --kalb-red: #b0102f;
+  --kalb-gold: #7a5200; /* darkened from the on-screen #fbbf24 — that reads
+                            at ~1.7:1 on white, far below print-legible */
+  --hairline: #ded8e2;
+  --callout-bg: #fdf3e0;
+  --warn-bg: #fbe9ec;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Manrope', 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.55;
+  padding: 0 8mm;
+}
+
+.masthead-mark {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.kalb-mark svg { display: block; margin: 0 auto; overflow: visible; }
+.kalb-mark-stroke {
+  fill: none;
+  stroke: var(--kalb-gold);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.kalb-mark-disk { fill: var(--kalb-red); }
+
+h1 {
+  font-family: 'Monoton', cursive;
+  font-weight: 400;
+  font-size: 3.2rem;
+  letter-spacing: 0.03em;
+  margin: 0 0 2px;
+  color: var(--kalb-gold);
+  text-align: center;
+}
+
+h1 + h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--kalb-red);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin: 8px 0 22px;
+}
+
+h2 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--kalb-gold);
+  border-bottom: 2px solid var(--kalb-red);
+  padding-bottom: 6px;
+  margin: 26px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  break-after: avoid;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 16px 0 6px;
+  break-after: avoid;
+}
+
+p, li { color: var(--ink); }
+li strong { color: var(--ink); }
+
+.logistics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+  break-inside: avoid;
+}
+.logistics-card {
+  background: var(--callout-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+}
+.logistics-card span {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.logistics-card p { margin: 0; }
+
+blockquote {
+  background: var(--callout-bg);
+  border-left: 4px solid var(--kalb-gold);
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  break-inside: avoid;
+}
+blockquote h3 { margin-top: 0; color: var(--kalb-gold); }
+
+.warning-box {
+  background: var(--warn-bg);
+  border: 1px solid rgba(176, 16, 47, 0.35);
+  border-left: 4px solid var(--kalb-red);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  margin: 14px 0;
+  font-style: italic;
+  break-inside: avoid;
+}
+.warning-box p { margin: 0; }
+
+hr { border: 0; border-top: 1px solid var(--hairline); margin: 18px 0; }
+
+li > ul, li > ol { list-style: none; padding-left: 0; margin-top: 3px; }
+
+code {
+  background: var(--callout-bg);
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}

@@ -8,59 +8,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const MarkdownIt = require('markdown-it');
-const container = require('markdown-it-container');
+const { renderBody } = require('./markdown-renderer');
 
 const DIR = __dirname;
-const CONTAINERS = ['logistics-grid', 'logistics-card', 'warning-box'];
-const QUOTES = { en: '“”‘’', fr: '«»‹›' };
-
-// Mirrors pandoc's auto_identifiers algorithm closely enough to keep the
-// same anchor ids: strip everything but letters/digits/whitespace/-_.,
-// collapse whitespace runs to a single hyphen, lowercase, then drop any
-// leading run of non-letters.
-function slugify(text) {
-  const stripped = text
-    .replace(/[*_`]/g, '')
-    .replace(/[^\p{L}\p{N}\s\-_.]/gu, '')
-    .replace(/\s+/g, '-')
-    .toLowerCase()
-    .replace(/^[^\p{L}]+/u, '');
-  return stripped || 'section';
-}
-
-function makeMarkdownIt(lang) {
-  const md = new MarkdownIt({ html: true, xhtmlOut: true, typographer: true, quotes: QUOTES[lang] });
-
-  CONTAINERS.forEach(name => {
-    md.use(container, name, {
-      validate: params => params.trim().split(/\s+/)[0] === name,
-      render: (tokens, idx) => (tokens[idx].nesting === 1 ? `<div class="${name}">\n` : `</div>\n`)
-    });
-  });
-
-  const usedIds = new Map();
-  md.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
-    const inline = tokens[idx + 1];
-    const rawText = inline.children
-      .filter(t => t.type === 'text' || t.type === 'code_inline' || t.type === 'softbreak')
-      .map(t => (t.type === 'softbreak' ? ' ' : t.content))
-      .join('');
-    let id = slugify(rawText);
-    const seen = usedIds.get(id) || 0;
-    usedIds.set(id, seen + 1);
-    if (seen > 0) id = `${id}-${seen}`;
-    tokens[idx].attrSet('id', id);
-    return self.renderToken(tokens, idx, options);
-  };
-
-  return md;
-}
 
 function renderFragment(mdFile, lang, hidden) {
-  const md = makeMarkdownIt(lang);
-  const source = fs.readFileSync(mdFile, 'utf8');
-  const body = md.render(source);
+  const body = renderBody(mdFile, lang);
   const hiddenAttr = hidden ? ' hidden' : '';
   return `<div class="rulebook-container" data-lang-content="${lang}"${hiddenAttr}>\n${body}</div>\n`;
 }
