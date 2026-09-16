@@ -7,7 +7,7 @@ For full setup steps, the turn structure, ladder/shot rules, and FAQ, see the ru
 
 ## Languages
 The game currently supports **English** and **French**:
-- **Rulebook:** `rulebook/rulebook.md` (EN) and `rulebook/rulebook.fr.md` (FR) build to `rulebook.html` / `rulebook.fr.html` via `rulebook/build.sh` (or `build.ps1`).
+- **Rulebook:** `rulebook/rulebook.md` (EN) and `rulebook/rulebook.fr.md` (FR) build to `rulebook.html` / `rulebook.fr.html` via `rulebook/build.sh` (or `build.ps1`). A print-ready PDF per language (`rulebook/print-assets/kalblast_rulebook_<lang>.pdf`) is generated separately with `npm run build:rulebook-pdf`, using its own light, ink-friendly stylesheet (`rulebook-print.css`) instead of the on-screen dark theme.
 - **Class cards:** the authoritative, print-ready PNGs live in `classes/class_cards/print-assets/<lang>/`, generated with `npm run build:card-pngs` (needs a local Chrome install — see below). `baseline.html` still opens in a browser with a language toggle and its own "Download PNG" buttons for quickly previewing a design change; it's just no longer the source of truth for what actually gets printed.
 - **Board:** same idea — `boards/print-assets/kalblast_perfected_board_<lang>.png` is the authoritative output, generated with `npm run build:board-pngs`. `board.html` remains for live previewing.
 
@@ -16,6 +16,7 @@ To add another language, add a sibling data file (`rulebook.<lang>.md`, `charact
 ## Repo layout notes
 - `shared/lang-toggle.js` — language-toggle and PNG-export helpers shared by `boards/board.html` and `classes/class_cards/baseline.html`.
 - `shared/export-pngs.js` — Puppeteer helpers behind `npm run build:card-pngs` / `build:board-pngs`. Needs a local Chrome install; if it's not found automatically, point at it with `CHROME_PATH=/path/to/chrome npm run build:...`. These scripts generate the authoritative print PNGs in a controlled browser instead of relying on whoever clicks "Download PNG" in their own — different browsers/environments can silently rasterize the export differently (a real issue this project hit once).
+- `rulebook/markdown-renderer.js` — the markdown-it setup (heading ids, `:::` containers, typographic quotes) shared by `build.js` (the on-screen `rulebook.html`) and `build-pdf.js` (the print PDFs), so both stay in sync.
 - `boards/spiral-coords.js` — single source of truth for the board's 61-room layout; both `board.html` and `simulations/simulation-kalblast.py` read this same file, so they can't drift apart.
 - `scripts/check-lang-parity.js` — run after editing translations (see above).
 
