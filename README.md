@@ -1,4 +1,4 @@
-# titine-quest-the-game
+# kalblast-the-game
 Titine's Quest (working name) is a series of drinking board games with RPG elements, designed by two game design masters.
 
 At the moment, there are two games in the series:
