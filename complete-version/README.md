@@ -1,6 +1,8 @@
 # KALBLAST
 ### *Drink your way to the top*
 
+*Created by Paul Arzelier and Côme Delobelle.*
+
 A drinking board game with RPG elements, whose board mechanics are inspired by Goose Game. The goal is to be the first player to land exactly on **Room 60**, the last room of the board.
 
 For full setup steps, the turn structure, ladder/shot rules, and FAQ, see the rulebook: [English](rulebook/rulebook.md) / [Français](rulebook/rulebook.fr.md).
@@ -41,3 +43,6 @@ If you roll higher than the distance needed to reach Room 60, your pawn bounces 
 
 ### Shots and the Crown
 "Š" stands for shots. The Golden Crown always sits atop one bottle in a line of shot bottles; whenever a rule forces a shot, it's poured from the crowned bottle, which then moves to the next bottle in line.
+
+## License
+KALBLAST is licensed under [CC BY-NC-SA 4.0](../LICENSE) — share and remix it freely, credit Paul Arzelier and Côme Delobelle, keep it non-commercial, and license any remix the same way.
