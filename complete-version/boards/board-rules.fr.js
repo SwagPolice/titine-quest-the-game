@@ -18,7 +18,7 @@ const roomTexts_fr = [
   "<b>PFC</b> collectif", // salle 14
   "<b>Valise</b>", // salle 15
   "Bois autant de gorgées que le résultat du dé", // salle 16
-  "Remplis ton verre, bois autant que tu veux, un autre joueur doit boire autant", // salle 17
+  "Remplis ton verre, bois autant que tu veux — un autre joueur t'imite.", // salle 17
   "Lance 1d6 : bois autant de gorgées si pair, distribue-les si impair", // salle 18
   "Bois et rejoue", // salle 19
   "Les meufs boivent, s'il n'y a pas de meuf, tout le monde boit", // salle 20
@@ -37,25 +37,25 @@ const roomTexts_fr = [
   "Prends un jeton Prêtre gratos", // salle 33
   "Le joueur au verre le plus rempli boit deux gorgées", // salle 34
   "Échangez vos classes dans le sens horaire. Les râleurs boivent", // salle 35
-  "Échange ton verre avec un joueur, buvez-en chacun la moitié, puis reprends le tien", // salle 36
+  "Échange ton verre avec un joueur, buvez-en la moitié, reprends le tien.", // salle 36
   "<b>Je n'ai jamais</b>", // salle 37
-  "Change l'ordre des bouteilles de <b>Š</b>, puis bois un <b>Š</b> de la bouteille de ton choix", // salle 38
+  "Change l'ordre des bouteilles de <b>Š</b>, puis bois un <b>Š</b> au choix.", // salle 38
   "Bois et va à la salle 31", // salle 39
   "<b>D'après...</b>", // salle 40
   "Échange de place avec le joueur d'en face. Vous êtes maintenant <b>liés</b>", // salle 41
   "<b>Vrai ou faux ?</b>", // salle 42
   "Un shot d'alcool fort avec quelqu'un, ou deux <b>Š</b> seul", // salle 43
   "Bois de l'eau", // salle 44
-  "Jusqu'à ton prochain tour, termine tes phrases par « Yeah », bois si tu oublies", // salle 45
+  "Jusqu'à ton prochain tour, finis tes phrases par « Yeah », sinon tu bois.", // salle 45
   "Les joueurs au verre plus qu'à moitié plein boivent", // salle 46
-  "Jusqu'à ton prochain tour, <b>petit bonhomme dans ton verre</b>. Un <b>Š</b> si tu oublies", // salle 47
+  "D'ici ton prochain tour, <b>petit bonhomme dans le verre</b>, sinon 1 <b>Š</b>.", // salle 47
   "Bois et active gratuitement ta capacité la prochaine fois", // salle 48
   "Échange ta classe avec le joueur d'en face. Les râleurs boivent", // salle 49
-  "Déclenche la capacité de Clazgreb gratos, sauf que tu peux aussi être touché", // salle 50
+  "Déclenche la capacité de Clazgreb gratos, risque inclus.", // salle 50
   "Avance de 3 salles et bois", // salle 51
   "Place une mine de Carnila dans cette salle", // salle 52
   "Lance 2d6, avance d'autant et bois autant de gorgées", // salle 53
-  "Supprime une règle créée à la salle 32. Son créateur boit. Bois s'il n'y avait aucune règle", // salle 54
+  "Annule une règle de la salle 32. Son créateur boit, sinon toi.", // salle 54
   "<b>PFC</b> royal. Les perdants boivent. Si tu gagnes tout, distribue un <b>Š</b>", // salle 55
   "Le joueur au verre le plus vide le termine", // salle 56
   "Bois 2 gorgées et avance d'une salle OU bois 1 <b>Š</b> et rejoue", // salle 57
