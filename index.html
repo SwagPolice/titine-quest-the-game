@@ -33,9 +33,34 @@
     padding: 0 20px 80px;
   }
   .wrap { max-width: 860px; margin: 0 auto; }
+  [hidden] { display: none !important; }
+
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.08);
+    color: var(--ink-muted);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .lang-btn + .lang-btn { margin-left: 8px; }
+  .lang-btn.active {
+    background: var(--kalb-gold);
+    color: #000;
+    border-color: transparent;
+  }
 
   header.masthead {
-    padding: clamp(48px, 8vw, 80px) 0 32px;
+    padding: clamp(24px, 6vw, 48px) 0 32px;
     text-align: center;
     border-bottom: 1px solid var(--hairline);
   }
@@ -71,6 +96,12 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--kalb-red);
+  }
+  .pitch {
+    max-width: 56ch;
+    margin: 22px auto 0;
+    font-size: 15.5px;
+    color: var(--ink-muted);
   }
 
   section { padding: 44px 0; border-bottom: 1px solid var(--hairline); }
@@ -117,6 +148,13 @@
   }
   .tools-note a { color: var(--ink); }
 
+  .disclaimer {
+    margin: 16px 0 0;
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
   footer {
     padding: 36px 0 0;
     color: var(--ink-faint);
@@ -133,6 +171,11 @@
 <body>
 <div class="wrap">
 
+  <div class="top-bar">
+    <button class="lang-btn active" data-lang-btn="en">English</button>
+    <button class="lang-btn" data-lang-btn="fr">Français</button>
+  </div>
+
   <header class="masthead">
     <div class="kalb-mark">
       <svg viewBox="0 0 120 60" width="88" height="44" aria-hidden="true">
@@ -148,35 +191,70 @@
       </svg>
     </div>
     <div class="lockup-title">KALBLAST</div>
-    <div class="org-mark">Konsortium of Administration, Law &amp; Business</div>
-    <div class="tagline">Drink your way to the top</div>
+    <div class="org-mark">
+      <span data-lang-content="en">Konsortium of Administration, Law &amp; Business</span>
+      <span data-lang-content="fr" hidden>Konsortium d'Administration, Législation et Business</span>
+    </div>
+    <div class="tagline">
+      <span data-lang-content="en">Drink your way to the top</span>
+      <span data-lang-content="fr" hidden>Buvez jusqu'au sommet</span>
+    </div>
+    <p class="pitch" data-lang-content="en">
+      A drinking board game for 2–6 players, 18+. Pick one of 10 characters, each with their own passive trait and active ability, and race to land exactly on Room 60 — overshoot, and you'll bounce back off the wall. Along the way: shots, mini-games, and rules that turn allies into rivals.
+    </p>
+    <p class="pitch" data-lang-content="fr" hidden>
+      Un jeu de plateau à boire pour 2 à 6 joueurs, dès 18 ans. Choisissez l'un des 10 personnages, chacun avec son trait passif et sa capacité active, et lancez-vous dans la course pour atterrir exactement sur la Case 60 — si vous allez trop loin, vous rebondissez. En chemin : des shots, des mini-jeux, et des règles qui transforment vos alliés en rivaux.
+    </p>
   </header>
 
   <section id="rulebook">
-    <span class="eyebrow">Start here</span>
-    <h2>Rulebook</h2>
-    <p class="lede">Setup, turn structure, the drinking rules, and the FAQ — English and French in one page, toggle at the top.</p>
+    <span class="eyebrow" data-lang-content="en">Start here</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Commencez ici</span>
+    <h2>
+      <span data-lang-content="en">Rulebook</span>
+      <span data-lang-content="fr" hidden>Livret de règles</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Setup, turn structure, the drinking rules, and the FAQ — English and French in one page, toggle at the top.</span>
+      <span data-lang-content="fr" hidden>Mise en place, déroulement d'un tour, règles de boisson et FAQ — anglais et français sur une seule page, à basculer en haut.</span>
+    </p>
     <div class="grid">
       <a class="card-link" href="complete-version/rulebook/rulebook.html">
-        <span class="title">Read the rulebook</span>
-        <span class="desc">Full rules, in-browser, EN/FR toggle</span>
-        <span class="go">Open →</span>
+        <span class="title">
+          <span data-lang-content="en">Read the rulebook</span>
+          <span data-lang-content="fr" hidden>Lire le livret de règles</span>
+        </span>
+        <span class="desc">
+          <span data-lang-content="en">Full rules, in-browser, EN/FR toggle</span>
+          <span data-lang-content="fr" hidden>Règles complètes, dans le navigateur, bascule EN/FR</span>
+        </span>
+        <span class="go">
+          <span data-lang-content="en">Open →</span>
+          <span data-lang-content="fr" hidden>Ouvrir →</span>
+        </span>
       </a>
     </div>
   </section>
 
   <section id="board">
-    <span class="eyebrow">Print</span>
-    <h2>The Golden Spiral board</h2>
-    <p class="lede">Print-ready board image, one file per language.</p>
+    <span class="eyebrow" data-lang-content="en">Print</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Imprimer</span>
+    <h2>
+      <span data-lang-content="en">The Golden Spiral board</span>
+      <span data-lang-content="fr" hidden>Le plateau de la Spirale Dorée</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Print-ready board image, one file per language.</span>
+      <span data-lang-content="fr" hidden>Image du plateau prête à imprimer, un fichier par langue.</span>
+    </p>
     <div class="grid">
-      <a class="card-link" href="complete-version/boards/print-assets/kalblast_perfected_board_en.png" download>
-        <span class="title">Board — English</span>
+      <a class="card-link" data-lang-content="en" href="complete-version/boards/print-assets/kalblast_perfected_board_en.png" download>
+        <span class="title">Board</span>
         <span class="desc">PNG, print-ready</span>
         <span class="go">Download →</span>
       </a>
-      <a class="card-link" href="complete-version/boards/print-assets/kalblast_perfected_board_fr.png" download>
-        <span class="title">Plateau — Français</span>
+      <a class="card-link" data-lang-content="fr" hidden href="complete-version/boards/print-assets/kalblast_perfected_board_fr.png" download>
+        <span class="title">Plateau</span>
         <span class="desc">PNG, prêt à imprimer</span>
         <span class="go">Télécharger →</span>
       </a>
@@ -184,47 +262,98 @@
   </section>
 
   <section id="cards">
-    <span class="eyebrow">Print</span>
-    <h2>Character class cards</h2>
-    <p class="lede">All 10 classes, print-ready, bundled as a ZIP per language.</p>
+    <span class="eyebrow" data-lang-content="en">Print</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Imprimer</span>
+    <h2>
+      <span data-lang-content="en">Character class cards</span>
+      <span data-lang-content="fr" hidden>Cartes de personnage</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">All 10 classes, print-ready, bundled as a ZIP per language.</span>
+      <span data-lang-content="fr" hidden>Les 10 classes, prêtes à imprimer, regroupées en ZIP par langue.</span>
+    </p>
     <div class="grid">
-      <a class="card-link" href="complete-version/classes/class_cards/print-assets/kalblast_cards_en.zip" download>
-        <span class="title">Cards — English</span>
+      <a class="card-link" data-lang-content="en" href="complete-version/classes/class_cards/print-assets/kalblast_cards_en.zip" download>
+        <span class="title">Cards</span>
         <span class="desc">ZIP · 10 classes</span>
         <span class="go">Download →</span>
       </a>
-      <a class="card-link" href="complete-version/classes/class_cards/print-assets/kalblast_cards_fr.zip" download>
-        <span class="title">Cartes — Français</span>
+      <a class="card-link" data-lang-content="fr" hidden href="complete-version/classes/class_cards/print-assets/kalblast_cards_fr.zip" download>
+        <span class="title">Cartes</span>
         <span class="desc">ZIP · 10 classes</span>
         <span class="go">Télécharger →</span>
       </a>
     </div>
+    <p class="disclaimer">
+      <span data-lang-content="en">Character portraits are AI-generated placeholder art, standing in until original illustrations are ready.</span>
+      <span data-lang-content="fr" hidden>Les portraits de personnages sont des visuels générés par IA, provisoires en attendant des illustrations originales.</span>
+    </p>
   </section>
 
   <section id="tools">
-    <span class="eyebrow gold">For tinkerers</span>
-    <h2>Live generators</h2>
-    <p class="lede">Want to preview a change or try a new class before it's baked into the print assets above? These are the interactive pages the assets are generated from.</p>
+    <span class="eyebrow" data-lang-content="en">For tinkerers</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Pour les bricoleurs</span>
+    <h2>
+      <span data-lang-content="en">Live generators</span>
+      <span data-lang-content="fr" hidden>Générateurs en direct</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Want to preview a change or try a new class before it's baked into the print assets above? These are the interactive pages the assets are generated from.</span>
+      <span data-lang-content="fr" hidden>Envie de prévisualiser un changement ou une nouvelle classe avant qu'elle soit intégrée aux fichiers ci-dessus ? Voici les pages interactives qui génèrent ces fichiers.</span>
+    </p>
     <div class="grid">
       <a class="card-link secondary" href="complete-version/boards/board.html">
-        <span class="title">Board generator</span>
-        <span class="desc">Live preview, EN/FR toggle</span>
-        <span class="go">Open →</span>
+        <span class="title">
+          <span data-lang-content="en">Board generator</span>
+          <span data-lang-content="fr" hidden>Générateur de plateau</span>
+        </span>
+        <span class="desc">
+          <span data-lang-content="en">Live preview, EN/FR toggle</span>
+          <span data-lang-content="fr" hidden>Aperçu en direct, bascule EN/FR</span>
+        </span>
+        <span class="go">
+          <span data-lang-content="en">Open →</span>
+          <span data-lang-content="fr" hidden>Ouvrir →</span>
+        </span>
       </a>
       <a class="card-link secondary" href="complete-version/classes/class_cards/baseline.html">
-        <span class="title">Card generator</span>
-        <span class="desc">Live preview, EN/FR toggle</span>
-        <span class="go">Open →</span>
+        <span class="title">
+          <span data-lang-content="en">Card generator</span>
+          <span data-lang-content="fr" hidden>Générateur de cartes</span>
+        </span>
+        <span class="desc">
+          <span data-lang-content="en">Live preview, EN/FR toggle</span>
+          <span data-lang-content="fr" hidden>Aperçu en direct, bascule EN/FR</span>
+        </span>
+        <span class="go">
+          <span data-lang-content="en">Open →</span>
+          <span data-lang-content="fr" hidden>Ouvrir →</span>
+        </span>
       </a>
     </div>
-    <p class="tools-note">These pages export live in your own browser, which can behave differently depending on your setup — the downloads above are the reliable, tested versions. See <a href="https://github.com/SwagPolice/kalblast-the-game/tree/master/complete-version">the repo</a> for source and build scripts.</p>
+    <p class="tools-note">
+      <span data-lang-content="en">These pages export live in your own browser, which can behave differently depending on your setup — the downloads above are the reliable, tested versions. See <a href="https://github.com/SwagPolice/kalblast-the-game/tree/master/complete-version">the repo</a> for source and build scripts.</span>
+      <span data-lang-content="fr" hidden>Ces pages exportent directement depuis votre navigateur, qui peut se comporter différemment selon votre configuration — les téléchargements ci-dessus sont les versions fiables et testées. Consultez <a href="https://github.com/SwagPolice/kalblast-the-game/tree/master/complete-version">le dépôt</a> pour le code source et les scripts de build.</span>
+    </p>
   </section>
 
   <footer>
-    <span>KALBLAST — a drinking board game with RPG elements.</span>
+    <span>
+      <span data-lang-content="en">KALBLAST — a drinking board game with RPG elements.</span>
+      <span data-lang-content="fr" hidden>KALBLAST — un jeu de plateau à boire avec des éléments de RPG.</span>
+    </span>
     <a href="https://github.com/SwagPolice/kalblast-the-game">GitHub</a>
   </footer>
 
 </div>
+
+<script src="complete-version/shared/lang-toggle.js"></script>
+<script>
+  initLangToggle(function (lang) {
+    document.querySelectorAll('[data-lang-content]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-lang-content') !== lang;
+    });
+  });
+</script>
 </body>
 </html>
