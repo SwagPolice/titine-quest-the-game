@@ -76,7 +76,7 @@ Quand leur présidente, Wanda Olsam, disparaît, ils font la seule chose envisag
 4. **Former l'Alignement :** D'un côté du plateau, placez les bouteilles d'alcool en ligne droite. Placez **la Couronne** au sommet de la première bouteille.
 5. **Choisir les Rôles :** Chaque joueur choisit une classe de personnage selon la méthode de sélection de votre choix.
 6. **Distribuer le Matériel :** Les joueurs reçoivent leur Carte de Classe respective, leur pion assorti, et tout jeton unique nécessaire à leur rôle.
-7. **Positionner les Pions :** Chaque joueur place son pion sur la **Case 0 (DÉPART)**.
+7. **Positionner les Pions :** Chaque joueur place son pion sur la **Salle 0 (DÉPART)**.
 8. **Désigner le Premier Joueur :** Tout le monde vote pour le joueur qui jouera en premier.
 
 ---
@@ -84,11 +84,11 @@ Quand leur présidente, Wanda Olsam, disparaît, ils font la seule chose envisag
 ## 🎯 L'Objectif du Jeu
 
 > ### 🏁 La Condition de Victoire
-> Un joueur gagne immédiatement en atterrissant **exactement** sur la **Case 60**.
+> Un joueur gagne immédiatement en atterrissant **exactement** sur la **Salle 60**.
 >
-> Si vous obtenez un résultat plus grand que la distance nécessaire pour atteindre la Case 60, votre pion **recule de l'excédent**.
+> Si vous obtenez un résultat plus grand que la distance nécessaire pour atteindre la Salle 60, votre pion **recule de l'excédent**.
 >
-> *Exemple :* Si vous êtes actuellement sur la Case 57 et que vous obtenez un `5`, vous avancez de 3 cases jusqu'à la Case 60, puis reculez de 2 cases, pour finalement atterrir sur la Case 58.
+> *Exemple :* Si vous êtes actuellement sur la Salle 57 et que vous obtenez un `5`, vous avancez de 3 salles jusqu'à la Salle 60, puis reculez de 2 salles, pour finalement atterrir sur la Salle 58.
 
 ---
 
@@ -98,7 +98,7 @@ Quand leur présidente, Wanda Olsam, disparaît, ils font la seule chose envisag
 Le jeu se déroule dans le sens des aiguilles d'une montre, joueur par joueur.
 
 ::: warning-box
-⚠️ **Interaction de Changement d'État :** Chaque fois qu'un joueur change de case *en dehors* de son propre tour (à cause d'effets de déplacement ou de capacités), il **ne déclenche pas** l'effet de la case.
+⚠️ **Interaction de Changement d'État :** Chaque fois qu'un joueur change de salle *en dehors* de son propre tour (à cause d'effets de déplacement ou de capacités), il **ne déclenche pas** l'effet de la salle.
 :::
 
 *Portez une attention particulière aux temps de recharge et aux réinitialisations de capacités ! Certaines actions ou capacités passives (comme la passive de Mamie Luc) peuvent se produire pendant le tour d'un adversaire, mais ne peuvent être exécutées qu'une fois par manche.*
@@ -106,8 +106,8 @@ Le jeu se déroule dans le sens des aiguilles d'une montre, joueur par joueur.
 ### Anatomie d'un Tour
 Pendant votre tour, vous **devez** effectuer votre Mouvement Obligatoire et **pouvez** choisir d'utiliser votre Capacité Active. Vous disposez d'une flexibilité tactique complète sur l'ordre de vos actions. Choisissez entre l'**Option A** et l'**Option B** :
 
-*   **Option A :** Effectuer le Mouvement → Résoudre la case/l'échelle où vous atterrissez → Déclencher la Capacité Active.
-*   **Option B :** Déclencher la Capacité Active → Effectuer le Mouvement → Résoudre la case/l'échelle où vous atterrissez.
+*   **Option A :** Effectuer le Mouvement → Résoudre la salle/l'échelle où vous atterrissez → Déclencher la Capacité Active.
+*   **Option B :** Déclencher la Capacité Active → Effectuer le Mouvement → Résoudre la salle/l'échelle où vous atterrissez.
 
 *Remarque : vous ne pouvez pas activer de capacités en plein mouvement ou en plein Événement d'Échelle. Vous devez annoncer explicitement au groupe quand votre tour est officiellement terminé.*
 
@@ -116,34 +116,34 @@ Pendant votre tour, vous **devez** effectuer votre Mouvement Obligatoire et **po
 ## 🧪 Les Règles de Boisson & la Couronne
 
 *   **Qu'est-ce qu'un « Š » ?** `Š` désigne explicitement un **Shot**.
-*   **La Couronne Tournante :** La Couronne repose toujours au sommet d'une des bouteilles de la ligne. Chaque fois qu'une règle de case, une capacité de carte, ou un événement force un joueur à boire des shots, ces shots **doivent** être servis exclusivement depuis la bouteille couronnée.
+*   **La Couronne Tournante :** La Couronne repose toujours au sommet d'une des bouteilles de la ligne. Chaque fois qu'une règle de salle, une capacité de carte, ou un événement force un joueur à boire des shots, ces shots **doivent** être servis exclusivement depuis la bouteille couronnée.
 *   **Déplacer la Couronne :** Immédiatement après que les shots ont été bus, la Couronne se déplace sur la bouteille suivante dans la ligne.
 
 ---
 
 ## 🪜 Règles Détaillées & Concepts Clés
 
-### Résoudre les Effets de Case
-Quand votre mouvement vous fait atterrir sur une case, résolvez l'effet imprimé de cette case (boisson, mini-jeu, téléportation, etc.) avant toute autre chose. Si cet effet vous envoie ailleurs, résolvez aussi l'effet de la nouvelle case, et ainsi de suite, jusqu'à atterrir quelque part sans déplacement supplémentaire.
+### Résoudre les Effets de Salle
+Quand votre mouvement vous fait atterrir sur une salle, résolvez l'effet imprimé de cette salle (boisson, mini-jeu, téléportation, etc.) avant toute autre chose. Si cet effet vous envoie ailleurs, résolvez aussi l'effet de la nouvelle salle, et ainsi de suite, jusqu'à atterrir quelque part sans déplacement supplémentaire.
 
-La seule exception est une échelle : si la case sur laquelle vous atterrissez contient une échelle, vous ne résolvez pas directement son effet. Résolvez d'abord l'Événement d'Échelle — puis résolvez l'effet de la case où vous finissez une fois l'événement réglé.
+La seule exception est une échelle : si la salle sur laquelle vous atterrissez contient une échelle, vous ne résolvez pas directement son effet. Résolvez d'abord l'Événement d'Échelle — puis résolvez l'effet de la salle où vous finissez une fois l'événement réglé.
 
 ### Déplacer les Échelles
-Chaque fois que votre dé de mouvement affiche un **6**, vous pouvez déplacer une des échelles à la fin de votre tour, en la reconnectant entre deux cases de votre choix (Case 60 exceptée). Les classes qui lancent plusieurs dés pour le mouvement peuvent afficher plusieurs 6 dans le même tour, et peuvent déplacer une échelle par 6 obtenu.
+Chaque fois que votre dé de mouvement affiche un **6**, vous pouvez déplacer une des échelles à la fin de votre tour, en la reconnectant entre deux salles de votre choix (Salle 60 exceptée). Les classes qui lancent plusieurs dés pour le mouvement peuvent afficher plusieurs 6 dans le même tour, et peuvent déplacer une échelle par 6 obtenu.
 
 ### Événements d'Échelle
-Quand vous atterrissez sur une case connectée à une échelle :
+Quand vous atterrissez sur une salle connectée à une échelle :
 
 1. Le joueur actif déclare s'il a l'intention de grimper à l'échelle (s'il monte) ou de l'éviter (s'il descend).
 2. **Le Défi :** N'importe quel adversaire peut instantanément contester le choix du joueur actif en buvant **1 Š**.
 3. **La Guerre des Enchères :** Les joueurs peuvent alterner les enchères, chaque contre-défi devant être **supérieur de 1 Š** à la dernière enchère, jusqu'à ce que tous les adversaires cèdent ou que le joueur actif abandonne.
 
-Seul le joueur actif peut déclencher un Événement d'Échelle, quelle que soit la raison de son entrée dans la case. Le joueur actif ne déclenche pas d'événement pour une échelle connectée à la case sur laquelle il commence son tour.
+Seul le joueur actif peut déclencher un Événement d'Échelle, quelle que soit la raison de son entrée dans la salle. Le joueur actif ne déclenche pas d'événement pour une échelle connectée à la salle sur laquelle il commence son tour.
 
-Si la résolution d'un Événement d'Échelle vous fait atterrir sur une case connectée à une autre échelle, vous résolvez immédiatement un nouvel Événement d'Échelle pour celle-ci — les échelles peuvent s'enchaîner ainsi. La même échelle, cependant, ne peut pas être utilisée deux fois dans le même tour.
+Si la résolution d'un Événement d'Échelle vous fait atterrir sur une salle connectée à une autre échelle, vous résolvez immédiatement un nouvel Événement d'Échelle pour celle-ci — les échelles peuvent s'enchaîner ainsi. La même échelle, cependant, ne peut pas être utilisée deux fois dans le même tour.
 
 ### Lié
-Certaines cartes et cases rendent deux joueurs **liés** l'un à l'autre. Chaque fois qu'un joueur lié doit boire (excepté les **Š**), le joueur auquel il est lié doit boire la même quantité. Un joueur ne peut être lié qu'à un seul autre joueur à la fois — entrer dans un nouveau lien rompt immédiatement le précédent.
+Certaines cartes et salles rendent deux joueurs **liés** l'un à l'autre. Chaque fois qu'un joueur lié doit boire (excepté les **Š**), le joueur auquel il est lié doit boire la même quantité. Un joueur ne peut être lié qu'à un seul autre joueur à la fois — entrer dans un nouveau lien rompt immédiatement le précédent.
 
 ### Mini-Jeux & Mots-Clés
 
@@ -156,7 +156,7 @@ Certaines cartes et cases rendent deux joueurs **liés** l'un à l'autre. Chaque
 *   **Vrai ou faux ? :** Le joueur actif raconte une anecdote à propos d'un autre joueur à table. Tous les autres devinent si elle est vraie ou fausse ; quiconque se trompe boit une gorgée.
 *   **Je n'ai jamais :** Règles standards.
 *   **Tu préfères :** Règles standards.
-*   **Reine des Questions :** Un titre accordé en atterrissant sur la Case 24. Tant que vous le détenez, vous pouvez donner une gorgée à quiconque répond à une question que vous posez.
+*   **Reine des Questions :** Un titre accordé en atterrissant sur la Salle 24. Tant que vous le détenez, vous pouvez donner une gorgée à quiconque répond à une question que vous posez.
 *   **le petit bonhomme dans votre verre :** Tant que c'est actif, vous devez sortir le (imaginaire) petit bonhomme de votre verre et le poser sur la table avant de boire, puis le remettre dedans après — à chaque fois que vous buvez.
 
 ---
@@ -166,13 +166,13 @@ Certaines cartes et cases rendent deux joueurs **liés** l'un à l'autre. Chaque
 ### Aide-Mémoire du Tour
 1. **Évaluer l'État :** Vérifiez les temps de recharge des cartes de classe.
 2. **Agir ou Bouger :** Effectuez l'Option A ou l'Option B.
-3. **Résoudre :** Traitez le texte de la Case ou les déclenchements d'Échelle.
+3. **Résoudre :** Traitez le texte de la Salle ou les déclenchements d'Échelle.
 4. **Passer :** Annoncez verbalement la fin de votre tour.
 
 ### Questions Fréquentes
-* **Q : Puis-je utiliser un raccourci d'échelle pour entrer sur la Case 60 ?**
-  * *R :* Absolument pas. La Case 60 est strictement **Impénétrable** ; aucune échelle ne peut y être ancrée ni en franchir les bordures.
+* **Q : Puis-je utiliser un raccourci d'échelle pour entrer sur la Salle 60 ?**
+  * *R :* Absolument pas. La Salle 60 est strictement **Impénétrable** ; aucune échelle ne peut y être ancrée ni en franchir les bordures.
 * **Q : Dois-je suivre un shot si le joueur auquel je suis Lié en prend un ?**
   * *R :* Non. La dynamique du Lien s'applique strictement aux gorgées standards. Les actions en `Š` sont individuelles sauf mention explicite contraire.
-* **Q : Que se passe-t-il si je suis déplacé sur la Case 60 par la capacité d'un autre joueur, mais que ce n'est pas mon tour ?**
-  * *R :* Vous ne gagnez pas — seul le joueur actif déclenche les effets de case (voir la règle d'Interaction de Changement d'État), et la condition de victoire est l'effet de la Case 60. Vous restez simplement là. À votre prochain tour, lancez normalement : puisque vous êtes déjà sur la Case 60, tout résultat dépasse de sa valeur complète, et vous rebondissez d'autant de cases en arrière.
+* **Q : Que se passe-t-il si je suis déplacé sur la Salle 60 par la capacité d'un autre joueur, mais que ce n'est pas mon tour ?**
+  * *R :* Vous ne gagnez pas — seul le joueur actif déclenche les effets de salle (voir la règle d'Interaction de Changement d'État), et la condition de victoire est l'effet de la Salle 60. Vous restez simplement là. À votre prochain tour, lancez normalement : puisque vous êtes déjà sur la Salle 60, tout résultat dépasse de sa valeur complète, et vous rebondissez d'autant de salles en arrière.

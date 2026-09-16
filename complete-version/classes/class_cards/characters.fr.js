@@ -7,10 +7,10 @@ const characters_fr = [
     color: "#ef4444",
     difficulty: 3,
     traitName: "Brûler d'impatience",
-    traitDesc: "Lancez 1d6 pour vous déplacer. Vous pouvez relancer votre dé de mouvement. Pour cela, vous devez boire un nombre de gorgées égal au double du chiffre des dizaines de votre case actuelle.",
+    traitDesc: "Lancez 1d6 pour vous déplacer. Vous pouvez relancer votre dé de mouvement. Pour cela, vous devez boire un nombre de gorgées égal au double du chiffre des dizaines de votre salle actuelle.",
     abilityName: "Burn-out",
     abilityCost: "1Š",
-    abilityDesc: "Lancez une boule de feu depuis votre case ; elle peut parcourir une distance de 2d6 cases, traverser les murs et changer de direction librement. Tout joueur touché boit 1Š. Si TOUS les autres joueurs sont touchés, ils boivent chacun 1Š supplémentaire.",
+    abilityDesc: "Lancez une boule de feu depuis votre salle ; elle peut parcourir une distance de 2d6 salles, traverser les murs et changer de direction librement. Tout joueur touché boit 1Š. Si TOUS les autres joueurs sont touchés, ils boivent chacun 1Š supplémentaire.",
     flavor: '« On dirait que vous avez cramé toute votre cagnotte CAGEC... »'
   },
   {
@@ -23,7 +23,7 @@ const characters_fr = [
     traitDesc: "Copiez le mouvement du joueur le plus proche devant vous sur le plateau. Si vous êtes premier, lancez 1d6 à la place.",
     abilityName: "Dans leur tête",
     abilityCost: "1Š",
-    abilityDesc: "Chaque fois que vous passez par ou atterrissez sur une case occupée par un autre joueur, vous pouvez payer le coût. Copiez sa Capacité de Classe comme une capacité supplémentaire que vous pouvez déclencher une fois gratuitement ce tour-ci. Vous ne pouvez avoir qu'une seule capacité supplémentaire à la fois.",
+    abilityDesc: "Chaque fois que vous passez par ou atterrissez sur une salle occupée par un autre joueur, vous pouvez payer le coût. Copiez sa Capacité de Classe comme une capacité supplémentaire que vous pouvez déclencher une fois gratuitement ce tour-ci. Vous ne pouvez avoir qu'une seule capacité supplémentaire à la fois.",
     flavor: '"Je suis Glamidir... VOSPODINOV !"'
   },
   {
@@ -33,7 +33,7 @@ const characters_fr = [
     color: "#35389e",
     difficulty: 3,
     traitName: "Le Grand Complot",
-    traitDesc: "Lancez 1d6 pour vous déplacer. Puis, lancez un second 1d6 : choisissez un adversaire à faire avancer/reculer de ce nombre de cases, et faites-le boire/distribuer ce nombre de gorgées." +
+    traitDesc: "Lancez 1d6 pour vous déplacer. Puis, lancez un second 1d6 : choisissez un adversaire à faire avancer/reculer de ce nombre de salles, et faites-le boire/distribuer ce nombre de gorgées." +
             "<br><br>Quand vous devenez le Conseiller, prenez un jeton Conseiller. Si tous les joueurs en ont un, la partie se termine. <b>Personne ne gagne</b>.",
     abilityName: "Sombres Manœuvres",
     abilityCost: "1Š",
@@ -47,10 +47,10 @@ const characters_fr = [
     color: "#eab308",
     difficulty: 1,
     traitName: "Jet Setteur",
-    traitDesc: "Lancez 1d60 pour vous déplacer. Le résultat est le numéro de la case sur laquelle vous atterrissez.",
+    traitDesc: "Lancez 1d60 pour vous déplacer. Le résultat est le numéro de la salle sur laquelle vous atterrissez.",
     abilityName: "Audioconférence d'urgence",
     abilityCost: "1Š",
-    abilityDesc: "Créez une onde de choc centrée sur la case 1d60. Les autres joueurs boivent des Š selon le gabarit de votre classe.",
+    abilityDesc: "Créez une onde de choc centrée sur la salle 1d60. Les autres joueurs boivent des Š selon le gabarit de votre classe.",
     flavor: '« D\'après la bourse, je devrais shorter ta vie. *BIP* »'
   },
   {
@@ -63,7 +63,7 @@ const characters_fr = [
     traitDesc: "Lancez 2d6 et utilisez le résultat le plus élevé pour vous déplacer.",
     abilityName: "LE PRIX DU SANG",
     abilityCost: "1Š",
-    abilityDesc: "Annulez l'effet de la case sur laquelle vous avez atterri, puis placez-y une mine. Le prochain joueur qui passe par cette case doit s'arrêter, retirer la mine, boire 1Š, et devenir <b>lié</b> à vous.",
+    abilityDesc: "Annulez l'effet de la salle sur laquelle vous avez atterri, puis placez-y une mine. Le prochain joueur qui passe par cette salle doit s'arrêter, retirer la mine, boire 1Š, et devenir <b>lié</b> à vous.",
     flavor: '« Donnez-moi votre énergie, donnez-moi votre SANG ! »'
   },
   {
@@ -73,12 +73,12 @@ const characters_fr = [
     color: "#8327c1",
     difficulty: 2,
     traitName: "Une question de dosage",
-    traitDesc: "Lancez 1d6 pour vous déplacer. Chaque fois que vous atterrissez sur une case bleue, distribuez 2 gorgées. Chaque fois que vous atterrissez sur une case violette, buvez 1 gorgée.",
+    traitDesc: "Lancez 1d6 pour vous déplacer. Chaque fois que vous atterrissez sur une salle bleue, distribuez 2 gorgées. Chaque fois que vous atterrissez sur une salle violette, buvez 1 gorgée.",
     abilityName: "Série d'injections tests",
     abilityCost: "KŠ",
     abilityDesc: "Choisissez une valeur pour K et payez KŠ pour activer, puis jouez à <b>PFC</b> contre chaque adversaire à tour de rôle.\n" +
-            "<br>- Si vous gagnez : il boit KŠ et vous avancez de +K cases.\n" +
-            "<br>- Si vous perdez : il avance de +K cases à la place.\n" +
+            "<br>- Si vous gagnez : il boit KŠ et vous avancez de +K salles.\n" +
+            "<br>- Si vous perdez : il avance de +K salles à la place.\n" +
             "<br><br>Si vous gagnez tous les duels, les adversaires boivent aussi un KŠ supplémentaire chacun, et vous avancez d'un +K supplémentaire par adversaire.",
     flavor: '« Ce qui ne te tue pas te rend plus rapide ! »'
   },
@@ -94,7 +94,7 @@ const characters_fr = [
     abilityCost: "1Š",
     abilityDesc: "Défiez le joueur le plus proche devant vous sur le plateau à <b>PFC</b> (au meilleur des 3).\n" +
             "<br>- Si vous perdez, l'autre joueur boit 1Š.\n" +
-            "<br>- Si vous gagnez, l'autre joueur boit 2Š et vous allez sur sa case.",
+            "<br>- Si vous gagnez, l'autre joueur boit 2Š et vous allez sur sa salle.",
     flavor: '« Je vais annihiler ce consortium en carton-pâte. »'
   },
   {
@@ -104,7 +104,7 @@ const characters_fr = [
     color: "#afa8a8",
     difficulty: 2,
     traitName: "Marche des Fiertés",
-    traitDesc: "Lancez 1d6 pour vous déplacer. <b>Une fois par manche</b>, quand le joueur le plus proche devant vous sur le plateau boit, vous pouvez aller directement sur sa case et boire le double à sa place.",
+    traitDesc: "Lancez 1d6 pour vous déplacer. <b>Une fois par manche</b>, quand le joueur le plus proche devant vous sur le plateau boit, vous pouvez aller directement sur sa salle et boire le double à sa place.",
     abilityName: "Je Préfère le Thé",
     abilityCost: "1Š",
     abilityDesc: "Obtenez 1d3 jetons (3 maximum à la fois). Chaque fois que vous devez 1Š ou plus, vous pouvez défausser un jeton. Si vous le faites, lancez 1d6 : vous pouvez alors boire ce nombre de gorgées pour chaque Š dû, au lieu du Š lui-même — ou simplement boire le Š si vous préférez. <br><i>Exception : vous ne pouvez pas utiliser ceci sur le coût en Š de l'activation de cette capacité.</i>",
@@ -137,7 +137,7 @@ const characters_fr = [
     abilityCost: "1Š",
     abilityDesc: "Choisissez une option (portée définie par votre gabarit) : " +
             "<br>- Déplacez une échelle à portée vers votre inventaire. " +
-            "<br>- Placez une échelle de votre inventaire dans n'importe quelle case à portée." +
+            "<br>- Placez une échelle de votre inventaire dans n'importe quelle salle à portée." +
             "<br>Quand une échelle est placée ou déplacée de cette façon, tous les joueurs se trouvant à portée, gabarit centré sur l'extrémité haute de l'échelle, doivent boire des Š selon la grille.",
     flavor: '« Hors de mon podium, les crasseux ! »'
   }

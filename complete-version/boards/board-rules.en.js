@@ -18,7 +18,7 @@ const roomTexts_en = [
   "Collective <b>RPS</b>", // room 14
   "<b>Suitcase</b>", // room 15
   "Drink as many sips as the dice just did", // room 16
-  "Fill up your glass, drink as much as you want, another player has to drink as much", // room 17
+  "Fill your glass, drink freely — another player matches you.", // room 17
   "Roll 1d6: drink that many sips if even, give them if odd", // room 18
   "Drink and take an extra turn", // room 19
   "Girls drink, if no girls, everybody drinks", // room 20
@@ -39,7 +39,7 @@ const roomTexts_en = [
   "Rotate classes clockwise. Complainers drink", // room 35
   "Trade glasses with a player, you both drink half of it, then switch back", // room 36
   "<b>Never have I ever</b>", // room 37
-  "Switch positions of <b>Š</b> bottles as you want, then drink a <b>Š</b> from any bottle", // room 38
+  "Rearrange the <b>Š</b> bottles, then drink one <b>Š</b> from any bottle.", // room 38
   "Drink and go to room 31", // room 39
   "<b>According to...</b>", // room 40
   "Swap seats with the player opposite you. You are now <b>bound</b>", // room 41
@@ -55,10 +55,10 @@ const roomTexts_en = [
   "Move 3 rooms ahead and drink", // room 51
   "Place a Carnila landmine in that room", // room 52
   "Roll 2d6 to move forward that many rooms and drink that many sips", // room 53
-  "Drop a rule made in room 32. Their creator drinks. If there is no rule, you drink", // room 54
+  "Cancel a room-32 rule. Its creator drinks — or you, if none exists.", // room 54
   "Royal <b>RPS</b>. Losers drink. If you win everything, give one <b>Š</b>", // room 55
   "Player with the emptiest glass empties it", // room 56
-  "Drink 2 sips and go forward one room OR drink 1 <b>Š</b> and take an extra turn", // room 57
+  "Drink 2 sips and move 1 room, OR drink 1 <b>Š</b> and replay.", // room 57
   "Drink water", // room 58
   "<b>Would you rather</b>", // room 59
   "You win, all players except you chug their glasses, you may give yours to another player. <br><br>UNBREACHABLE: NO ladder on it" // room 60

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KALBLAST Perfected Golden Spiral Board</title>
+  <title>KALBLAST Board</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -330,7 +330,7 @@
   <div class="controls">
     <button class="download-btn lang-btn active" data-lang-btn="en">English</button>
     <button class="download-btn lang-btn" data-lang-btn="fr">Français</button>
-    <button class="download-btn" onclick="downloadBoard()">Download Perfected Golden Board</button>
+    <button class="download-btn" onclick="downloadBoard()">Download Board</button>
   </div>
 
   <div class="board-container" id="board-capture-wrapper">
@@ -352,7 +352,7 @@
     const roomTextsByLang = { en: roomTexts_en, fr: roomTexts_fr };
     const roomLabels = {
       en: { start: "START", victory: "👑 ROOM 60 👑" },
-      fr: { start: "DÉPART", victory: "👑 CASE 60 👑" }
+      fr: { start: "DÉPART", victory: "👑 SALLE 60 👑" }
     };
     let currentLang = 'en';
 
