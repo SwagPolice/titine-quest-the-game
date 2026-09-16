@@ -1,5 +1,21 @@
 <!-- AUTO-BUILD: after editing this file, regenerate rulebook.html by running build.ps1 (or build.sh) in this folder. -->
 
+<div class="masthead-mark">
+  <span class="kalb-mark">
+    <svg viewBox="0 0 120 60" width="96" height="48" aria-hidden="true">
+      <g class="kalb-mark-stroke">
+        <line x1="12" y1="6" x2="12" y2="54"/>
+        <line x1="12" y1="30" x2="38" y2="6"/>
+        <line x1="12" y1="30" x2="38" y2="54"/>
+        <line x1="108" y1="6" x2="108" y2="54"/>
+        <line x1="108" y1="30" x2="82" y2="6"/>
+        <line x1="108" y1="30" x2="82" y2="54"/>
+      </g>
+      <circle class="kalb-mark-disk" cx="60" cy="30" r="7"/>
+    </svg>
+  </span>
+</div>
+
 # KALBLAST
 ### *Drink your way to the top*
 

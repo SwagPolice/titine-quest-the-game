@@ -8,13 +8,14 @@ For full setup steps, the turn structure, ladder/shot rules, and FAQ, see the ru
 ## Languages
 The game currently supports **English** and **French**:
 - **Rulebook:** `rulebook/rulebook.md` (EN) and `rulebook/rulebook.fr.md` (FR) build to `rulebook.html` / `rulebook.fr.html` via `rulebook/build.sh` (or `build.ps1`).
-- **Class cards:** open `classes/class_cards/baseline.html` in a browser and use the language toggle at the top before downloading PNGs.
-- **Board:** open `boards/board.html` in a browser and use the language toggle before downloading the board PNG.
+- **Class cards:** the authoritative, print-ready PNGs live in `classes/class_cards/print-assets/<lang>/`, generated with `npm run build:card-pngs` (needs a local Chrome install — see below). `baseline.html` still opens in a browser with a language toggle and its own "Download PNG" buttons for quickly previewing a design change; it's just no longer the source of truth for what actually gets printed.
+- **Board:** same idea — `boards/print-assets/kalblast_perfected_board_<lang>.png` is the authoritative output, generated with `npm run build:board-pngs`. `board.html` remains for live previewing.
 
 To add another language, add a sibling data file (`rulebook.<lang>.md`, `characters.<lang>.js`, `board-rules.<lang>.js`) with the same structure and wire it into the relevant build script / language toggle. After editing any EN/FR data file, run `node scripts/check-lang-parity.js` to catch length mismatches, missing translations, or dropped keyword markup (`<b>`, `<br>`, `Š`) before they reach print.
 
 ## Repo layout notes
 - `shared/lang-toggle.js` — language-toggle and PNG-export helpers shared by `boards/board.html` and `classes/class_cards/baseline.html`.
+- `shared/export-pngs.js` — Puppeteer helpers behind `npm run build:card-pngs` / `build:board-pngs`. Needs a local Chrome install; if it's not found automatically, point at it with `CHROME_PATH=/path/to/chrome npm run build:...`. These scripts generate the authoritative print PNGs in a controlled browser instead of relying on whoever clicks "Download PNG" in their own — different browsers/environments can silently rasterize the export differently (a real issue this project hit once).
 - `boards/spiral-coords.js` — single source of truth for the board's 61-room layout; both `board.html` and `simulations/simulation-kalblast.py` read this same file, so they can't drift apart.
 - `scripts/check-lang-parity.js` — run after editing translations (see above).
 

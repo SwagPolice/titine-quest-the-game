@@ -1,0 +1,43 @@
+/* ⚡ KALBLAST SHARED VISUAL IDENTITY
+   Single source of truth for the brand-level palette and fonts, shared by
+   the board, class cards, and rulebook. Per-character "signal" colors stay
+   defined locally where each character is defined (characters.*.js) — they
+   are exclusive to that character and never belong here. */
+
+:root {
+  --void: #0a0710;
+  --void-warm: #170a10;
+  --panel: #14101c;
+  --hairline: #2a2233;
+
+  --kalb-red: #b0102f;
+  --kalb-red-dim: #6e0e24;
+  --kalb-gold: #fbbf24;
+
+  --ink: #f3eef7;
+  --ink-muted: #9c93a8;
+  --ink-faint: #6b6278;
+}
+
+.kalb-mark {
+  display: inline-block;
+  line-height: 0;
+}
+
+.kalb-mark svg {
+  display: block;
+  overflow: visible;
+}
+
+.kalb-mark .kalb-mark-stroke {
+  fill: none;
+  stroke: var(--kalb-gold);
+  stroke-width: 7;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 2px var(--kalb-gold)) drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+}
+
+.kalb-mark .kalb-mark-disk {
+  fill: var(--kalb-red);
+  filter: drop-shadow(0 0 3px var(--kalb-red)) drop-shadow(0 0 10px rgba(176, 16, 47, 0.9));
+}
