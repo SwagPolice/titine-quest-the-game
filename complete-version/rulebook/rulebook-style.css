@@ -1,24 +1,31 @@
-/* ⚡ KALBLAST RULEBOOK STYLE DECK */
+/* ⚡ KALBLAST RULEBOOK STYLE DECK
+   Brand-level tokens (colors, the KALB mark) live in ../shared/theme.css;
+   the aliases below just keep this file's existing variable names working. */
 :root {
-  --bg-dark: #090610;
+  --bg-dark: var(--void);
   --panel-bg: rgba(20, 15, 32, 0.7);
-  --border-glow: #1c172e;
-  --neon-gold: #fbbf24;
-  --neon-purple: #a855f7;
-  --text-light: #f1f5f9;
-  --text-muted: #a19da8;
+  --border-glow: var(--kalb-red);
+  --neon-gold: var(--kalb-gold);
+  --text-light: var(--ink);
+  --text-muted: var(--ink-muted);
 }
 
 body {
   background-color: #121214;
   color: var(--text-light);
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Manrope', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   margin: 0;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* 🔺 MASTHEAD MARK */
+.masthead-mark {
+  text-align: center;
+  margin-bottom: 12px;
 }
 
 /* 🌐 LANGUAGE TOGGLE */
@@ -63,23 +70,24 @@ body {
 
 /* 👑 TYPOGRAPHY DIRECTIONS */
 h1 {
-  font-size: 3.5rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 4px;
+  font-family: 'Monoton', cursive;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 8vw, 4.5rem);
+  letter-spacing: 0.03em;
   margin-bottom: 0px;
-  color: #ffffff;
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5), 0 4px 0px var(--border-glow);
+  color: var(--neon-gold);
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.9), 0 0 22px rgba(251, 191, 36, 0.55), 0 0 60px rgba(251, 191, 36, 0.3);
   text-align: center;
 }
 
-h3.tagline {
-  font-size: 1.25rem;
-  color: var(--neon-gold);
+h1 + h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--kalb-red);
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-top: 5px;
+  letter-spacing: 0.2em;
+  margin-top: 14px;
   margin-bottom: 40px;
 }
 
@@ -150,13 +158,13 @@ li strong {
 
 /* 🔏 WARNING RULES */
 .warning-box {
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(176, 16, 47, 0.12);
+  border: 1px solid rgba(176, 16, 47, 0.4);
   padding: 15px 20px;
   border-radius: 8px;
   margin: 20px 0;
   font-style: italic;
-  color: #e9d5ff;
+  color: #f3d7d7;
 }
 
 /* 🛠️ PANDOC BUILD COMPATIBILITY

@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+// Regenerates the authoritative, print-ready character card PNGs (both
+// languages) via a controlled Puppeteer-driven Chrome — see
+// ../shared/export-pngs.js for why this exists instead of relying on the
+// in-browser "Download PNG" buttons.
+//
+// Run: npm run build:card-pngs
+// (needs a local Chrome install; set CHROME_PATH if it's not found automatically)
+
+const fs = require('fs');
+const path = require('path');
+const { launchAndOpen, capturePng } = require('../../shared/export-pngs');
+
+const DIR = __dirname;
+const OUT_DIR = path.join(DIR, 'print-assets');
+const LANGS = ['en', 'fr'];
+
+(async () => {
+  const { browser, page } = await launchAndOpen(path.join(DIR, 'baseline.html'));
+
+  let total = 0;
+  for (const lang of LANGS) {
+    if (lang !== 'en') {
+      await page.click(`[data-lang-btn="${lang}"]`);
+      await new Promise((r) => setTimeout(r, 300)); // let re-render settle
+    }
+
+    const outDir = path.join(OUT_DIR, lang);
+    fs.mkdirSync(outDir, { recursive: true });
+
+    const cards = await page.evaluate((l) => {
+      const chars = l === 'fr' ? characters_fr : characters_en;
+      return chars.map((c, i) => ({ id: `card-${i}`, filename: cardFilename(c.name, l) }));
+    }, lang);
+
+    for (const { id, filename } of cards) {
+      const buffer = await capturePng(page, id);
+      fs.writeFileSync(path.join(outDir, filename), buffer);
+      console.log(`  ${lang}/${filename}`);
+      total++;
+    }
+  }
+
+  await browser.close();
+  console.log(`Done: ${total} card PNGs written to ${path.relative(process.cwd(), OUT_DIR)}/`);
+})().catch((err) => {
+  console.error('Card PNG build failed:', err.message);
+  process.exit(1);
+});

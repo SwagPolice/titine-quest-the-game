@@ -3,10 +3,15 @@
   "private": true,
   "scripts": {
     "build:rulebook": "node complete-version/rulebook/build.js",
+    "build:card-images": "node complete-version/classes/class_cards/build-images.js",
+    "build:fonts": "node complete-version/shared/build-fonts.js",
+    "build:card-pngs": "node complete-version/classes/class_cards/build-card-pngs.js",
+    "build:board-pngs": "node complete-version/boards/build-board-pngs.js",
     "check:lang-parity": "node complete-version/scripts/check-lang-parity.js"
   },
   "devDependencies": {
     "markdown-it": "^14.1.0",
-    "markdown-it-container": "^4.0.0"
+    "markdown-it-container": "^4.0.0",
+    "puppeteer-core": "^25.11.0"
   }
 }

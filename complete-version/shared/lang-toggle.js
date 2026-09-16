@@ -21,7 +21,12 @@ function initLangToggle(onChangeLang) {
 function downloadPng(nodeId, filenameFn) {
   const node = document.getElementById(nodeId);
 
-  return htmlToImage.toPng(node, { quality: 1.0, pixelRatio: 2 })
+  // Embedded @font-face rules (see shared/build-fonts.js) still need to
+  // finish decoding before capture — cheap and harmless to wait for.
+  return document.fonts.ready
+    .then(function () {
+      return htmlToImage.toPng(node, { quality: 1.0, pixelRatio: 2 });
+    })
     .then(function (dataUrl) {
       const link = document.createElement('a');
       link.download = filenameFn();
