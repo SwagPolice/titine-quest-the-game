@@ -1,5 +1,5 @@
 {
-  "name": "titine-quest-the-game",
+  "name": "kalblast-the-game",
   "private": true,
   "scripts": {
     "build:rulebook": "node complete-version/rulebook/build.js",
