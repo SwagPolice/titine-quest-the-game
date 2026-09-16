@@ -20,7 +20,7 @@ To add another language, add a sibling data file (`rulebook.<lang>.md`, `charact
 - `scripts/check-lang-parity.js` — run after editing translations (see above).
 
 ## What is needed to play
-- The KALBLAST board (The Golden Spiral)
+- The KALBLAST board
 - Character Class Cards
 - a pawn for each player
 - regular dice
