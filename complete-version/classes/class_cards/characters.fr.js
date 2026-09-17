@@ -98,7 +98,7 @@ const characters_fr = [
     flavor: '« Je vais annihiler ce consortium en carton-pâte. »'
   },
   {
-    name: "“Mamie” Luc",
+    name: "« Mamie » Luc",
     title: "Mascotte LBGTQIA+",
     image: "priest.jpg",
     color: "#afa8a8",

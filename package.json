@@ -10,7 +10,8 @@
     "build:board-a4-pdf": "node complete-version/boards/build-board-a4-pdf.js",
     "build:rulebook-pdf": "node complete-version/rulebook/build-pdf.js",
     "build:components-pdf": "node complete-version/components/build-print-sheet-pdf.js",
-    "check:lang-parity": "node complete-version/scripts/check-lang-parity.js"
+    "check:lang-parity": "node complete-version/scripts/check-lang-parity.js",
+    "check:print-assets": "node complete-version/scripts/check-print-assets.js"
   },
   "devDependencies": {
     "markdown-it": "^14.1.0",

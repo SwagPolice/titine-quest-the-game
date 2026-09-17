@@ -14,13 +14,10 @@
   * { box-sizing: border-box; }
   body { margin: 0; background: #ffffff; }
 
-  /* Board rendered at 277mm square: fills a full A4 page height within
-     10mm margins (297 - 20 = 277mm), then split down the middle. Each
-     half is 138.5mm + an 8mm overlap on its inner edge = 146.5mm wide,
-     comfortably inside A4's ~190mm usable width. */
+  /* Board size/overlap/half-width are set from board-print-constants.js at
+     runtime (see the script at the bottom), not hardcoded here, so this
+     file can't silently drift from print-sheet.html's ability templates. */
   .half {
-    width: 146.5mm;
-    height: 277mm;
     overflow: hidden;
     position: relative;
     page-break-after: always;
@@ -29,11 +26,7 @@
   .half img {
     position: absolute;
     top: 0;
-    width: 277mm;
-    height: 277mm;
   }
-  .half.left img { left: 0; }
-  .half.right img { left: -130.5mm; }
 
   /* Plain alignment ticks at the seam edge, no text, for rough pre-alignment
      before fine-tuning against the overlapping artwork itself. */
@@ -50,15 +43,45 @@
 <body>
   <div class="half left">
     <img id="board-img-left" src="print-assets/kalblast_perfected_board_en.png" alt="">
-    <div class="tick" style="top: 40mm;"></div>
-    <div class="tick" style="top: 138.5mm;"></div>
-    <div class="tick" style="top: 237mm;"></div>
+    <div class="tick"></div>
+    <div class="tick"></div>
+    <div class="tick"></div>
   </div>
   <div class="half right">
     <img id="board-img-right" src="print-assets/kalblast_perfected_board_en.png" alt="">
-    <div class="tick" style="top: 40mm;"></div>
-    <div class="tick" style="top: 138.5mm;"></div>
-    <div class="tick" style="top: 237mm;"></div>
+    <div class="tick"></div>
+    <div class="tick"></div>
+    <div class="tick"></div>
   </div>
+
+  <script src="board-print-constants.js"></script>
+  <script>
+    // Derive every physical dimension from the shared constants instead of
+    // hardcoding them a second time here (see board-print-constants.js).
+    const halfWidthMm = BOARD_PRINT_MM / 2 + OVERLAP_MM;
+    const rightShiftMm = -(BOARD_PRINT_MM / 2 - OVERLAP_MM);
+
+    document.querySelectorAll('.half').forEach(function (half) {
+      half.style.width = halfWidthMm + 'mm';
+      half.style.height = BOARD_PRINT_MM + 'mm';
+    });
+    document.querySelectorAll('.half img').forEach(function (img) {
+      img.style.width = BOARD_PRINT_MM + 'mm';
+      img.style.height = BOARD_PRINT_MM + 'mm';
+    });
+    document.getElementById('board-img-left').style.left = '0';
+    document.getElementById('board-img-right').style.left = rightShiftMm + 'mm';
+
+    // Three evenly-meaningful tick marks per half: an inset near the top,
+    // the exact vertical center, and the mirrored inset near the bottom —
+    // all derived from BOARD_PRINT_MM so they can't drift from it.
+    const TICK_INSET_MM = 40;
+    const tickTops = [TICK_INSET_MM, BOARD_PRINT_MM / 2, BOARD_PRINT_MM - TICK_INSET_MM];
+    document.querySelectorAll('.half').forEach(function (half) {
+      half.querySelectorAll('.tick').forEach(function (tick, i) {
+        tick.style.top = tickTops[i] + 'mm';
+      });
+    });
+  </script>
 </body>
 </html>
