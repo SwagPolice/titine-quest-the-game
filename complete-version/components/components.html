@@ -380,19 +380,15 @@
 </div>
 
 <script src="../shared/lang-toggle.js"></script>
+<script src="../classes/class_cards/characters.en.js"></script>
+<script src="../classes/class_cards/characters.fr.js"></script>
 <script>
-  const PAWNS = [
-    { name_en: "FireFoxxx", name_fr: "FireFoxxx", color: "#ef4444" },
-    { name_en: "Glamidir Vospo", name_fr: "Glamidir Vospo", color: "#10b981" },
-    { name_en: "Hans Pinner", name_fr: "Hans Pinner", color: "#35389e" },
-    { name_en: "Clazgreb", name_fr: "Clazgreb", color: "#eab308" },
-    { name_en: "Carnila", name_fr: "Carnila", color: "#981241" },
-    { name_en: "Turbo Killer", name_fr: "Turbo Killer", color: "#8327c1" },
-    { name_en: "Robiocoop", name_fr: "Robiocoop", color: "#27c16f" },
-    { name_en: "“Grandma” Luke", name_fr: "«Mamie» Luc", color: "#afa8a8" },
-    { name_en: "Paul Guaca", name_fr: "Paul Guaca", color: "#6bae22" },
-    { name_en: "Brenchilli", name_fr: "Brenchilli", color: "#b08ff6" }
-  ];
+  // Pawn names/colors are read directly from the character data files
+  // instead of a separately maintained copy — a hardcoded duplicate here
+  // previously drifted out of sync with the real character names.
+  const PAWNS = characters_en.map(function (c, i) {
+    return { name_en: c.name, name_fr: characters_fr[i].name, color: c.color };
+  });
 
   const pawnGrid = document.getElementById('pawn-grid');
   PAWNS.forEach(function (p) {

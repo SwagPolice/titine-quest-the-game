@@ -26,15 +26,32 @@
   }
   .cut-circle { fill: none; stroke: var(--hairline); stroke-width: 0.5; stroke-dasharray: 1.6 1.6; }
   .cut-rect { fill: none; stroke: var(--hairline); stroke-width: 0.5; stroke-dasharray: 1.6 1.6; }
+
+  /* Templates are physically scaled to match a real board room, so they
+     no longer fit beside the token rows — give them their own page. Plain
+     block layout, not flex/grid: Chrome's print engine won't fragment
+     flex/grid children across a page break, it just clips whatever
+     overflows, so oversized items here must flow as normal block content. */
+  #row-templates {
+    display: block;
+    page-break-before: always;
+  }
+  #row-templates > svg {
+    display: block;
+    margin: 0 auto 10mm;
+    page-break-inside: avoid;
+  }
 </style>
 </head>
 <body>
 <div class="sheet" id="sheet">
   <div class="row" id="row-pawns"></div>
   <div class="row" id="row-misc"></div>
-  <div class="row" id="row-templates"></div>
+  <div id="row-templates"></div>
 </div>
 
+<script src="../boards/board-print-constants.js"></script>
+<script src="../classes/class_cards/characters.en.js"></script>
 <script>
   const TOKEN_MM = 20;
   const NS = 'http://www.w3.org/2000/svg';
@@ -58,7 +75,10 @@
   }
 
   // ---- Pawns (10x, one per class, KALB mark centered) ----
-  const PAWN_COLORS = ['#ef4444', '#10b981', '#35389e', '#eab308', '#981241', '#8327c1', '#27c16f', '#afa8a8', '#6bae22', '#b08ff6'];
+  // Colors are read from the character data (identical across EN/FR, so
+  // reading the English file is enough) instead of a separately maintained
+  // copy of the same 10 hex values.
+  const PAWN_COLORS = characters_en.map(function (c) { return c.color; });
   function drawPawn(color) {
     const svg = newTokenSvg(TOKEN_MM);
     append(svg, 'circle', { cx: 50, cy: 50, r: 42, fill: color, stroke: 'rgba(0,0,0,0.2)', 'stroke-width': 2 });
@@ -150,8 +170,13 @@
   for (let i = 0; i < 6; i++) rowMisc.appendChild(drawAdvisor());
 
   // ---- Ability templates (diamond grid, Manhattan distance <= 2) ----
+  // Cell size must match a real board room — sourced from
+  // ../boards/board-print-constants.js, the single source of truth shared
+  // with board-print-a4.html, instead of a locally hardcoded number.
+  // Getting this wrong means the template doesn't actually line up when
+  // laid over the printed board (see that file's header comment for why).
   function drawTemplate(baseValue, color) {
-    const cellMm = 16;
+    const cellMm = ROOM_MM;
     const svg = svgEl('svg', { width: (5 * cellMm) + 'mm', height: (5 * cellMm) + 'mm', viewBox: '0 0 240 240' });
     svg.appendChild(svgEl('rect', { class: 'cut-rect', x: 1, y: 1, width: 238, height: 238 }));
     const cell = 48;
