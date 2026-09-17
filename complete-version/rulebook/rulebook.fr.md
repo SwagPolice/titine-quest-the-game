@@ -52,13 +52,14 @@ Quand leur présidente, Wanda Olsam, disparaît, ils font la seule chose envisag
 ## 📦 Contenu de la Boîte
 *   `1x` **Livret de règles**
 *   `1x` **Plateau de jeu**
-*   `60x` **Cartes de Classe de Personnage** (6 exemplaires de chacune des 10 classes)
-*   `6x` **Pions Joueurs**
+*   `10x` **Cartes de Classe de Personnage** (une de chaque classe — imprimez des exemplaires supplémentaires si vous le souhaitez)
+*   `10x` **Pions Joueurs** (une couleur par classe, pour que le pion de chaque joueur corresponde à sa carte)
 *   `1x` **Couronne Dorée**
 *   `4x` **Échelles Miniatures**
-*   `25x` **Jetons Prêtre**
-*   `10x` **Jetons Mine**
+*   `6x` **Jetons Lumière Protectrice**
+*   `3x` **Jetons Mine**
 *   `6x` **Jetons Conseiller**
+*   `1x` **Jeton Marche des Fiertés**
 *   `1x` **Gabarit de Clazgreb**
 *   `1x` **Gabarit de Brenchilli**
 *   `2x` **Dés à 6 faces**

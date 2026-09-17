@@ -34,7 +34,7 @@ const roomTexts_en = [
   "Give two sips to two people", // room 30
   "Drink and go to room 50", // room 31
   "Drink a shot of hard liquor", // room 32
-  "Take a priest token for free", // room 33
+  "Take a Protective Light token for free", // room 33
   "Player with the fullest drink drinks two sips", // room 34
   "Rotate classes clockwise. Complainers drink", // room 35
   "Trade glasses with a player, you both drink half of it, then switch back", // room 36

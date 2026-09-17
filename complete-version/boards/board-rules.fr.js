@@ -34,7 +34,7 @@ const roomTexts_fr = [
   "Distribue deux gorgées à deux personnes", // salle 30
   "Bois et va à la salle 50", // salle 31
   "Bois un shot d'alcool fort", // salle 32
-  "Prends un jeton Prêtre gratos", // salle 33
+  "Prends un jeton Lumière Protectrice gratos", // salle 33
   "Le joueur au verre le plus rempli boit deux gorgées", // salle 34
   "Échangez vos classes dans le sens horaire. Les râleurs boivent", // salle 35
   "Échange ton verre avec un joueur, buvez-en la moitié, rééchangez.", // salle 36
