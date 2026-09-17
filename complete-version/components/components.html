@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KALBLAST — Physical Components</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Reference designs for KALBLAST's physical components: pawns, crown, ladders, and ability tokens.">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/theme.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--void);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 20% -10%, rgba(176,16,47,0.14), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 10%, rgba(251,191,36,0.07), transparent 55%);
+    color: var(--ink);
+    font-family: 'Manrope', 'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    padding: 0 20px 80px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  [hidden] { display: none !important; }
+
+  .top-bar { display: flex; justify-content: flex-end; padding-top: 20px; }
+  .lang-btn {
+    background: rgba(255,255,255,0.08);
+    color: var(--ink-muted);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .lang-btn + .lang-btn { margin-left: 8px; }
+  .lang-btn.active { background: var(--kalb-gold); color: #000; border-color: transparent; }
+
+  header.masthead { padding: clamp(24px, 6vw, 44px) 0 30px; text-align: center; border-bottom: 1px solid var(--hairline); }
+  .kalb-mark svg { display: block; margin: 0 auto; }
+  header.masthead .lockup-title {
+    font-family: 'Monoton', cursive;
+    font-weight: 400;
+    font-size: clamp(30px, 6vw, 46px);
+    letter-spacing: 0.02em;
+    color: var(--kalb-gold);
+    text-shadow: 0 0 6px rgba(251,191,36,0.8), 0 0 20px rgba(251,191,36,0.4);
+    margin: 14px 0 6px;
+  }
+  header.masthead .dek { max-width: 60ch; margin: 14px auto 0; color: var(--ink-muted); font-size: 15px; }
+
+  section { padding: 40px 0; border-bottom: 1px solid var(--hairline); }
+  section:last-of-type { border-bottom: none; }
+  .eyebrow {
+    font-weight: 800; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--kalb-gold); display: block; margin-bottom: 8px;
+  }
+  section h2 { margin: 0 0 8px; font-size: 20px; }
+  section p.lede { color: var(--ink-muted); max-width: 62ch; margin: 0 0 26px; font-size: 14.5px; }
+
+  .piece-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+  .piece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 12px;
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .piece svg { display: block; }
+  .emoji-token {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    border: 3px solid;
+  }
+  .piece .name { font-weight: 700; font-size: 12.5px; }
+  .piece .qty { font-size: 11px; color: var(--kalb-gold); font-weight: 800; letter-spacing: 0.04em; }
+  .piece .note { font-size: 11.5px; color: var(--ink-muted); }
+
+  .single-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .single-row .piece { flex: 1 1 200px; }
+
+  .template-figure { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .template-figure svg { display: block; }
+  .template-figure .name { font-weight: 700; font-size: 13px; }
+  .template-figure .note { font-size: 12px; color: var(--ink-muted); max-width: 30ch; }
+
+  .qty-note {
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: var(--panel);
+    border-left: 3px solid var(--kalb-red);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  footer {
+    padding: 30px 0 0;
+    color: var(--ink-faint);
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <button class="lang-btn active" data-lang-btn="en">English</button>
+    <button class="lang-btn" data-lang-btn="fr">Français</button>
+  </div>
+
+  <header class="masthead">
+    <div class="kalb-mark">
+      <svg viewBox="0 0 120 60" width="64" height="32" aria-hidden="true">
+        <g class="kalb-mark-stroke">
+          <line x1="12" y1="6" x2="12" y2="54"/>
+          <line x1="12" y1="30" x2="38" y2="6"/>
+          <line x1="12" y1="30" x2="38" y2="54"/>
+          <line x1="108" y1="6" x2="108" y2="54"/>
+          <line x1="108" y1="30" x2="82" y2="6"/>
+          <line x1="108" y1="30" x2="82" y2="54"/>
+        </g>
+        <circle class="kalb-mark-disk" cx="60" cy="30" r="7"/>
+      </svg>
+    </div>
+    <div class="lockup-title">COMPONENTS</div>
+    <p class="dek" data-lang-content="en">First-pass designs for KALBLAST's physical pieces — pawns, the Golden Crown, ladders, and every ability token — sized and colored to match the board and character identities already in place.</p>
+    <p class="dek" data-lang-content="fr" hidden>Premiers jets pour les pièces physiques de KALBLAST — pions, Couronne d'Or, échelles et tous les jetons de capacité — dimensionnés et colorés pour correspondre au plateau et aux identités des personnages déjà en place.</p>
+  </header>
+
+  <section id="pawns">
+    <span class="eyebrow" data-lang-content="en">One per class</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Une par classe</span>
+    <h2>
+      <span data-lang-content="en">Player Pawns</span>
+      <span data-lang-content="fr" hidden>Pions des joueurs</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Plain circles, one color per class — a player's pawn matches whichever character card they're playing. 10 total, so any combination of classes in play has a matching pawn.</span>
+      <span data-lang-content="fr" hidden>De simples cercles, une couleur par classe — le pion d'un joueur reprend la couleur de la carte personnage qu'il incarne. 10 au total, pour que toute combinaison de classes en jeu ait un pion assorti.</span>
+    </p>
+    <div class="piece-grid" id="pawn-grid"></div>
+  </section>
+
+  <section id="crown">
+    <span class="eyebrow" data-lang-content="en">Shared component</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Composant partagé</span>
+    <h2>
+      <span data-lang-content="en">Golden Crown</span>
+      <span data-lang-content="fr" hidden>Couronne d'Or</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Rests on top of whichever shot bottle is currently active.</span>
+      <span data-lang-content="fr" hidden>Repose sur la bouteille de shot actuellement active.</span>
+    </p>
+    <div class="single-row">
+      <div class="piece">
+        <svg width="84" height="84" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="var(--void-warm)" stroke="var(--kalb-gold)" stroke-width="2"/>
+          <g filter="url(#crownGlow)">
+            <polygon points="26,64 26,50 36,60 50,32 64,60 74,50 74,64" fill="var(--kalb-gold)"/>
+            <rect x="26" y="62" width="48" height="8" rx="2" fill="var(--kalb-gold)"/>
+          </g>
+          <circle cx="50" cy="48" r="4.5" fill="var(--kalb-red)"/>
+          <defs>
+            <filter id="crownGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#fbbf24" flood-opacity="0.85"/>
+            </filter>
+          </defs>
+        </svg>
+        <div class="name" data-lang-content="en">Custom medallion</div>
+        <div class="name" data-lang-content="fr" hidden>Médaillon sur mesure</div>
+        <div class="qty">1×</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ladders">
+    <span class="eyebrow" data-lang-content="en">Placed at setup, moved during play</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Placées au départ, déplacées en jeu</span>
+    <h2>
+      <span data-lang-content="en">Ladders</span>
+      <span data-lang-content="fr" hidden>Échelles</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Rectangular, as long as one room is wide, so a ladder can be laid flat across the gap between two adjacent rooms.</span>
+      <span data-lang-content="fr" hidden>Rectangulaires, aussi longues que la largeur d'une salle, pour pouvoir être posées bien à plat entre deux salles adjacentes.</span>
+    </p>
+    <div class="single-row">
+      <div class="piece" style="flex-basis: 260px;">
+        <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+          <rect x="2" y="2" width="196" height="56" rx="6" fill="var(--panel)" stroke="var(--hairline)"/>
+          <line x1="18" y1="14" x2="182" y2="14" stroke="var(--kalb-gold)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="18" y1="46" x2="182" y2="46" stroke="var(--kalb-gold)" stroke-width="5" stroke-linecap="round"/>
+          <g stroke="var(--kalb-gold)" stroke-width="5" stroke-linecap="round">
+            <line x1="30" y1="14" x2="30" y2="46"/>
+            <line x1="58" y1="14" x2="58" y2="46"/>
+            <line x1="86" y1="14" x2="86" y2="46"/>
+            <line x1="114" y1="14" x2="114" y2="46"/>
+            <line x1="142" y1="14" x2="142" y2="46"/>
+            <line x1="170" y1="14" x2="170" y2="46"/>
+          </g>
+        </svg>
+        <div class="name" data-lang-content="en">1 room-width long</div>
+        <div class="name" data-lang-content="fr" hidden>Longue d'une largeur de salle</div>
+        <div class="qty">4×</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="landmine">
+    <span class="eyebrow" data-lang-content="en">Carnila's ability &amp; Room 52</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Capacité de Carnila &amp; Salle 52</span>
+    <h2>
+      <span data-lang-content="en">Landmine Token</span>
+      <span data-lang-content="fr" hidden>Jeton Mine</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">A simple circular token, marked with a poison symbol — a clear, unambiguous warning to whoever lands on it next.</span>
+      <span data-lang-content="fr" hidden>Un simple jeton circulaire, marqué d'un symbole de poison — un avertissement clair pour le prochain joueur qui tombe dessus.</span>
+    </p>
+    <div class="single-row">
+      <div class="piece">
+        <div class="emoji-token" style="background:#1a1010; border-color:#e8dcc0;" aria-hidden="true">☠️</div>
+        <div class="name" data-lang-content="en">Landmine Token</div>
+        <div class="name" data-lang-content="fr" hidden>Jeton Mine</div>
+        <div class="qty">3×</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="grandma-luke">
+    <span class="eyebrow" data-lang-content="en">“Grandma” Luke &amp; Room 33</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>« Mamie » Luc &amp; Salle 33</span>
+    <h2>
+      <span data-lang-content="en">Protective Light &amp; Pride Parade</span>
+      <span data-lang-content="fr" hidden>Lumière Protectrice et Marche des Fiertés</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Protective Light tokens are handed out by both Room 33 and "I Prefer Tea" — one shared token pool, no separate "priest token" needed. The Pride Parade token is two-sided: a rainbow when her once-a-round trait can be used, a cloud once it's spent.</span>
+      <span data-lang-content="fr" hidden>Les jetons Lumière Protectrice sont distribués à la fois par la Salle 33 et par « Je préfère le thé » — une seule réserve de jetons, plus besoin d'un « jeton prêtre » séparé. Le jeton Marche des Fiertés a deux faces : un arc-en-ciel quand son trait une-fois-par-round est disponible, un nuage une fois utilisé.</span>
+    </p>
+    <div class="single-row">
+      <div class="piece">
+        <svg width="84" height="84" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="var(--void-warm)"/>
+          <g fill="none" stroke="var(--kalb-gold)" filter="url(#lightGlow)">
+            <circle cx="50" cy="50" r="10" stroke-width="3" opacity="0.95"/>
+            <circle cx="50" cy="50" r="20" stroke-width="2.5" opacity="0.7"/>
+            <circle cx="50" cy="50" r="30" stroke-width="2" opacity="0.45"/>
+            <circle cx="50" cy="50" r="40" stroke-width="1.5" opacity="0.25"/>
+          </g>
+          <circle cx="50" cy="50" r="5" fill="#fff7e0"/>
+          <defs>
+            <filter id="lightGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.6" flood-color="#fbbf24" flood-opacity="0.9"/>
+            </filter>
+          </defs>
+        </svg>
+        <div class="name" data-lang-content="en">Protective Light</div>
+        <div class="name" data-lang-content="fr" hidden>Lumière Protectrice</div>
+        <div class="qty">6×</div>
+      </div>
+      <div class="piece">
+        <div class="emoji-token" style="background:#f3eed9; border-color:var(--kalb-gold);" aria-hidden="true">🌈</div>
+        <div class="name" data-lang-content="en">Pride Parade — usable</div>
+        <div class="name" data-lang-content="fr" hidden>Marche des Fiertés — utilisable</div>
+        <div class="note" data-lang-content="en">rainbow, light face</div>
+        <div class="note" data-lang-content="fr" hidden>arc-en-ciel, face claire</div>
+      </div>
+      <div class="piece">
+        <div class="emoji-token" style="background:#241c28; border-color:var(--ink-faint);" aria-hidden="true">☁️</div>
+        <div class="name" data-lang-content="en">Pride Parade — spent</div>
+        <div class="name" data-lang-content="fr" hidden>Marche des Fiertés — épuisé</div>
+        <div class="note" data-lang-content="en">cloud, dark face</div>
+        <div class="note" data-lang-content="fr" hidden>nuage, face sombre</div>
+      </div>
+    </div>
+    <p class="lede" style="margin-top:16px; margin-bottom:0;">
+      <span data-lang-content="en">1× token (both faces of the same piece) — only one player is ever “Grandma” Luke.</span>
+      <span data-lang-content="fr" hidden>1× jeton (les deux faces de la même pièce) — un seul joueur incarne « Mamie » Luc à la fois.</span>
+    </p>
+  </section>
+
+  <section id="hans-pinner">
+    <span class="eyebrow" data-lang-content="en">Hans Pinner's ability</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Capacité de Hans Pinner</span>
+    <h2>
+      <span data-lang-content="en">Advisor Token</span>
+      <span data-lang-content="fr" hidden>Jeton Conseiller</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Three watching eyes in a triangle, each wired to a center circle — held by whoever Hans Pinner has made his Advisor.</span>
+      <span data-lang-content="fr" hidden>Trois yeux disposés en triangle, chacun relié à un cercle central — détenu par le joueur que Hans Pinner a nommé Conseiller.</span>
+    </p>
+    <div class="single-row">
+      <div class="piece">
+        <svg width="84" height="84" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="var(--void-warm)" stroke="#35389e" stroke-width="2"/>
+          <g stroke="#7a7ed6" stroke-width="2.5">
+            <line x1="50" y1="50" x2="50" y2="26"/>
+            <line x1="50" y1="50" x2="30" y2="62"/>
+            <line x1="50" y1="50" x2="70" y2="62"/>
+          </g>
+          <circle cx="50" cy="50" r="8" fill="#35389e" stroke="#7a7ed6" stroke-width="2"/>
+          <g>
+            <circle cx="50" cy="26" r="7" fill="#fff" stroke="#35389e" stroke-width="2"/>
+            <circle cx="50" cy="27" r="2.6" fill="#1a1a2e"/>
+            <circle cx="30" cy="62" r="7" fill="#fff" stroke="#35389e" stroke-width="2"/>
+            <circle cx="30" cy="63" r="2.6" fill="#1a1a2e"/>
+            <circle cx="70" cy="62" r="7" fill="#fff" stroke="#35389e" stroke-width="2"/>
+            <circle cx="70" cy="63" r="2.6" fill="#1a1a2e"/>
+          </g>
+        </svg>
+        <div class="name" data-lang-content="en">Advisor Token</div>
+        <div class="name" data-lang-content="fr" hidden>Jeton Conseiller</div>
+        <div class="qty">6×</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="templates">
+    <span class="eyebrow" data-lang-content="en">Ability overlays</span>
+    <span class="eyebrow" data-lang-content="fr" hidden>Gabarits de capacité</span>
+    <h2>
+      <span data-lang-content="en">Clazgreb &amp; Brenchilli Templates</span>
+      <span data-lang-content="fr" hidden>Gabarits de Clazgreb et Brenchilli</span>
+    </h2>
+    <p class="lede">
+      <span data-lang-content="en">Transparent overlays, centered on the epicenter room. Each cell shows how many Š the occupant of that room drinks — the number drops by 1 for every room of Manhattan distance from the center.</span>
+      <span data-lang-content="fr" hidden>Gabarits transparents, centrés sur la salle épicentre. Chaque case indique combien de Š boit l'occupant de cette salle — le nombre diminue de 1 par salle de distance de Manhattan par rapport au centre.</span>
+    </p>
+    <div class="single-row">
+      <div class="template-figure">
+        <svg id="clazgreb-grid" width="240" height="240" viewBox="0 0 240 240" aria-hidden="true"></svg>
+        <div class="name">Clazgreb</div>
+        <div class="note" data-lang-content="en">center starts at 4</div>
+        <div class="note" data-lang-content="fr" hidden>le centre commence à 4</div>
+      </div>
+      <div class="template-figure">
+        <svg id="brenchilli-grid" width="240" height="240" viewBox="0 0 240 240" aria-hidden="true"></svg>
+        <div class="name">Brenchilli</div>
+        <div class="note" data-lang-content="en">center starts at 3</div>
+        <div class="note" data-lang-content="fr" hidden>le centre commence à 3</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="qty-note">
+    <span data-lang-content="en">Quantities assume one copy printed per class — landmine, Protective Light, and Pride Parade tokens no longer need to cover six simultaneous copies of the same character. Print extra tokens if you print extra class cards.</span>
+    <span data-lang-content="fr" hidden>Les quantités supposent un seul exemplaire imprimé par classe — les jetons Mine, Lumière Protectrice et Marche des Fiertés n'ont plus besoin de couvrir six exemplaires simultanés du même personnage. Imprimez des jetons supplémentaires si vous imprimez des cartes en plus.</span>
+  </p>
+
+  <footer>
+    <span data-lang-content="en">KALBLAST — first-pass component designs, subject to revision.</span>
+    <span data-lang-content="fr" hidden>KALBLAST — premiers jets des composants, susceptibles d'évoluer.</span>
+  </footer>
+
+</div>
+
+<script src="../shared/lang-toggle.js"></script>
+<script>
+  const PAWNS = [
+    { name_en: "FireFoxxx", name_fr: "FireFoxxx", color: "#ef4444" },
+    { name_en: "Glamidir Vospo", name_fr: "Glamidir Vospo", color: "#10b981" },
+    { name_en: "Hans Pinner", name_fr: "Hans Pinner", color: "#35389e" },
+    { name_en: "Clazgreb", name_fr: "Clazgreb", color: "#eab308" },
+    { name_en: "Carnila", name_fr: "Carnila", color: "#981241" },
+    { name_en: "Turbo Killer", name_fr: "Turbo Killer", color: "#8327c1" },
+    { name_en: "Robiocoop", name_fr: "Robiocoop", color: "#27c16f" },
+    { name_en: "“Grandma” Luke", name_fr: "«Mamie» Luc", color: "#afa8a8" },
+    { name_en: "Paul Guaca", name_fr: "Paul Guaca", color: "#6bae22" },
+    { name_en: "Brenchilli", name_fr: "Brenchilli", color: "#b08ff6" }
+  ];
+
+  const pawnGrid = document.getElementById('pawn-grid');
+  PAWNS.forEach(function (p) {
+    const piece = document.createElement('div');
+    piece.className = 'piece';
+    piece.innerHTML =
+      '<svg width="72" height="72" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<ellipse cx="50" cy="88" rx="30" ry="6" fill="rgba(0,0,0,0.35)"/>' +
+      '<circle cx="50" cy="50" r="42" fill="' + p.color + '" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>' +
+      '<ellipse cx="38" cy="34" rx="15" ry="9" fill="rgba(255,255,255,0.28)"/>' +
+      '<g transform="translate(18.8,34.4) scale(0.52)">' +
+      '<g fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="15" stroke-linecap="round">' +
+      '<line x1="12" y1="6" x2="12" y2="54"/><line x1="12" y1="30" x2="38" y2="6"/><line x1="12" y1="30" x2="38" y2="54"/>' +
+      '<line x1="108" y1="6" x2="108" y2="54"/><line x1="108" y1="30" x2="82" y2="6"/><line x1="108" y1="30" x2="82" y2="54"/>' +
+      '</g>' +
+      '<circle cx="60" cy="30" r="8" fill="rgba(0,0,0,0.5)"/>' +
+      '<g fill="none" stroke="#fdf6e3" stroke-width="9" stroke-linecap="round">' +
+      '<line x1="12" y1="6" x2="12" y2="54"/><line x1="12" y1="30" x2="38" y2="6"/><line x1="12" y1="30" x2="38" y2="54"/>' +
+      '<line x1="108" y1="6" x2="108" y2="54"/><line x1="108" y1="30" x2="82" y2="6"/><line x1="108" y1="30" x2="82" y2="54"/>' +
+      '</g>' +
+      '<circle cx="60" cy="30" r="7" fill="#fdf6e3"/>' +
+      '</g>' +
+      '</svg>' +
+      '<div class="name" data-lang-content="en">' + p.name_en + '</div>' +
+      '<div class="name" data-lang-content="fr" hidden>' + p.name_fr + '</div>';
+    pawnGrid.appendChild(piece);
+  });
+
+  // Diamond grid (Manhattan distance <= 2 from center), value = base - distance.
+  function drawDiamondGrid(svgId, baseValue, color) {
+    const svg = document.getElementById(svgId);
+    const cell = 48;
+    const cells = [];
+    for (let dy = -2; dy <= 2; dy++) {
+      for (let dx = -2; dx <= 2; dx++) {
+        const dist = Math.abs(dx) + Math.abs(dy);
+        if (dist <= 2) cells.push({ dx: dx, dy: dy, value: baseValue - dist });
+      }
+    }
+    const ns = 'http://www.w3.org/2000/svg';
+    cells.forEach(function (c) {
+      const x = (c.dx + 2) * cell;
+      const y = (c.dy + 2) * cell;
+      const rect = document.createElementNS(ns, 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', cell);
+      rect.setAttribute('height', cell);
+      rect.setAttribute('fill', color);
+      rect.setAttribute('fill-opacity', '0.22');
+      rect.setAttribute('stroke', color);
+      rect.setAttribute('stroke-width', '2');
+      svg.appendChild(rect);
+      const text = document.createElementNS(ns, 'text');
+      text.setAttribute('x', x + cell / 2);
+      text.setAttribute('y', y + cell / 2 + 7);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('font-size', '22');
+      text.setAttribute('font-weight', '800');
+      text.setAttribute('fill', color);
+      text.textContent = c.value;
+      svg.appendChild(text);
+    });
+  }
+  drawDiamondGrid('clazgreb-grid', 4, '#eab308');
+  drawDiamondGrid('brenchilli-grid', 3, '#b08ff6');
+
+  initLangToggle(function (lang) {
+    document.querySelectorAll('[data-lang-content]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-lang-content') !== lang;
+    });
+  });
+</script>
+</body>
+</html>

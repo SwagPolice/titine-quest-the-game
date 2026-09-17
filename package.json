@@ -7,7 +7,9 @@
     "build:fonts": "node complete-version/shared/build-fonts.js",
     "build:card-pngs": "node complete-version/classes/class_cards/build-card-pngs.js",
     "build:board-pngs": "node complete-version/boards/build-board-pngs.js",
+    "build:board-a4-pdf": "node complete-version/boards/build-board-a4-pdf.js",
     "build:rulebook-pdf": "node complete-version/rulebook/build-pdf.js",
+    "build:components-pdf": "node complete-version/components/build-print-sheet-pdf.js",
     "check:lang-parity": "node complete-version/scripts/check-lang-parity.js"
   },
   "devDependencies": {

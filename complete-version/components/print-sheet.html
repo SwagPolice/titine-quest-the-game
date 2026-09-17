@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KALBLAST — Components Print Sheet</title>
+<!-- Print-only, deliberately wordless: no on-screen dark theme, no text,
+     so a single file works for every language. Icons and numerals only —
+     see build-print-sheet-pdf.js for how this becomes the shipped PDF. -->
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; }
+  :root {
+    --paper: #ffffff;
+    --hairline: #c9c2ce;
+    --kalb-red: #b0102f;
+    --kalb-gold: #fbbf24;
+  }
+  body { margin: 0; background: var(--paper); }
+  .sheet { max-width: 190mm; margin: 0 auto; }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 5mm;
+    margin-bottom: 7mm;
+  }
+  .cut-circle { fill: none; stroke: var(--hairline); stroke-width: 0.5; stroke-dasharray: 1.6 1.6; }
+  .cut-rect { fill: none; stroke: var(--hairline); stroke-width: 0.5; stroke-dasharray: 1.6 1.6; }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <div class="row" id="row-pawns"></div>
+  <div class="row" id="row-misc"></div>
+  <div class="row" id="row-templates"></div>
+</div>
+
+<script>
+  const TOKEN_MM = 20;
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function newTokenSvg(sizeMm) {
+    const svg = svgEl('svg', { width: sizeMm + 'mm', height: sizeMm + 'mm', viewBox: '0 0 100 100' });
+    svg.appendChild(svgEl('circle', { class: 'cut-circle', cx: 50, cy: 50, r: 48 }));
+    return svg;
+  }
+
+  function append(svg, tag, attrs, parent) {
+    const el = svgEl(tag, attrs);
+    (parent || svg).appendChild(el);
+    return el;
+  }
+
+  // ---- Pawns (10x, one per class, KALB mark centered) ----
+  const PAWN_COLORS = ['#ef4444', '#10b981', '#35389e', '#eab308', '#981241', '#8327c1', '#27c16f', '#afa8a8', '#6bae22', '#b08ff6'];
+  function drawPawn(color) {
+    const svg = newTokenSvg(TOKEN_MM);
+    append(svg, 'circle', { cx: 50, cy: 50, r: 42, fill: color, stroke: 'rgba(0,0,0,0.2)', 'stroke-width': 2 });
+    append(svg, 'ellipse', { cx: 38, cy: 34, rx: 15, ry: 9, fill: 'rgba(255,255,255,0.3)' });
+    const halo = append(svg, 'g', { transform: 'translate(18.8,34.4) scale(0.52)', fill: 'none', stroke: 'rgba(0,0,0,0.45)', 'stroke-width': 15, 'stroke-linecap': 'round' });
+    ['12,6,12,54', '12,30,38,6', '12,30,38,54', '108,6,108,54', '108,30,82,6', '108,30,82,54'].forEach(function (pts) {
+      const p = pts.split(',');
+      append(svg, 'line', { x1: p[0], y1: p[1], x2: p[2], y2: p[3] }, halo);
+    });
+    append(svg, 'circle', { cx: 60, cy: 30, r: 8, fill: 'rgba(0,0,0,0.45)' }, halo);
+    const mark = append(svg, 'g', { transform: 'translate(18.8,34.4) scale(0.52)', fill: 'none', stroke: '#fdf6e3', 'stroke-width': 9, 'stroke-linecap': 'round' });
+    ['12,6,12,54', '12,30,38,6', '12,30,38,54', '108,6,108,54', '108,30,82,6', '108,30,82,54'].forEach(function (pts) {
+      const p = pts.split(',');
+      append(svg, 'line', { x1: p[0], y1: p[1], x2: p[2], y2: p[3] }, mark);
+    });
+    append(svg, 'circle', { cx: 60, cy: 30, r: 7, fill: '#fdf6e3' }, mark);
+    return svg;
+  }
+
+  // ---- Golden Crown (1x) ----
+  function drawCrown() {
+    const svg = newTokenSvg(24);
+    append(svg, 'circle', { cx: 50, cy: 50, r: 46, fill: '#170a10', stroke: 'var(--kalb-gold)', 'stroke-width': 2 });
+    append(svg, 'polygon', { points: '26,64 26,50 36,60 50,32 64,60 74,50 74,64', fill: 'var(--kalb-gold)' });
+    append(svg, 'rect', { x: 26, y: 62, width: 48, height: 8, rx: 2, fill: 'var(--kalb-gold)' });
+    append(svg, 'circle', { cx: 50, cy: 48, r: 4.5, fill: 'var(--kalb-red)' });
+    return svg;
+  }
+
+  // ---- Landmine (3x, skull emoji) ----
+  function drawEmojiToken(sizeMm, bg, border, emoji) {
+    const svg = newTokenSvg(sizeMm);
+    append(svg, 'circle', { cx: 50, cy: 50, r: 42, fill: bg, stroke: border, 'stroke-width': 3 });
+    const text = append(svg, 'text', { x: 50, y: 50, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 42 });
+    text.textContent = emoji;
+    return svg;
+  }
+
+  // ---- Protective Light (6x, rings, no glow filter for print) ----
+  function drawProtectiveLight() {
+    const svg = newTokenSvg(TOKEN_MM);
+    append(svg, 'circle', { cx: 50, cy: 50, r: 46, fill: '#170a10' });
+    const g = append(svg, 'g', { fill: 'none', stroke: 'var(--kalb-gold)' });
+    [[10, 3, 0.95], [20, 2.5, 0.7], [30, 2, 0.45], [40, 1.5, 0.25]].forEach(function (r) {
+      append(svg, 'circle', { cx: 50, cy: 50, r: r[0], 'stroke-width': r[1], opacity: r[2] }, g);
+    });
+    append(svg, 'circle', { cx: 50, cy: 50, r: 5, fill: '#fff7e0' });
+    return svg;
+  }
+
+  // ---- Advisor Token (6x) ----
+  function drawAdvisor() {
+    const svg = newTokenSvg(TOKEN_MM);
+    append(svg, 'circle', { cx: 50, cy: 50, r: 46, fill: '#170a10', stroke: '#35389e', 'stroke-width': 2 });
+    const lines = append(svg, 'g', { stroke: '#7a7ed6', 'stroke-width': 2.5 });
+    [[50, 50, 50, 26], [50, 50, 30, 62], [50, 50, 70, 62]].forEach(function (p) {
+      append(svg, 'line', { x1: p[0], y1: p[1], x2: p[2], y2: p[3] }, lines);
+    });
+    append(svg, 'circle', { cx: 50, cy: 50, r: 8, fill: '#35389e', stroke: '#7a7ed6', 'stroke-width': 2 });
+    [[50, 26], [30, 62], [70, 62]].forEach(function (p) {
+      append(svg, 'circle', { cx: p[0], cy: p[1], r: 7, fill: '#fff', stroke: '#35389e', 'stroke-width': 2 });
+      append(svg, 'circle', { cx: p[0], cy: p[1] + 1, r: 2.6, fill: '#1a1a2e' });
+    });
+    return svg;
+  }
+
+  const rowPawns = document.getElementById('row-pawns');
+  PAWN_COLORS.forEach(function (c) { rowPawns.appendChild(drawPawn(c)); });
+
+  const rowMisc = document.getElementById('row-misc');
+  rowMisc.appendChild(drawCrown());
+  for (let i = 0; i < 4; i++) {
+    const svg = svgEl('svg', { width: '48mm', height: '13mm', viewBox: '0 0 200 60' });
+    svg.appendChild(svgEl('rect', { class: 'cut-rect', x: 1, y: 1, width: 198, height: 58, rx: 6 }));
+    const rails = svgEl('g', { stroke: 'var(--kalb-gold)', 'stroke-width': 5, 'stroke-linecap': 'round' });
+    svg.appendChild(rails);
+    [[18, 14, 182, 14], [18, 46, 182, 46]].forEach(function (p) {
+      rails.appendChild(svgEl('line', { x1: p[0], y1: p[1], x2: p[2], y2: p[3] }));
+    });
+    [30, 58, 86, 114, 142, 170].forEach(function (x) {
+      rails.appendChild(svgEl('line', { x1: x, y1: 14, x2: x, y2: 46 }));
+    });
+    rowMisc.appendChild(svg);
+  }
+  for (let i = 0; i < 3; i++) rowMisc.appendChild(drawEmojiToken(TOKEN_MM, '#1a1010', '#e8dcc0', '☠️'));
+  for (let i = 0; i < 6; i++) rowMisc.appendChild(drawProtectiveLight());
+  rowMisc.appendChild(drawEmojiToken(TOKEN_MM, '#f3eed9', 'var(--kalb-gold)', '🌈'));
+  rowMisc.appendChild(drawEmojiToken(TOKEN_MM, '#241c28', '#6b6278', '☁️'));
+  for (let i = 0; i < 6; i++) rowMisc.appendChild(drawAdvisor());
+
+  // ---- Ability templates (diamond grid, Manhattan distance <= 2) ----
+  function drawTemplate(baseValue, color) {
+    const cellMm = 16;
+    const svg = svgEl('svg', { width: (5 * cellMm) + 'mm', height: (5 * cellMm) + 'mm', viewBox: '0 0 240 240' });
+    svg.appendChild(svgEl('rect', { class: 'cut-rect', x: 1, y: 1, width: 238, height: 238 }));
+    const cell = 48;
+    for (let dy = -2; dy <= 2; dy++) {
+      for (let dx = -2; dx <= 2; dx++) {
+        const dist = Math.abs(dx) + Math.abs(dy);
+        if (dist > 2) continue;
+        const x = (dx + 2) * cell, y = (dy + 2) * cell;
+        svg.appendChild(svgEl('rect', { x: x, y: y, width: cell, height: cell, fill: color, 'fill-opacity': 0.22, stroke: color, 'stroke-width': 2 }));
+        const text = svgEl('text', { x: x + cell / 2, y: y + cell / 2 + 7, 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 800, fill: color });
+        text.textContent = baseValue - dist;
+        svg.appendChild(text);
+      }
+    }
+    return svg;
+  }
+  const rowTemplates = document.getElementById('row-templates');
+  rowTemplates.appendChild(drawTemplate(4, '#eab308'));
+  rowTemplates.appendChild(drawTemplate(3, '#b08ff6'));
+</script>
+</body>
+</html>

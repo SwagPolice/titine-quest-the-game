@@ -52,13 +52,14 @@ When their president, Wanda Olsam, goes missing, they do the only thing imaginab
 ## 📦 What's in the Box?
 *   `1x` **Rulebook**
 *   `1x` **Game Board**
-*   `60x` **Character Class Cards** (6 copies of each of the 10 classes)
-*   `6x` **Player Pawns**
+*   `10x` **Character Class Cards** (one of each class — print extra copies of any class if you'd like)
+*   `10x` **Player Pawns** (one per class color, so any player's pawn matches their card)
 *   `1x` **Golden Crown**
 *   `4x` **Miniature Ladders**
-*   `25x` **Priest Tokens**
-*   `10x` **Landmine Tokens**
+*   `6x` **Protective Light Tokens**
+*   `3x` **Landmine Tokens**
 *   `6x` **Advisor Tokens**
+*   `1x` **Pride Parade Token**
 *   `1x` **Clazgreb Template**
 *   `1x` **Brenchilli Template**
 *   `2x` **6-sided Dice**
