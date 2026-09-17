@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KALBLAST — Board (A4 split)</title>
+<!-- Print-only harness: crops the already-authoritative board PNG
+     (print-assets/kalblast_perfected_board_<lang>.png) into two overlapping
+     A4-sized halves. Deliberately does NOT re-render board.html — that PNG
+     is the single verified source of truth (see build-board-pngs.js), so
+     this only crops pixels, never regenerates them. See
+     build-board-a4-pdf.js for how the two languages get captured. -->
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ffffff; }
+
+  /* Board rendered at 277mm square: fills a full A4 page height within
+     10mm margins (297 - 20 = 277mm), then split down the middle. Each
+     half is 138.5mm + an 8mm overlap on its inner edge = 146.5mm wide,
+     comfortably inside A4's ~190mm usable width. */
+  .half {
+    width: 146.5mm;
+    height: 277mm;
+    overflow: hidden;
+    position: relative;
+    page-break-after: always;
+  }
+  .half:last-child { page-break-after: auto; }
+  .half img {
+    position: absolute;
+    top: 0;
+    width: 277mm;
+    height: 277mm;
+  }
+  .half.left img { left: 0; }
+  .half.right img { left: -130.5mm; }
+
+  /* Plain alignment ticks at the seam edge, no text, for rough pre-alignment
+     before fine-tuning against the overlapping artwork itself. */
+  .tick {
+    position: absolute;
+    width: 6mm;
+    height: 0.4mm;
+    background: #999;
+  }
+  .half.left .tick { right: 0; }
+  .half.right .tick { left: 0; }
+</style>
+</head>
+<body>
+  <div class="half left">
+    <img id="board-img-left" src="print-assets/kalblast_perfected_board_en.png" alt="">
+    <div class="tick" style="top: 40mm;"></div>
+    <div class="tick" style="top: 138.5mm;"></div>
+    <div class="tick" style="top: 237mm;"></div>
+  </div>
+  <div class="half right">
+    <img id="board-img-right" src="print-assets/kalblast_perfected_board_en.png" alt="">
+    <div class="tick" style="top: 40mm;"></div>
+    <div class="tick" style="top: 138.5mm;"></div>
+    <div class="tick" style="top: 237mm;"></div>
+  </div>
+</body>
+</html>
