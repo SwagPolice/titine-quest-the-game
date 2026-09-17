@@ -409,8 +409,95 @@
     </div>
   </section>
 
+  <section id="production-brief">
+    <span class="eyebrow gold">04 — Production brief</span>
+    <h2>Painting the cast, and the box lid</h2>
+    <p class="lede">Two deliverables, one visual language: rim-lit figures against the KALB void, same technique as the silhouette proof above — just with real likenesses instead of placeholder shapes. This section is the practical handoff: reference points for the look, then exact canvas setup for Clip Studio Paint.</p>
+
+    <div class="swatch-group">
+      <h3>Moodboard — rim-light-on-black, comic-neon references</h3>
+      <p class="lede" style="margin-bottom:16px;">Named artists to pull actual reference images from, not embedded here — search their name plus a keyword or two. Picked specifically for the "black shape, one glowing color" technique the silhouette test above is already built around, not neon in general.</p>
+      <ul class="rules-list">
+        <li><strong>Jock</strong> (comic covers — <em>Batman</em>, <em>Wytches</em>) — the closest existing match to the silhouette test itself: near-flat black figures against one saturated color field. Search "Jock cover art."</li>
+        <li><strong>Sean Murphy</strong> (<em>Batman: White Knight</em>, <em>Punk Rock Jesus</em>) — high-contrast noir linework with a single accent color doing all the emotional work. Search "Sean Murphy White Knight art."</li>
+        <li><strong>Josan Gonzalez</strong> (<em>Judge Dredd</em> covers, cyberpunk illustration) — denser, more rendered take on neon-on-black; good reference if a character wants more surface detail than a pure silhouette. Search "Josan Gonzalez illustration."</li>
+        <li><strong>Ian McQue</strong> — industrial figures picked out by strong colored rim-light against near-black grounds. The best reference for the "light escaping something dark" rule below. Search "Ian McQue sketches."</li>
+        <li><strong>Yoji Shinkawa</strong> (art director, <em>Metal Gear Solid</em>) — looser ink-wash figures with dramatic single-color glow. Reference if a character calls for more energy/motion than precision. Search "Yoji Shinkawa MGS art."</li>
+      </ul>
+      <p class="lede" style="margin-top:16px; margin-bottom:0;">The four rules already written for this project (§06 below) still govern every character: black is a surface, not an absence; red and gold never compete; a character's neon is theirs alone; light should look like it's escaping something dark.</p>
+    </div>
+
+    <div class="swatch-group">
+      <h3>Character portraits — canvas setup</h3>
+      <p class="lede" style="margin-bottom:16px;">The card is built at tarot proportions (confirmed directly from <code>baseline.html</code>'s card CSS: 350×600px, a 7:12 ratio) — matching this exactly means the final painting drops in with zero cropping surprises.</p>
+      <table class="tokens">
+        <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Trim size</td><td class="hex">70 × 120mm</td></tr>
+          <tr><td>Bleed</td><td class="hex">+3mm each edge → 76 × 126mm canvas</td></tr>
+          <tr><td>Resolution</td><td class="hex">300 dpi (350–400 dpi for extra zoom headroom)</td></tr>
+          <tr><td>Basic expression color</td><td class="hex">Color</td></tr>
+          <tr><td>Color mode</td><td class="hex">RGB — not CMYK</td></tr>
+          <tr><td>At 300dpi, canvas ≈</td><td class="hex">898 × 1488 px</td></tr>
+        </tbody>
+      </table>
+      <p class="lede" style="margin: 16px 0;">RGB matters here specifically: every color in this project (this page included) is a web hex value — <span class="hex">#B0102F</span>, <span class="hex">#FBBF24</span>, each signal color — and CMYK conversion would visibly shift them, especially the reds and golds.</p>
+
+      <h3 style="margin-top:28px;">Safe zone — where the face actually reads</h3>
+      <p class="lede" style="margin-bottom:14px;">Traced directly from the card's live layout: the name/title plate sits at the top, the trait/ability/flavor text panel takes up roughly the bottom half, and both are semi-opaque dark panels — anything under them reads as a dim shape, not a detail. Approximate, since panel height flexes with each character's text length.</p>
+      <div style="border:1px solid var(--hairline); border-radius: 10px; overflow:hidden; max-width:220px;">
+        <div style="height:70px; background:rgba(24,20,34,0.85); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--ink-faint); border-bottom:1px solid var(--hairline);">Name / title plate — obscured</div>
+        <div style="height:110px; background:linear-gradient(135deg, rgba(176,16,47,0.1), rgba(251,191,36,0.06)); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--kalb-gold); font-weight:800;">OPEN — face &amp; key detail here</div>
+        <div style="height:170px; background:rgba(18,14,26,0.9); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--ink-faint); border-top:1px solid var(--hairline);">Trait / ability / flavor text — obscured</div>
+      </div>
+
+      <h3 style="margin-top:28px;">Filenames — must match exactly</h3>
+      <p class="lede" style="margin-bottom:14px;">These are the legacy working-title filenames still referenced by <code>characters.en.js</code>/<code>characters.fr.js</code> today — export to these exact names (same art serves both languages) and the new portrait drops straight into the existing pipeline.</p>
+      <table class="tokens">
+        <thead><tr><th>Character</th><th>Filename</th><th>Signal color</th></tr></thead>
+        <tbody>
+          <tr><td>FireFoxxx</td><td class="hex">firefoxxx.jpg</td><td><span class="tok-swatch" style="background:#ef4444"></span>#EF4444</td></tr>
+          <tr><td>Glamidir Vospo</td><td class="hex">spy.jpg</td><td><span class="tok-swatch" style="background:#10b981"></span>#10B981</td></tr>
+          <tr><td>Hans Pinner</td><td class="hex">advisor.jpg</td><td><span class="tok-swatch" style="background:#35389e"></span>#35389E</td></tr>
+          <tr><td>Clazgreb</td><td class="hex">bard.jpg</td><td><span class="tok-swatch" style="background:#eab308"></span>#EAB308</td></tr>
+          <tr><td>Carnila</td><td class="hex">vampire.jpg</td><td><span class="tok-swatch" style="background:#981241"></span>#981241</td></tr>
+          <tr><td>Turbo Killer</td><td class="hex">berserker.jpg</td><td><span class="tok-swatch" style="background:#8327c1"></span>#8327C1</td></tr>
+          <tr><td>Robiocoop</td><td class="hex">warrior.jpg</td><td><span class="tok-swatch" style="background:#27c16f"></span>#27C16F</td></tr>
+          <tr><td>"Grandma" Luke</td><td class="hex">priest.jpg</td><td><span class="tok-swatch" style="background:#afa8a8"></span>#AFA8A8</td></tr>
+          <tr><td>Paul Guaca</td><td class="hex">vanilla.jpg</td><td><span class="tok-swatch" style="background:#6bae22"></span>#6BAE22</td></tr>
+          <tr><td>Brenchilli</td><td class="hex">carpenter.jpg</td><td><span class="tok-swatch" style="background:#b08ff6"></span>#B08FF6</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top:28px;">Clip Studio Paint — New Canvas steps</h3>
+      <ul class="rules-list">
+        <li>File → New. Set the unit dropdown to <strong>mm</strong>, width <strong>76</strong>, height <strong>126</strong>.</li>
+        <li>Resolution: <strong>300</strong> (or 350–400 if you want extra headroom).</li>
+        <li>Basic expression color: <strong>Color</strong>.</li>
+        <li>If your CSP version offers a template/margin option in the New Canvas dialog, set a <strong>3mm</strong> margin on all sides to mark the bleed — otherwise, add a guide layer by hand at 3mm from each edge (Ruler tool, or View → Grid/Guides) once the canvas is open, so you can see trim vs. bleed while you paint.</li>
+        <li>Paint at full canvas size (bleed included); keep the face/key silhouette detail centered in the open middle band above.</li>
+        <li>Export: flatten, crop to the 70×120mm trim (drop the bleed), save as <strong>.jpg</strong> under the exact filename from the table above. Keep the layered <strong>.clip</strong> master (bleed included) as the archive.</li>
+      </ul>
+    </div>
+
+    <div class="swatch-group">
+      <h3>Box lid — canvas setup</h3>
+      <p class="lede" style="margin-bottom:14px;"><strong>No box has been manufactured or specced yet</strong> — this is a working assumption, not a real print template. Treat these dimensions as a placeholder sized to be safely re-cropped once an actual box (or printer) is chosen, not a locked spec.</p>
+      <table class="tokens">
+        <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Working trim (assumed)</td><td class="hex">270 × 200mm (typical mid-size party/board game lid)</td></tr>
+          <tr><td>Bleed</td><td class="hex">+3mm each edge → 276 × 206mm canvas</td></tr>
+          <tr><td>Resolution</td><td class="hex">300 dpi</td></tr>
+          <tr><td>Color mode</td><td class="hex">RGB</td></tr>
+        </tbody>
+      </table>
+      <p class="lede" style="margin:16px 0 0;">Composition follows the digital mockup above directly: the KALB wordmark, "KALBLAST" lockup, and tagline centered in the top third; all 10 characters arranged in a shallow arc across the bottom two-thirds, each rim-lit in their own signal color against the KALB void — same ten colors, same filenames-to-character mapping as the table above.</p>
+    </div>
+  </section>
+
   <section id="chrome">
-    <span class="eyebrow gold">04 — Chrome, applied</span>
+    <span class="eyebrow gold">05 — Chrome, applied</span>
     <h2>Where red enters the frame</h2>
     <p class="lede">Small, illustrative only — not applied to the real files yet. The idea: gold keeps doing what it already does well (structure, victory, active states); red enters as a second accent for anything organizational — dividers, authority, danger — without ever touching a character's own signal color.</p>
 
@@ -449,7 +536,7 @@
   </section>
 
   <section id="guide">
-    <span class="eyebrow gold">05 — Reference</span>
+    <span class="eyebrow gold">06 — Reference</span>
     <h2>Style guide summary</h2>
 
     <table class="tokens">
