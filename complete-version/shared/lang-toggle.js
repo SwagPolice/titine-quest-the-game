@@ -35,5 +35,9 @@ function downloadPng(nodeId, filenameFn) {
     })
     .catch(function (error) {
       console.error('Image capture failed:', error);
+      const isFr = document.documentElement.lang === 'fr';
+      alert(isFr
+        ? "Échec de l'export de l'image. Réessayez, ou utilisez le fichier prêt à imprimer sur la page de téléchargement."
+        : 'Image export failed. Try again, or use the ready-made download on the main download page.');
     });
 }
