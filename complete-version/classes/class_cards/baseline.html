@@ -373,19 +373,21 @@
   <div class="lang-bar">
     <button class="download-btn lang-btn active" data-lang-btn="en">English</button>
     <button class="download-btn lang-btn" data-lang-btn="fr">Français</button>
+    <button class="download-btn lang-btn" data-lang-btn="da">Dansk</button>
   </div>
 
   <!-- 📥 SEPARATE CHARACTER DATA FILE IMPORTS (one per language) -->
   <script src="characters.en.js"></script>
   <script src="characters.fr.js"></script>
+  <script src="characters.da.js"></script>
   <!-- Portraits inlined as data URIs (see build-images.js) so "Download PNG"
        has nothing to fetch() — Chrome blocks file://-to-file:// fetches. -->
   <script src="character-images.generated.js"></script>
   <script src="../../shared/lang-toggle.js"></script>
 
   <script>
-    const charactersByLang = { en: characters_en, fr: characters_fr };
-    const difficultyLabel = { en: "Difficulty", fr: "Difficulté" };
+    const charactersByLang = { en: characters_en, fr: characters_fr, da: characters_da };
+    const difficultyLabel = { en: "Difficulty", fr: "Difficulté", da: "Sværhedsgrad" };
     let currentLang = 'en';
 
     // 🎨 PRINT-SAFE THEME COLOR DERIVATION
@@ -534,7 +536,7 @@
             </div>
           </div>
 
-          <button class="download-btn" onclick="downloadCard('${cardId}', '${char.name}')">Download PNG</button>
+          <button class="download-btn" onclick="downloadCard('${cardId}', '${characters_en[index].name}')">Download PNG</button>
         `;
 
         cardsWrapper.appendChild(container);
@@ -550,7 +552,11 @@
 
     // 💾 Extraction Engine
     // Shared with the build-card-pngs.js print-asset build script, so the
-    // filename rule only lives in one place.
+    // filename rule only lives in one place. Always pass the ENGLISH name
+    // here (see call sites), never the current display language's — a
+    // per-language nickname (e.g. "Grandma" Luke / "Bedste" Luke / "Mamie"
+    // Luc) would otherwise change the exported filename every time a
+    // translation is revised, leaving stale files behind under the old name.
     function cardFilename(name, lang) {
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
       return `${slug}_${lang}_card.png`;
