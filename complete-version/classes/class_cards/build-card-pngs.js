@@ -10,10 +10,11 @@
 const fs = require('fs');
 const path = require('path');
 const { launchAndOpen, capturePng } = require('../../shared/export-pngs');
+const { detectLanguages } = require('../../shared/detect-languages');
 
 const DIR = __dirname;
 const OUT_DIR = path.join(DIR, 'print-assets');
-const LANGS = ['en', 'fr'];
+const LANGS = ['en', ...detectLanguages().complete];
 
 (async () => {
   const { browser, page } = await launchAndOpen(path.join(DIR, 'baseline.html'));
@@ -29,7 +30,10 @@ const LANGS = ['en', 'fr'];
     fs.mkdirSync(outDir, { recursive: true });
 
     const cards = await page.evaluate((l) => {
-      const chars = l === 'fr' ? characters_fr : characters_en;
+      // charactersByLang (defined in baseline.html) is a `const`, so it isn't
+      // reachable via window[...] — but page.evaluate runs in the page's own
+      // global scope, so referencing it directly by name works fine.
+      const chars = charactersByLang[l];
       return chars.map((c, i) => ({ id: `card-${i}`, filename: cardFilename(c.name, l) }));
     }, lang);
 

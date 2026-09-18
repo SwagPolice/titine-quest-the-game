@@ -15,10 +15,11 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer-core');
 const { findChrome } = require('../shared/export-pngs');
+const { detectLanguages } = require('../shared/detect-languages');
 
 const DIR = __dirname;
 const OUT_DIR = path.join(DIR, 'print-assets');
-const LANGS = ['en', 'fr'];
+const LANGS = ['en', ...detectLanguages().complete];
 
 (async () => {
   fs.mkdirSync(OUT_DIR, { recursive: true });

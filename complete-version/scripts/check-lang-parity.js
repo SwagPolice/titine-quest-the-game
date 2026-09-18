@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Cross-checks the EN/FR content data files for structural drift.
+// Cross-checks every non-English language's content data files for
+// structural drift against English, the canonical reference language.
 //
 // Text (flavor, descriptions, names, titles) is expected to differ between
 // languages — that's the point. What must NOT differ are the mechanical bits:
@@ -8,17 +9,35 @@
 // "Š" shot symbol) per corresponding field, since a translator dropping a
 // <b> around a keyword or an Š changes the printed rules, not just the prose.
 //
+// Languages are detected automatically from which board-rules.<lang>.js /
+// characters.<lang>.js / rulebook.<lang>.md files exist on disk — adding a
+// new language's files is enough to bring it under this check, no edit to
+// this script required. Each file must export its data under a
+// language-suffixed name (roomTexts_<lang>, characters_<lang>), matching the
+// convention every existing language file already follows.
+//
 // Run: node complete-version/scripts/check-lang-parity.js
 
 const fs = require('fs');
 const path = require('path');
+const { detectLanguages } = require('../shared/detect-languages');
 
-const { roomTexts_en } = require(path.join(__dirname, '../boards/board-rules.en.js'));
-const { roomTexts_fr } = require(path.join(__dirname, '../boards/board-rules.fr.js'));
-const { characters_en } = require(path.join(__dirname, '../classes/class_cards/characters.en.js'));
-const { characters_fr } = require(path.join(__dirname, '../classes/class_cards/characters.fr.js'));
+const BOARDS_DIR = path.join(__dirname, '../boards');
+const CHARACTERS_DIR = path.join(__dirname, '../classes/class_cards');
+const RULEBOOK_DIR = path.join(__dirname, '../rulebook');
 
 const errors = [];
+
+const { board: boardLangs, characters: charLangs, rulebook: rulebookLangs, incomplete } = detectLanguages();
+const allLangs = [...new Set([...boardLangs, ...charLangs, ...rulebookLangs])].sort();
+
+// A language should have all three files, or none — a partial translation
+// silently missing one data type is worth flagging just as loudly as a
+// structural drift within a file that does exist. Whatever files DO exist
+// still get deep-checked below (via boardLangs/charLangs/rulebookLangs).
+for (const { lang, missing } of incomplete) {
+  missing.forEach((rel) => errors.push(`Language "${lang}": missing complete-version/${rel}`));
+}
 
 function countOccurrences(text, token) {
   return text.split(token).length - 1;
@@ -26,14 +45,14 @@ function countOccurrences(text, token) {
 
 const MARKUP_TOKENS = ['<b>', '</b>', '<i>', '</i>', '<br>', 'Š'];
 
-function checkMarkupParity(label, enText, frText) {
+function checkMarkupParity(label, enText, otherText, langLabel) {
   for (const token of MARKUP_TOKENS) {
     const enCount = countOccurrences(enText, token);
-    const frCount = countOccurrences(frText, token);
-    if (enCount !== frCount) {
+    const otherCount = countOccurrences(otherText, token);
+    if (enCount !== otherCount) {
       errors.push(
-        `${label}: "${token}" count differs (EN: ${enCount}, FR: ${frCount})\n` +
-        `    EN: ${enText}\n    FR: ${frText}`
+        `${label}: "${token}" count differs (EN: ${enCount}, ${langLabel}: ${otherCount})\n` +
+        `    EN: ${enText}\n    ${langLabel}: ${otherText}`
       );
     }
   }
@@ -41,57 +60,79 @@ function checkMarkupParity(label, enText, frText) {
 
 // ---- Board room texts --------------------------------------------------
 
-if (roomTexts_en.length !== roomTexts_fr.length) {
-  errors.push(`Room text array length mismatch: EN has ${roomTexts_en.length}, FR has ${roomTexts_fr.length}`);
-} else {
+const { roomTexts_en } = require(path.join(BOARDS_DIR, 'board-rules.en.js'));
+
+for (const lang of boardLangs) {
+  const upper = lang.toUpperCase();
+  const mod = require(path.join(BOARDS_DIR, `board-rules.${lang}.js`));
+  const roomTexts_lang = mod[`roomTexts_${lang}`];
+  if (!roomTexts_lang) {
+    errors.push(`board-rules.${lang}.js: expected export "roomTexts_${lang}" not found`);
+    continue;
+  }
+  if (roomTexts_en.length !== roomTexts_lang.length) {
+    errors.push(`Room text array length mismatch: EN has ${roomTexts_en.length}, ${upper} has ${roomTexts_lang.length}`);
+    continue;
+  }
   roomTexts_en.forEach((en, i) => {
-    const fr = roomTexts_fr[i];
+    const other = roomTexts_lang[i];
     const enEmpty = !en || en.trim() === '';
-    const frEmpty = !fr || fr.trim() === '';
-    if (enEmpty !== frEmpty) {
-      errors.push(`Room ${i}: one language is empty and the other isn't (EN: "${en}", FR: "${fr}")`);
+    const otherEmpty = !other || other.trim() === '';
+    if (enEmpty !== otherEmpty) {
+      errors.push(`Room ${i} (${upper}): one language is empty and the other isn't (EN: "${en}", ${upper}: "${other}")`);
       return;
     }
     if (!enEmpty) {
-      checkMarkupParity(`Room ${i}`, en, fr);
+      checkMarkupParity(`Room ${i} (${upper})`, en, other, upper);
     }
   });
 }
 
 // ---- Character cards ----------------------------------------------------
 
+const { characters_en } = require(path.join(CHARACTERS_DIR, 'characters.en.js'));
+
 const STRUCTURAL_FIELDS = ['image', 'color', 'difficulty', 'abilityCost'];
 const MARKUP_CHECKED_FIELDS = ['traitDesc', 'abilityDesc'];
 const REQUIRED_TEXT_FIELDS = ['name', 'title', 'traitName', 'traitDesc', 'abilityName', 'abilityCost', 'abilityDesc', 'flavor'];
 
-if (characters_en.length !== characters_fr.length) {
-  errors.push(`Character array length mismatch: EN has ${characters_en.length}, FR has ${characters_fr.length}`);
-} else {
+for (const lang of charLangs) {
+  const upper = lang.toUpperCase();
+  const mod = require(path.join(CHARACTERS_DIR, `characters.${lang}.js`));
+  const characters_lang = mod[`characters_${lang}`];
+  if (!characters_lang) {
+    errors.push(`characters.${lang}.js: expected export "characters_${lang}" not found`);
+    continue;
+  }
+  if (characters_en.length !== characters_lang.length) {
+    errors.push(`Character array length mismatch: EN has ${characters_en.length}, ${upper} has ${characters_lang.length}`);
+    continue;
+  }
   characters_en.forEach((en, i) => {
-    const fr = characters_fr[i];
-    if (!fr) {
-      errors.push(`Character ${i} ("${en.name}"): missing in FR data`);
+    const other = characters_lang[i];
+    if (!other) {
+      errors.push(`Character ${i} ("${en.name}"): missing in ${upper} data`);
       return;
     }
 
-    STRUCTURAL_FIELDS.forEach(field => {
-      if (en[field] !== fr[field]) {
+    STRUCTURAL_FIELDS.forEach((field) => {
+      if (en[field] !== other[field]) {
         errors.push(
           `Character ${i} ("${en.name}"): field "${field}" must be identical across languages ` +
-          `(EN: ${JSON.stringify(en[field])}, FR: ${JSON.stringify(fr[field])})`
+          `(EN: ${JSON.stringify(en[field])}, ${upper}: ${JSON.stringify(other[field])})`
         );
       }
     });
 
-    REQUIRED_TEXT_FIELDS.forEach(field => {
-      if (!fr[field] || String(fr[field]).trim() === '') {
-        errors.push(`Character ${i} ("${en.name}"): FR field "${field}" is empty`);
+    REQUIRED_TEXT_FIELDS.forEach((field) => {
+      if (!other[field] || String(other[field]).trim() === '') {
+        errors.push(`Character ${i} ("${en.name}"): ${upper} field "${field}" is empty`);
       }
     });
 
-    MARKUP_CHECKED_FIELDS.forEach(field => {
-      if (en[field] && fr[field]) {
-        checkMarkupParity(`Character ${i} ("${en.name}").${field}`, en[field], fr[field]);
+    MARKUP_CHECKED_FIELDS.forEach((field) => {
+      if (en[field] && other[field]) {
+        checkMarkupParity(`Character ${i} ("${en.name}").${field} (${upper})`, en[field], other[field], upper);
       }
     });
   });
@@ -99,8 +140,7 @@ if (characters_en.length !== characters_fr.length) {
 
 // ---- Rulebook (prose, not a data array — check structure, not content) ----
 
-const rulebookEn = fs.readFileSync(path.join(__dirname, '../rulebook/rulebook.md'), 'utf8');
-const rulebookFr = fs.readFileSync(path.join(__dirname, '../rulebook/rulebook.fr.md'), 'utf8');
+const rulebookEn = fs.readFileSync(path.join(RULEBOOK_DIR, 'rulebook.md'), 'utf8');
 
 function countToken(text, token) {
   return text.split(token).length - 1;
@@ -120,20 +160,26 @@ const RULEBOOK_CHECKS = [
   { label: 'Shot symbol (Š)', token: 'Š' },
 ];
 
-RULEBOOK_CHECKS.forEach(({ label, token, regex }) => {
-  const enCount = regex ? countRegex(rulebookEn, regex) : countToken(rulebookEn, token);
-  const frCount = regex ? countRegex(rulebookFr, regex) : countToken(rulebookFr, token);
-  if (enCount !== frCount) {
-    errors.push(`Rulebook: "${label}" count differs (EN: ${enCount}, FR: ${frCount})`);
-  }
-});
+for (const lang of rulebookLangs) {
+  const upper = lang.toUpperCase();
+  const rulebookOther = fs.readFileSync(path.join(RULEBOOK_DIR, `rulebook.${lang}.md`), 'utf8');
+  RULEBOOK_CHECKS.forEach(({ label, token, regex }) => {
+    const enCount = regex ? countRegex(rulebookEn, regex) : countToken(rulebookEn, token);
+    const otherCount = regex ? countRegex(rulebookOther, regex) : countToken(rulebookOther, token);
+    if (enCount !== otherCount) {
+      errors.push(`Rulebook (${upper}): "${label}" count differs (EN: ${enCount}, ${upper}: ${otherCount})`);
+    }
+  });
+}
 
 // ---- Report --------------------------------------------------------------
 
 if (errors.length > 0) {
   console.error(`✗ Language parity check failed with ${errors.length} issue(s):\n`);
-  errors.forEach(e => console.error(`  - ${e}\n`));
+  errors.forEach((e) => console.error(`  - ${e}\n`));
   process.exit(1);
+} else if (allLangs.length === 0) {
+  console.log('✓ Language parity check passed: no non-English language files found to check.');
 } else {
-  console.log('✓ Language parity check passed: EN/FR data files are structurally in sync.');
+  console.log(`✓ Language parity check passed: ${allLangs.map((l) => l.toUpperCase()).join(', ')} structurally in sync with EN.`);
 }

@@ -8,7 +8,11 @@ const MarkdownIt = require('markdown-it');
 const container = require('markdown-it-container');
 
 const CONTAINERS = ['logistics-grid', 'logistics-card', 'warning-box'];
+// A language without its own registered quote style (i.e. a freshly
+// scaffolded language, not yet localized here) falls back to the English
+// convention rather than crashing markdown-it's typographer.
 const QUOTES = { en: '“”‘’', fr: '«»‹›' };
+const DEFAULT_QUOTES = QUOTES.en;
 
 // Mirrors pandoc's auto_identifiers algorithm closely enough to keep stable
 // anchor ids: strip everything but letters/digits/whitespace/-_.,
@@ -25,7 +29,7 @@ function slugify(text) {
 }
 
 function makeMarkdownIt(lang) {
-  const md = new MarkdownIt({ html: true, xhtmlOut: true, typographer: true, quotes: QUOTES[lang] });
+  const md = new MarkdownIt({ html: true, xhtmlOut: true, typographer: true, quotes: QUOTES[lang] || DEFAULT_QUOTES });
 
   CONTAINERS.forEach(name => {
     md.use(container, name, {

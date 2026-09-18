@@ -9,10 +9,11 @@
 const fs = require('fs');
 const path = require('path');
 const { launchAndOpen, capturePng } = require('../shared/export-pngs');
+const { detectLanguages } = require('../shared/detect-languages');
 
 const DIR = __dirname;
 const OUT_DIR = path.join(DIR, 'print-assets');
-const LANGS = ['en', 'fr'];
+const LANGS = ['en', ...detectLanguages().complete];
 
 (async () => {
   const { browser, page } = await launchAndOpen(path.join(DIR, 'board.html'));
