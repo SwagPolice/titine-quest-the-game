@@ -9,8 +9,10 @@
 const fs = require('fs');
 const path = require('path');
 const { renderBody } = require('./markdown-renderer');
+const { detectLanguages } = require('../shared/detect-languages');
 
 const DIR = __dirname;
+const LANGS = ['en', ...detectLanguages().complete];
 
 function renderFragment(mdFile, lang, hidden) {
   const body = renderBody(mdFile, lang);
@@ -20,8 +22,10 @@ function renderFragment(mdFile, lang, hidden) {
 
 const head = fs.readFileSync(path.join(DIR, 'rulebook-head.html'), 'utf8');
 const foot = fs.readFileSync(path.join(DIR, 'rulebook-foot.html'), 'utf8');
-const en = renderFragment(path.join(DIR, 'rulebook.md'), 'en', false);
-const fr = renderFragment(path.join(DIR, 'rulebook.fr.md'), 'fr', true);
+const fragments = LANGS.map((lang, i) => {
+  const mdFile = lang === 'en' ? 'rulebook.md' : `rulebook.${lang}.md`;
+  return renderFragment(path.join(DIR, mdFile), lang, i !== 0);
+}).join('');
 
-fs.writeFileSync(path.join(DIR, 'rulebook.html'), head + en + fr + foot);
-console.log('rulebook.html regenerated (EN + FR) from rulebook.md / rulebook.fr.md');
+fs.writeFileSync(path.join(DIR, 'rulebook.html'), head + fragments + foot);
+console.log(`rulebook.html regenerated (${LANGS.map((l) => l.toUpperCase()).join(' + ')}) from rulebook.md / rulebook.<lang>.md`);

@@ -14,15 +14,21 @@ const path = require('path');
 const puppeteer = require('puppeteer-core');
 const { findChrome } = require('../shared/export-pngs');
 const { renderBody } = require('./markdown-renderer');
+const { detectLanguages } = require('../shared/detect-languages');
 
 const DIR = __dirname;
 const OUT_DIR = path.join(DIR, 'print-assets');
+// A language without its own translated title (i.e. not yet localized in
+// this map) falls back to the English one — reasonable for a freshly
+// scaffolded language whose rulebook prose is still in English anyway.
 const TITLES = { en: 'KALBLAST — Rulebook', fr: 'KALBLAST — Livret de règles' };
 
-const TARGETS = [
-  { md: path.join(DIR, 'rulebook.md'), lang: 'en', out: 'kalblast_rulebook_en.pdf' },
-  { md: path.join(DIR, 'rulebook.fr.md'), lang: 'fr', out: 'kalblast_rulebook_fr.pdf' },
-];
+const LANGS = ['en', ...detectLanguages().complete];
+const TARGETS = LANGS.map((lang) => ({
+  md: path.join(DIR, lang === 'en' ? 'rulebook.md' : `rulebook.${lang}.md`),
+  lang,
+  out: `kalblast_rulebook_${lang}.pdf`,
+}));
 
 function buildHtml(mdFile, lang) {
   const body = renderBody(mdFile, lang);
@@ -30,7 +36,7 @@ function buildHtml(mdFile, lang) {
 <html lang="${lang}">
 <head>
 <meta charset="UTF-8">
-<title>${TITLES[lang]}</title>
+<title>${TITLES[lang] || TITLES.en}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
