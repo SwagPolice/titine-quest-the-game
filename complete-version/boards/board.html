@@ -338,6 +338,7 @@
   <div class="controls">
     <button class="download-btn lang-btn active" data-lang-btn="en">English</button>
     <button class="download-btn lang-btn" data-lang-btn="fr">Français</button>
+    <button class="download-btn lang-btn" data-lang-btn="da">Dansk</button>
     <button class="download-btn" onclick="downloadBoard()">Download Board</button>
   </div>
 
@@ -353,14 +354,16 @@
   <!-- 📥 SEPARATE TEXT RULES FILE IMPORTS (one per language) -->
   <script src="board-rules.en.js"></script>
   <script src="board-rules.fr.js"></script>
+  <script src="board-rules.da.js"></script>
   <script src="spiral-coords.js"></script>
   <script src="../shared/lang-toggle.js"></script>
 
   <script>
-    const roomTextsByLang = { en: roomTexts_en, fr: roomTexts_fr };
+    const roomTextsByLang = { en: roomTexts_en, fr: roomTexts_fr, da: roomTexts_da };
     const roomLabels = {
       en: { start: "START", victory: "👑 ROOM 60 👑" },
-      fr: { start: "DÉPART", victory: "👑 SALLE 60 👑" }
+      fr: { start: "DÉPART", victory: "👑 SALLE 60 👑" },
+      da: { start: "START", victory: "👑 RUM 60 👑" }
     };
     let currentLang = 'en';
 

@@ -30,11 +30,14 @@ const LANGS = ['en', ...detectLanguages().complete];
     fs.mkdirSync(outDir, { recursive: true });
 
     const cards = await page.evaluate((l) => {
-      // charactersByLang (defined in baseline.html) is a `const`, so it isn't
-      // reachable via window[...] — but page.evaluate runs in the page's own
-      // global scope, so referencing it directly by name works fine.
+      // charactersByLang/characters_en (defined in baseline.html) are both
+      // `const`, so they aren't reachable via window[...] — but page.evaluate
+      // runs in the page's own global scope, so referencing them directly by
+      // name works fine. Filenames are always slugged from the English name
+      // (see cardFilename's comment) so they don't rename every time a
+      // translation of the nickname changes.
       const chars = charactersByLang[l];
-      return chars.map((c, i) => ({ id: `card-${i}`, filename: cardFilename(c.name, l) }));
+      return chars.map((c, i) => ({ id: `card-${i}`, filename: cardFilename(characters_en[i].name, l) }));
     }, lang);
 
     for (const { id, filename } of cards) {
